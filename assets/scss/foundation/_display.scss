@@ -1,0 +1,21 @@
+@use '../global' as g;
+
+.Display {
+	&__sp--none {
+		@include max-screen($breakpoint-tablet) {
+			display: none;
+		}
+	}
+
+	&__tablet--none {
+		@include between-screen($breakpoint-tablet, $breakpoint-pc) {
+			display: none;
+		}
+	}
+
+	&__pc--none {
+		@include min-screen($breakpoint-pc) {
+			display: none;
+		}
+	}
+}

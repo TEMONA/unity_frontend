@@ -1,0 +1,28 @@
+@use 'breakpoint' as mixin;
+
+@mixin responsive-margin($size) {
+	margin: map-get($spacing-map-pc, $size);
+
+	@include mixin.max-screen($breakpoint-pc) {
+		margin: map-get($spacing-map-sp, $size);
+	}
+}
+
+@mixin responsive-margin-each(
+	$top-size: null,
+	$right-size: null,
+	$bottom-size: null,
+	$left-size: null
+) {
+	margin-top: map-get($spacing-map-pc, $top-size);
+	margin-right: map-get($spacing-map-pc, $right-size);
+	margin-bottom: map-get($spacing-map-pc, $bottom-size);
+	margin-left: map-get($spacing-map-pc, $left-size);
+
+	@include mixin.max-screen($breakpoint-pc) {
+		margin-top: map-get($spacing-map-sp, $top-size);
+		margin-right: map-get($spacing-map-sp, $right-size);
+		margin-bottom: map-get($spacing-map-sp, $bottom-size);
+		margin-left: map-get($spacing-map-sp, $left-size);
+	}
+}

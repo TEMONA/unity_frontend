@@ -1,0 +1,47 @@
+@use 'sass:math';
+
+$spacing-size: 4px;
+
+$spacing-size-xs-pc: $spacing-size;
+$spacing-size-sm-pc: $spacing-size * 2;
+$spacing-size-md-pc: $spacing-size * 4;
+$spacing-size-ml-pc: $spacing-size * 6;
+$spacing-size-lg-pc: $spacing-size * 8;
+$spacing-size-xl-pc: $spacing-size * 10;
+$spacing-size-ex-pc: $spacing-size * 12;
+$spacing-size-xx-pc: $spacing-size * 14;
+
+$spacing-size-xs-sp: calc($spacing-size / 2);
+$spacing-size-sm-sp: $spacing-size;
+$spacing-size-md-sp: $spacing-size * 2;
+$spacing-size-ml-sp: $spacing-size * 4;
+$spacing-size-lg-sp: $spacing-size * 6;
+$spacing-size-xl-sp: $spacing-size * 7;
+$spacing-size-ex-sp: $spacing-size * 8;
+$spacing-size-xx-sp: $spacing-size * 10;
+
+$spacing-map-pc: (
+	0: 0,
+	auto: auto,
+	xs: $spacing-size-xs-pc,
+	sm: $spacing-size-sm-pc,
+	md: $spacing-size-md-pc,
+	ml: $spacing-size-ml-pc,
+	lg: $spacing-size-lg-pc,
+	xl: $spacing-size-xl-pc,
+	ex: $spacing-size-ex-pc,
+	xx: $spacing-size-xx-pc,
+);
+
+$spacing-map-sp: (
+	0: 0,
+	auto: auto,
+	xs: $spacing-size-xs-sp,
+	sm: $spacing-size-sm-sp,
+	md: $spacing-size-md-sp,
+	ml: $spacing-size-ml-sp,
+	lg: $spacing-size-lg-sp,
+	xl: $spacing-size-xl-sp,
+	ex: $spacing-size-ex-sp,
+	xx: $spacing-size-xx-sp,
+);

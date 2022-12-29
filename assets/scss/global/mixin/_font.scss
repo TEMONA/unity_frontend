@@ -1,0 +1,9 @@
+@import 'breakpoint';
+
+@mixin responsive-font-size($size) {
+	font-size: map-get($font-map-pc, $size);
+
+	@include max-screen($breakpoint-large-tablet) {
+		font-size: map-get($font-map-sp, $size);
+	}
+}

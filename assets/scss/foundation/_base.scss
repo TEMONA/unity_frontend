@@ -1,0 +1,25 @@
+@use '../global' as g;
+
+html,
+body {
+	font-size: $font-size-md-pc;
+	@if $font-family-eng {
+		font-family: $font-family-eng, $font-family;
+	} @else {
+		font-family: $font-family;
+	}
+	@include max-screen($breakpoint-sp) {
+		font-size: $font-size-md-sp;
+	}
+	-ms-text-size-adjust: 100%;
+	-webkit-text-size-adjust: 100%;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	overflow-x: hidden;
+	overflow-y: visible;
+}
+
+p {
+	line-height: 2;
+	@include responsive-font-size('md');
+}
