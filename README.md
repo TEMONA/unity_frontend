@@ -17,52 +17,26 @@ $ yarn start
 $ yarn generate
 ```
 
-For detailed explanation on how things work, check out the [documentation](https://nuxtjs.org).
+## フォルダ構成
 
-## Special Directories
-
-You can create the following extra directories, some of which have special behaviors. Only `pages` is required; you can delete them if you don't want to use their functionality.
-
-### `assets`
-
-The assets directory contains your uncompiled assets such as Stylus or Sass files, images, or fonts.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets).
-
-### `components`
-
-The components directory contains your Vue.js components. Components make up the different parts of your page and can be reused and imported into your pages, layouts and even other components.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components).
-
-### `layouts`
-
-Layouts are a great help when you want to change the look and feel of your Nuxt app, whether you want to include a sidebar or have distinct layouts for mobile and desktop.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts).
-
-### `pages`
-
-This directory contains your application views and routes. Nuxt will read all the `*.vue` files inside this directory and setup Vue Router automatically.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing).
-
-### `plugins`
-
-The plugins directory contains JavaScript plugins that you want to run before instantiating the root Vue.js Application. This is the place to add Vue plugins and to inject functions or constants. Every time you need to use `Vue.use()`, you should create a file in `plugins/` and add its path to plugins in `nuxt.config.js`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins).
-
-### `static`
-
-This directory contains your static files. Each file inside this directory is mapped to `/`.
-
-Example: `/static/robots.txt` is mapped as `/robots.txt`.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static).
-
-### `store`
-
-This directory contains your Vuex store files. Creating a file in this directory automatically activates Vuex.
-
-More information about the usage of this directory in [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store).
+```
+root
+├── assets # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets)
+│   ├── images # svgなどの軽量な画像を配置する（jpg,pngなどはstatic）
+│   └── scss # 基盤となるSCSSを配置する（コンポーネント、ページごとのCSSは別で配置）
+│       ├── foundations # リセットCSS,汎用クラスのSCSSを用途ごとに配置する
+│       └── globals
+│           ├── mixins # SCSS Mixinを用途ごとに配置する
+│           └── variables # SCSS変数を用途ごとに配置する
+│       └── variables.scss # Vuetify用のSCSS変数を記載する
+├── components # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/components)を[atomic design](https://a-suenami.hatenablog.com/entry/2019/04/29/173415)の思想に沿って配置する
+│   ├── atoms # 最小のコンポーネント、1ファイル:1HTMLタグとなるよう配置する
+│   ├── molecules # それ自体が独立して存在はできないが、Atom ほど無機質でなく、最低限の意味をそれ自体が帯びる要素になり、atomsのみを子に持つよう配置する
+│   └── organisms # 独立して意味を持つコンポーネントでatomsとmoleculesを子に持つよう配置する
+├── layouts # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/layouts)
+├── pages # [the documentation](https://nuxtjs.org/docs/2.x/get-started/routing)
+├── plugins # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/plugins)
+├── static # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static)、重めの画像を配置する
+└── store # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store)
+└── test # jestを配置する
+```
