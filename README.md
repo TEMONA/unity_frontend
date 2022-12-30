@@ -19,7 +19,6 @@ $ yarn generate
 
 ## フォルダ構成
 
-```
 root
 ├── assets # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/assets)
 │   ├── images # svgなどの軽量な画像を配置する（jpg,pngなどはstatic）
@@ -39,4 +38,3 @@ root
 ├── static # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/static)、重めの画像を配置する
 └── store # [the documentation](https://nuxtjs.org/docs/2.x/directory-structure/store)
 └── test # jestを配置する
-```
