@@ -23,7 +23,7 @@ $ yarn generate
 root
 ├── assets # https://nuxtjs.org/docs/2.x/directory-structure/assets
 │   ├── images # svgなどの軽量な画像を配置する（jpg,pngなどはstatic)
-│   └── scss # 基盤となるSCSSを配置する（コンポーネント、ページごとのCSSは別で配置）
+│   └── scss # 基盤となるSCSSを配置する（コンポーネント、ページごとのCSSはlayouts,pagesに配置する）
 │       ├── foundations # リセットCSS,汎用クラスのSCSSを用途ごとに配置する
 │       └── globals
 │           ├── mixins # SCSS Mixinを用途ごとに配置する
