@@ -40,3 +40,56 @@ root
 └── store # https://nuxtjs.org/docs/2.x/directory-structure/store
 └── test # jestを配置する
 ```
+
+## コーディング規約
+
+### 命名規則
+
+#### pages
+
+動的ページのファイル名は\_id.vue で統一する
+
+#### components
+
+- アッパーキャメルケースで命名する
+- 原則２つ以上の単語を連結する
+  - ex. Navigation とせず、GlobalNavigation とする
+  - ２つ以上の単語を利用すると不自然になる場合は、既存の HTML タグ名と競合しない名称をつける
+  - HTML のタグ名と競合するのを防止するため
+
+#### HTML クラス
+
+BEM ベースでの命名規則を採用する
+コネクタはケバブケースとスネークケースを利用し、{Block}\_\_{Element}--{Modifier}とする。
+
+- Block
+  - pages は route 名、components はファイル名を利用する
+  - layouts の場合
+    - ex. noauth, default
+  - pages の場合
+    - ex. users.vue は users, users/\_id.vue は user
+  - components の場合
+    - ex. GlobalNavigation, GlobalFooter
+- Element
+  - 役割を省略せず記載する
+  - ２単語以上を利用する場合はローワーキャメルケースで接続する
+  - ex. title, text, description, image, subTitle
+- Modifier
+  - 状態を省略せず記載する
+  - 状態が複数ある場合はケバブケース１つで接続する
+  - ex. disabled, type-button, type-submit
+
+#### 画像ファイル
+
+ローワースネークケースを利用し、{利用箇所}\_{役割}\_{要素}とする。
+
+- 利用箇所
+  - 主にファイル名を利用する
+  - ex. users, user
+- 役割
+  - BEM でいう E を利用する
+  - ex. thumbnail, icon
+- 要素
+  - 要素が複数ある場合はその要素名を利用する
+  - １ファイル内で１つしか画像の利用箇所がない場合は省略可能
+  - ex. thumbnail_kawashita, thumbnail_kaneko
