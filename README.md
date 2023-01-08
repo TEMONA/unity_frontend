@@ -120,3 +120,10 @@ BEM ベースでの命名規則を採用する
   - 要素が複数ある場合はその要素名を利用する
   - １ファイル内で１つしか画像の利用箇所がない場合は省略可能
   - ex. thumbnail_kawashita, thumbnail_kaneko
+
+### SCSS
+
+- scoped は利用しない
+- 各コンポーネント内 SCSS のルートにはそのファイル名の Block を入れる
+  - 他ファイルで意図しないスタイルが当たるの防止のため
+- Element, Modifier 間は１行空ける
