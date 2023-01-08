@@ -41,6 +41,33 @@ root
 └── test # jestを配置する
 ```
 
+## 開発環境
+
+### エディタ
+
+VSCode を利用
+
+### 拡張機能
+
+- 必須
+  - Vetur
+    - Vue.js に特化したいろんな便利ツールが入ってる拡張機能
+  - Vue Peek
+    - コンポーネントの編集を楽にする拡張機能
+  - Sass
+    - Sass のシンタックスハイライトを入れてくれる拡張機能
+  - ESLint
+    - コード保存時の自動検査をしてくれる拡張機能
+  - Stylelint
+    - CSS の記述中や保存する時にいい感じにエラーを出してくれたり自動整形してくれる拡張機能
+  - Prettier - Code formatter
+    - コードの自動整形をしてくれる拡張機能
+- 推奨
+  - GitHub Pull Requests and Issues
+    - PR 作成とかが楽になる
+  - Japanese Language Pack for Visual Studio Code
+    - VSCode を日本語対応させてくれる
+
 ## コーディング規約
 
 ### 命名規則
