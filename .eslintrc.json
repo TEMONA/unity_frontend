@@ -2,7 +2,8 @@
 	"root": true,
 	"parser": "vue-eslint-parser",
 	"parserOptions": {
-		"parser": "babel-eslint",
+		"parser": "@babel/eslint-parser",
+		"requireConfigFile": false,
 		"sourceType": "module"
 	},
 	"env": {
@@ -11,14 +12,12 @@
 		"es6": true
 	},
 	"extends": [
-		"@nuxtjs",
 		"eslint:recommended",
 		"plugin:vue/recommended",
 		"plugin:nuxt/recommended",
-		"plugin:gridsome/recommended",
 		"prettier"
 	],
-	"plugins": ["vue"],
+	"plugins": ["vue", "prettier"],
 	"rules": {
 		"no-console": "warn",
 		"indent": [2, "tab"],
@@ -35,6 +34,7 @@
 				"trailingComma": "all",
 				"useTabs": true
 			}
-		]
+		],
+		"vue/multi-word-component-names": 0
 	}
 }
