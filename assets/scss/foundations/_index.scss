@@ -1,5 +1,5 @@
-@import 'reset';
-@import 'base';
-@import 'container';
-@import 'section';
-@import 'display';
+@forward 'reset';
+@forward 'base';
+@forward 'container';
+@forward 'section';
+@forward 'display';

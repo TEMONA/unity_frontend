@@ -1,4 +1,4 @@
-@import 'breakpoint';
-@import 'padding';
-@import 'margin';
-@import 'font';
+@forward 'breakpoint';
+@forward 'padding';
+@forward 'margin';
+@forward 'font';

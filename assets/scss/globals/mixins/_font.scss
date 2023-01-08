@@ -1,4 +1,4 @@
-@import 'breakpoint';
+@use 'breakpoint';
 
 @mixin responsive-font-size($size) {
 	font-size: map-get($font-map-pc, $size);

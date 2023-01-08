@@ -1,9 +1,11 @@
 import colors from 'vuetify/es5/util/colors'
+import { Sass } from 'sass'
+import { Fibers } from 'fibers'
 
 export default {
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
-		titleTemplate: '%s - unity_frontend',
+		titleTemplate: '%s - テモナ社内SNS「Unity」',
 		title: 'unity_frontend',
 		htmlAttrs: {
 			lang: 'ja',
@@ -44,6 +46,9 @@ export default {
 
 	// Modules: https://go.nuxtjs.dev/config-modules
 	modules: ['@nuxtjs/style-resources'],
+	styleResources: {
+		scss: ['~/assets/scss/global/_index.scss'],
+	},
 
 	// Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
 	vuetify: {
@@ -65,5 +70,15 @@ export default {
 	},
 
 	// Build Configuration: https://go.nuxtjs.dev/config-build
-	build: {},
+	build: {
+		loaders: {
+			scss: {
+				implementation: Sass,
+				// fibersをインストールした場合
+				sassOptions: {
+					fiber: Fibers,
+				},
+			},
+		},
+	},
 }
