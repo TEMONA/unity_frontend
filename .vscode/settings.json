@@ -1,13 +1,17 @@
 {
-	"eslint.validate": ["javascript", "vue"],
+	// linter
 	"eslint.enable": true,
-	"javascript.format.enable": false,
+	"eslint.packageManager": "yarn",
+	"eslint.validate": ["javascript", "vue"],
 	"editor.codeActionsOnSave": {
-		"source.fixAll.eslint": true
+		"source.fixAll.eslint": true,
+		"source.fixAll.stylelint": true
 	},
+	// formatter
+	"javascript.format.enable": false,
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
 	"editor.formatOnSave": true,
-	"prettier.stylelintIntegration": true,
-	"prettier.eslintIntegration": true,
+	"editor.formatOnPaste": true,
+	"editor.formatOnType": true,
 	"editor.tabSize": 2
 }
