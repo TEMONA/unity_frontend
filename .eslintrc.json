@@ -16,8 +16,7 @@
 		"plugin:vue/recommended",
 		"plugin:nuxt/recommended",
 		"plugin:gridsome/recommended",
-		"prettier",
-		"prettier/vue"
+		"prettier"
 	],
 	"plugins": ["vue"],
 	"rules": {
