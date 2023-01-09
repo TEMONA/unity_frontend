@@ -1,8 +1,16 @@
 import colors from 'vuetify/es5/util/colors'
 import { Sass } from 'sass'
 import { Fibers } from 'fibers'
+import bodyParser from 'body-parser'
+import session from 'cookie-session'
+
+const authorizationTokenMaxAge = 1000 * 60 * 60 * 24 * 7
 
 export default {
+	publicRuntimeConfig: {
+		baseUrl: process.env.BASE_URL || 'http://localhost:3000',
+		apiUrl: process.env.API_URL || 'http://localhost:3000',
+	},
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
 		titleTemplate: '%s - テモナ社内SNS「Unity」',
@@ -46,6 +54,26 @@ export default {
 
 	// Modules: https://go.nuxtjs.dev/config-modules
 	modules: ['@nuxtjs/axios'],
+	axios: {
+		baseURL: process.env.API_URL || 'http://localhost:3000',
+		timeout: 10000,
+		headers: {
+			'Cache-Control': 'no-cache',
+			'Access-Control-Allow-Origin': process.env.BASE_URL,
+		},
+	},
+
+	// ブラウザのセッションが閉じても認証情報を保持できるようにする
+	serverMiddleware: [
+		bodyParser.json(),
+		session({
+			secret: 'super-secret-key',
+			resave: false,
+			saveUninitialized: false,
+			cookie: { maxAge: authorizationTokenMaxAge },
+		}),
+		{ path: '/api', handler: '~/api/index.ts' },
+	],
 
 	// Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
 	vuetify: {
