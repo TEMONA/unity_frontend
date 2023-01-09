@@ -1,9 +1,10 @@
-@use 'breakpoint';
+@use '../variables' as g;
+@use 'breakpoint' as breakpoint;
 
 @mixin responsive-font-size($size) {
-	font-size: map-get($font-map-pc, $size);
+	font-size: map-get(g.$font-map-pc, $size);
 
-	@include max-screen($breakpoint-large-tablet) {
-		font-size: map-get($font-map-sp, $size);
+	@include breakpoint.max-screen(g.$breakpoint-large-tablet) {
+		font-size: map-get(g.$font-map-sp, $size);
 	}
 }

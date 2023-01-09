@@ -24,7 +24,6 @@ root
 ├── assets # https://nuxtjs.org/docs/2.x/directory-structure/assets
 │   ├── images # svgなどの軽量な画像を配置する（jpg,pngなどはstatic)
 │   └── scss # 基盤となるSCSSを配置する（コンポーネント、ページごとのCSSはlayouts,pagesに配置する）
-│       ├── foundations # リセットCSS,汎用クラスのSCSSを用途ごとに配置する
 │       └── globals
 │           ├── mixins # SCSS Mixinを用途ごとに配置する
 │           └── variables # SCSS変数を用途ごとに配置する
@@ -51,22 +50,24 @@ VSCode を利用
 
 - 必須
   - Vetur
-    - Vue.js に特化したいろんな便利ツールが入ってる拡張機能
+    - Vue.js に特化したいろんな便利ツールが入ってる
   - Vue Peek
-    - コンポーネントの編集を楽にする拡張機能
+    - コンポーネントの編集を楽にする
   - Sass
-    - Sass のシンタックスハイライトを入れてくれる拡張機能
+    - Sass のシンタックスハイライトを入れてくれる
   - ESLint
-    - コード保存時の自動検査をしてくれる拡張機能
+    - コード保存時の自動検査をしてくれる
   - Stylelint
-    - CSS の記述中や保存する時にいい感じにエラーを出してくれたり自動整形してくれる拡張機能
+    - CSS の記述中や保存する時にいい感じにエラーを出してくれたり自動整形してくれる
   - Prettier - Code formatter
-    - コードの自動整形をしてくれる拡張機能
+    - コードの自動整形をしてくれる
 - 推奨
   - GitHub Pull Requests and Issues
     - PR 作成とかが楽になる
   - Japanese Language Pack for Visual Studio Code
     - VSCode を日本語対応させてくれる
+  - Vue docs
+    - Vue.js や Vuex, Vue Router, Vue SSR, Vuetify, Nuxt.js, VuePress の公式ドキュメントを VSCode 内から直接参照できる
 
 ## コーディング規約
 
@@ -120,6 +121,24 @@ BEM ベースでの命名規則を採用する
   - 要素が複数ある場合はその要素名を利用する
   - １ファイル内で１つしか画像の利用箇所がない場合は省略可能
   - ex. thumbnail_kawashita, thumbnail_kaneko
+
+### Vue
+
+#### Components
+
+- 型定義はそのファイル内で行う？
+  - けど props は分けてた方がいいよなぁ
+  - となると lists 側で型定義してた方が良い？違和感あるけどなぁ
+- methods の型定義はインラインで OK
+  - 他ファイルから読むことがないため
+
+#### plugins
+
+- props と return の型定義を書く
+
+#### store
+
+- props と return の型定義を書く
 
 ### SCSS
 

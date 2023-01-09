@@ -13,5 +13,9 @@
 	"editor.formatOnSave": true,
 	"editor.formatOnPaste": true,
 	"editor.formatOnType": true,
-	"editor.tabSize": 2
+	"editor.tabSize": 2,
+	// vue docs
+	"vueDocs.links": {
+		"Vuetify": "https://vuetifyjs.com/getting-started/quick-start"
+	}
 }

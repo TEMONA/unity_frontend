@@ -1,6 +1,7 @@
 // Ref: https://github.com/nuxt-community/vuetify-module#customvariables
 //
 // The variables you want to modify
+@use 'sass:map';
 
 // ==================================== //
 // Global Settings
@@ -17,7 +18,7 @@ $btn-letter-spacing: 0 !default;
 $btn-text-transform: none;
 
 $btn-sizes: () !default;
-$btn-sizes: map-deep-merge(
+$btn-sizes: map.deep-merge(
 	(
 		'x-small': 20,
 		'small': 36,
@@ -29,7 +30,7 @@ $btn-sizes: map-deep-merge(
 );
 
 $btn-font-sizes: () !default;
-$btn-font-sizes: map-deep-merge(
+$btn-font-sizes: map.deep-merge(
 	(
 		'x-small': 0.625rem,
 		'small': 0.75rem,
@@ -56,7 +57,7 @@ $border-radius-root: 8px !default;
 $heading-font-family: 'DM Sans', sans-serif !default;
 
 $headings: () !default;
-$headings: map-deep-merge(
+$headings: map.deep-merge(
 	(
 		'h1': (
 			'size': 36px,
@@ -158,7 +159,7 @@ $headings: map-deep-merge(
 //
 $chip-selected-opacity: 0.28 !default;
 $icon-sizes: () !default;
-$icon-sizes: map-deep-merge(
+$icon-sizes: map.deep-merge(
 	(
 		'small': (
 			'font-size': 12,
@@ -175,7 +176,7 @@ $spacer: 2px !default;
 $grid-gutter: $spacer * 15 !default;
 
 $grid-breakpoints: () !default;
-$grid-breakpoints: map-deep-merge(
+$grid-breakpoints: map.deep-merge(
 	(
 		'xs': 0,
 		'sm': 576px,
@@ -189,7 +190,7 @@ $grid-breakpoints: map-deep-merge(
 // Container
 
 $container-max-widths: () !default;
-$container-max-widths: map-deep-merge(
+$container-max-widths: map.deep-merge(
 	(
 		'md': 720px,
 		'lg': 1140px,

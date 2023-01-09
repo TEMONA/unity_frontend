@@ -39,22 +39,4 @@ export default Vue.extend({
 })
 </script>
 
-<style lang="scss">
-.LinkButton {
-	display: inline-block;
-	padding: $spacing-size * 2 $spacing-size * 4;
-	color: $bgr-color;
-
-	&--role {
-		&-main {
-			background-color: $main-color;
-		}
-		&-accent {
-			background-color: $accent-color;
-		}
-		&-sub {
-			background-color: $sub-color;
-		}
-	}
-}
-</style>
+<style lang="scss"></style>
