@@ -14,18 +14,19 @@ interface StateType {
 	}
 }
 
-const authorization: AuthorizationStateType = {
+const initialAuthorizationState: AuthorizationStateType = {
 	access: null,
 	refresh: null,
 }
 
-export const state: () => StateType = () => ({
-	// 認証情報保持用オブジェクト
-	authorization,
+const initialState: StateType = {
+	authorization: initialAuthorizationState,
 	config: {
 		baseUrl: '',
 	},
-})
+}
+
+export const state: () => StateType = () => Object.assign({}, initialState)
 
 type RootState = ReturnType<typeof state>
 
@@ -70,6 +71,10 @@ export const mutations: MutationTree<RootState> = {
 		)
 	},
 	logout(state) {
-		state.authorization = Object.assign({}, state.authorization, authorization)
+		state.authorization = Object.assign(
+			{},
+			state.authorization,
+			initialAuthorizationState,
+		)
 	},
 }
