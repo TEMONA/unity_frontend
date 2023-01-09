@@ -9,6 +9,7 @@
 			</v-container>
 			<Footer />
 		</v-main>
+		<Snackbar />
 	</v-app>
 </template>
 

@@ -47,15 +47,29 @@ export const actions: ActionTree<RootState, RootState> = {
 				commit('login', authorization)
 				this.$router.push(redirectTo)
 			})
+			.catch(() => {
+				commit('snackbar/displaySnackbar', {
+					status: 404,
+					message: '処理に失敗しました。時間をおいて再度お試しください。',
+				})
+			})
 	},
 	// ログアウト用関数。apiにリクエストを送ってstoreを綺麗にする
 	async logout({ state, commit }, { isRedirect = true }) {
-		await this.$axios.$delete(`${state.config.baseUrl}/api/logout`).then(() => {
-			commit('logout')
-			if (isRedirect) {
-				this.$router.push('/login')
-			}
-		})
+		await this.$axios
+			.$delete(`${state.config.baseUrl}/api/logout`)
+			.then(() => {
+				commit('logout')
+				if (isRedirect) {
+					this.$router.push('/login')
+				}
+			})
+			.catch(() => {
+				commit('snackbar/displaySnackbar', {
+					status: 404,
+					message: '処理に失敗しました。時間をおいて再度お試しください。',
+				})
+			})
 	},
 }
 
