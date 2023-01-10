@@ -1,4 +1,5 @@
 import { ActionTree, MutationTree } from 'vuex'
+import { ActionContext } from 'vuex/types'
 
 import get from 'lodash/get'
 
@@ -7,11 +8,13 @@ interface AuthorizationStateType {
 	refresh: string | null
 }
 
+interface configStateType {
+	baseUrl: string
+}
+
 interface StateType {
 	authorization: AuthorizationStateType
-	config: {
-		baseUrl: string
-	}
+	config: configStateType
 }
 
 const initialAuthorizationState: AuthorizationStateType = {
@@ -19,11 +22,13 @@ const initialAuthorizationState: AuthorizationStateType = {
 	refresh: null,
 }
 
+const initialconfigState: configStateType = {
+	baseUrl: '',
+}
+
 const initialState: StateType = {
 	authorization: initialAuthorizationState,
-	config: {
-		baseUrl: '',
-	},
+	config: initialconfigState,
 }
 
 export const state: () => StateType = () => Object.assign({}, initialState)
@@ -31,16 +36,37 @@ export const state: () => StateType = () => Object.assign({}, initialState)
 type RootState = ReturnType<typeof state>
 
 export const actions: ActionTree<RootState, RootState> = {
-	// 必要なruntimeConfigとログインセッション（ある場合）をstateに渡す
-	nuxtServerInit({ commit }, { req, $config }) {
+	/**
+	 * 必要なruntimeConfigとログインセッション（ある場合）をstateに渡す関数
+	 *
+	 * @param Context Vueのcontext
+	 * @param Payload 処理したいデータ
+	 */
+	nuxtServerInit(
+		{ commit }: ActionContext<RootState, RootState>,
+		{ req, $config }: any,
+	) {
 		const { baseUrl } = $config
 		commit('updateConfig', { baseUrl })
 		if (get(req, 'session.authorization.access')) {
 			commit('login', req.session.authorization)
 		}
 	},
-	// ログイン用関数
-	async login({ state, commit }, { authorization, redirectTo = '/' }) {
+
+	/**
+	 * APIの認証情報（JWT）をstateに保存する関数
+	 *
+	 * @param Context Vueのcontext
+	 * @param Payload.authoarization 認証情報（JWT）
+	 * @param Payload.redirectTo ログイン後のリダイレクト先
+	 */
+	async login(
+		{ state, commit }: ActionContext<RootState, RootState>,
+		{
+			authorization,
+			redirectTo = '/',
+		}: { authorization: AuthorizationStateType; redirectTo?: string },
+	) {
 		await this.$axios
 			.$post(`${state.config.baseUrl}/api/login`, { authorization })
 			.then(() => {
@@ -54,8 +80,17 @@ export const actions: ActionTree<RootState, RootState> = {
 				})
 			})
 	},
-	// ログアウト用関数。apiにリクエストを送ってstoreを綺麗にする
-	async logout({ state, commit }, { isRedirect = true }) {
+
+	/**
+	 * APIの認証情報（JWT）をstateから削除する関数
+	 *
+	 * @param Context Vueのcontext
+	 * @param Payload.isRedirect ログアウト後にリダイレクトするかどうか
+	 */
+	async logout(
+		{ state, commit }: ActionContext<RootState, RootState>,
+		{ isRedirect = true }: { isRedirect?: boolean },
+	) {
 		await this.$axios
 			.$delete(`${state.config.baseUrl}/api/logout`)
 			.then(() => {
@@ -74,17 +109,36 @@ export const actions: ActionTree<RootState, RootState> = {
 }
 
 export const mutations: MutationTree<RootState> = {
-	updateConfig(state, configProps) {
+	/**
+	 * stateにruntimeConfigを注入する関数
+	 *
+	 * @param state （変更前の）state
+	 * @param configProps stateに注入するruntimeConfig
+	 */
+	updateConfig(state: RootState, configProps: configStateType) {
 		state.config = Object.assign({}, state.config, configProps)
 	},
-	login(state, authorizationProps) {
+
+	/**
+	 * stateに認証情報を注入する関数
+	 *
+	 * @param state （変更前の）state
+	 * @param authorizationProps stateに注入する認証情報（JWT）
+	 */
+	login(state: RootState, authorizationProps: AuthorizationStateType) {
 		state.authorization = Object.assign(
 			{},
 			state.authorization,
 			authorizationProps,
 		)
 	},
-	logout(state) {
+
+	/**
+	 * stateの認証情報を空にする関数
+	 *
+	 * @param state （変更前の）state
+	 */
+	logout(state: RootState) {
 		state.authorization = Object.assign(
 			{},
 			state.authorization,

@@ -32,12 +32,12 @@ export const state = () => ({
 type RootState = ReturnType<typeof state>
 
 export const mutations: MutationTree<RootState> = {
-	displaySnackbar(state, { status, message = '' }: Payload) {
+	displaySnackbar(state: RootState, { status, message = '' }: Payload) {
 		state.isShow = true
 		state.message = message || statusCodeMap[status] || ''
 		state.color = status === 200 ? colors.success : colors.error
 	},
-	closeSnackbar(state) {
+	closeSnackbar(state: RootState) {
 		state.isShow = false
 	},
 }
