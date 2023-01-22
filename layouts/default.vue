@@ -1,10 +1,26 @@
 <template>
 	<v-app>
-		<Header />
-		<Sidebar />
+		<v-app-bar app color="primary" class="white--text">
+			<v-app-bar-nav-icon @click="drawer = !drawer" />
+			<v-toolbar-title>Unity - Temona SNS</v-toolbar-title>
+		</v-app-bar>
+
+		<v-navigation-drawer v-model="drawer" fixed temporary>
+			<v-list>
+				<v-list-item v-for="[icon, text] in links" :key="icon" link>
+					<v-list-item-icon>
+						<v-icon>{{ icon }}</v-icon>
+					</v-list-item-icon>
+
+					<v-list-item-content>
+						<v-list-item-title>{{ text }}</v-list-item-title>
+					</v-list-item-content>
+				</v-list-item>
+			</v-list>
+		</v-navigation-drawer>
 		<v-main>
-			<Breadcrumbs :items="breadcrumbs" />
 			<v-container class="mb-16">
+				<Breadcrumbs :items="breadcrumbs" />
 				<nuxt />
 			</v-container>
 			<Footer />
@@ -23,6 +39,14 @@ export default {
 					disabled: false,
 					href: '/',
 				},
+			],
+			drawer: null,
+
+			links: [
+				['mdi-inbox-arrow-down', 'Inbox'],
+				['mdi-send', 'Send'],
+				['mdi-delete', 'Trash'],
+				['mdi-alert-octagon', 'Spam'],
 			],
 		}
 	},
