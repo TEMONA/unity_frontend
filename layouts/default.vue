@@ -1,8 +1,12 @@
 <template>
 	<v-app>
 		<v-app-bar app color="primary" class="white--text">
-			<v-app-bar-nav-icon @click="drawer = !drawer" />
+			<v-app-bar-nav-icon @click="drawer = !drawer" class="white--text" />
 			<v-toolbar-title>Unity - Temona SNS</v-toolbar-title>
+			<v-spacer />
+			<v-btn icon class="white--text">
+				<v-icon>mdi-account-circle</v-icon>
+			</v-btn>
 		</v-app-bar>
 
 		<v-navigation-drawer v-model="drawer" fixed temporary>
