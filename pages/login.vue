@@ -4,8 +4,12 @@
 			<v-card class="align-end">
 				<v-card-title>ログイン</v-card-title>
 				<v-card-text>
-					<v-text-field label="メールアドレス" v-model="email"></v-text-field>
-					<v-text-field label="パスワード" v-model="password"></v-text-field>
+					<v-text-field
+						label="メールアドレス"
+						:hide-details="false"
+						v-model="email"
+					/>
+					<v-text-field label="パスワード" type="password" v-model="password" />
 				</v-card-text>
 				<v-divider />
 				<v-card-actions>
@@ -56,5 +60,3 @@ export default Vue.extend({
 	},
 })
 </script>
-
-<style lang="scss"></style>
