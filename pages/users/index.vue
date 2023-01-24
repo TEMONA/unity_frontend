@@ -16,8 +16,9 @@
 				</template>
 				<template v-slot:append>
 					<v-btn icon @click="toggleSearchCard = !toggleSearchCard">
-						<v-icon v-if="toggleSearchCard">mdi-close</v-icon>
-						<v-icon v-else>mdi-menu-open</v-icon>
+						<v-icon>
+							{{ toggleSearchCard ? 'mdi-close' : 'mdi-menu-open' }}
+						</v-icon>
 					</v-btn>
 				</template>
 			</v-text-field>
