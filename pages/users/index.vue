@@ -1,6 +1,6 @@
 <template>
 	<v-row class="users">
-		<v-col cols="12" md="3">
+		<v-col cols="12" md="4" class="users__sidebar">
 			<v-text-field
 				single-line
 				solo
@@ -76,7 +76,7 @@
 				</v-card-actions>
 			</v-card>
 		</v-col>
-		<v-col cols="12" md="9">
+		<v-col cols="12" md="8">
 			<v-list two-line>
 				<v-subheader>
 					検索結果
