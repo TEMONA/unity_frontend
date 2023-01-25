@@ -78,36 +78,7 @@
 			</v-card>
 		</v-col>
 		<v-col cols="12" md="8">
-			<v-list two-line>
-				<v-subheader>
-					検索結果
-					<v-spacer />
-					<div class="mr-2">1-3 / 30</div>
-					<v-icon>mdi-dots-vertical</v-icon>
-				</v-subheader>
-
-				<v-divider />
-
-				<template v-for="(item, index) in users">
-					<v-list-item :key="index" link>
-						<v-list-item-avatar color="grey darken-1" />
-
-						<v-list-item-content>
-							<v-list-item-title>
-								{{ item.name }}
-								<span class="grey--text text-caption">
-									{{ item.department }} {{ item.group }}
-									{{ item.role }}
-								</span>
-							</v-list-item-title>
-
-							<v-list-item-subtitle>
-								{{ item.work }}
-							</v-list-item-subtitle>
-						</v-list-item-content>
-					</v-list-item>
-				</template>
-			</v-list>
+			<UserSearchResult :meta="meta" :users="users" />
 		</v-col>
 	</v-row>
 </template>
@@ -140,13 +111,19 @@ export default Vue.extend({
 				workLength: '',
 				workDetail: '',
 			},
+			meta: {
+				start: 1,
+				end: 3,
+				total: 30,
+			},
 			users: [
 				{
+					image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
 					name: '氏名',
 					department: '事業部',
 					group: 'グループ',
 					role: '役職',
-					work: '業務内容を２行だけ表示...',
+					detail: '業務内容を２行だけ表示...',
 				},
 			],
 		}
