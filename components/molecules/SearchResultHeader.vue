@@ -14,6 +14,12 @@
 <script lang="ts">
 import Vue from 'vue'
 
+export interface SearchResultHeaderType {
+	start: number
+	end: number
+	total: number
+}
+
 export default Vue.extend({
 	name: 'SearchResultHeader',
 	props: {
