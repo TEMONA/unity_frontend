@@ -1,5 +1,5 @@
 <template>
-	<v-list-item link>
+	<v-list-item link class="UserListItem">
 		<v-list-item-avatar color="grey darken-1">
 			<v-img :aspect-ratio="1" :src="image" alt="社員画像" />
 		</v-list-item-avatar>
@@ -14,7 +14,12 @@
 				</span>
 			</v-list-item-title>
 			<slot name="chip" />
-			<v-chip v-if="status" :color="chipColor">{{ status }}</v-chip>
+			<v-chip
+				v-if="status"
+				:color="chipColor"
+				class="UserListItem__chip mt-3 mr-4"
+				>{{ status }}</v-chip
+			>
 
 			<v-list-item-subtitle>
 				{{ detail }}
@@ -84,3 +89,13 @@ export default Vue.extend({
 	},
 })
 </script>
+
+<style lang="scss">
+.UserListItem {
+	&__chip {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+}
+</style>
