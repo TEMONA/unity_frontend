@@ -34,40 +34,47 @@
 						label="事業部"
 						hide-details="auto"
 						v-model="search.department"
+						class="mt-3"
 					/>
 					<v-text-field
 						label="グループ"
 						hide-details="auto"
 						v-model="search.group"
+						class="mt-3"
 					/>
 					<v-select
 						:items="selectItems.role"
 						hide-details="auto"
 						label="役職"
 						v-model="search.role"
+						class="mt-3"
 					/>
 					<v-select
 						:items="selectItems.type"
 						hide-details="auto"
 						label="職種"
 						v-model="search.type"
+						class="mt-3"
 					/>
 					<v-select
 						:items="selectItems.grade"
 						hide-details="auto"
 						label="グレード"
 						v-model="search.grade"
+						class="mt-3"
 					/>
 					<v-select
 						:items="selectItems.workLength"
 						hide-details="auto"
 						label="勤続年数"
 						v-model="search.workLength"
+						class="mt-3"
 					/>
 					<v-text-field
 						label="業務内容"
 						hide-details="auto"
 						v-model="search.workDetail"
+						class="mt-3"
 					/>
 				</v-card-text>
 				<v-divider />
