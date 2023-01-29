@@ -9,7 +9,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { SearchResultHeaderType } from '../molecules/SearchResultHeader.vue'
-import { UserListItemType } from './UserList.vue'
+import { UserListType } from './UserList.vue'
 
 export default Vue.extend({
 	name: 'UserSearchResult',
@@ -21,7 +21,7 @@ export default Vue.extend({
 		users: {
 			type: Array,
 			required: true,
-		} as Vue.PropOptions<UserListItemType[]>,
+		} as Vue.PropOptions<UserListType[]>,
 	},
 })
 </script>

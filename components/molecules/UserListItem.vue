@@ -18,8 +18,9 @@
 				v-if="status"
 				:color="chipColor"
 				class="UserListItem__chip mt-3 mr-4"
-				>{{ status }}</v-chip
 			>
+				{{ status }}
+			</v-chip>
 
 			<v-list-item-subtitle>
 				{{ detail }}
@@ -30,6 +31,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
+export interface UserListItemType {
+	image: string
+	name: string
+	department: string
+	group: string
+	role?: string
+	status?: string
+	detail: string
+}
 
 export default Vue.extend({
 	name: 'UserListItem',

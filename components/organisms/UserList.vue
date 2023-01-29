@@ -1,8 +1,12 @@
 <template>
 	<div>
 		<UserListItem v-for="(item, index) in users" :key="index" v-bind="item">
-			<template v-if="prepend" v-slot:prepend>
-				{{ prepend }}
+			<template v-if="item.direction" v-slot:prepend>
+				{{
+					item.direction === 'from'
+						? 'この人からのリクエスト：'
+						: 'この人へのリクエスト　：'
+				}}
 			</template>
 		</UserListItem>
 	</div>
@@ -10,15 +14,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { UserListItemType } from '../molecules/UserListItem.vue'
 
-export interface UserListItemType {
-	image: string
-	name: string
-	department: string
-	group: string
-	role?: string
-	status?: string
-	detail: string
+export interface UserListType extends UserListItemType {
+	direction: 'from' | 'to' | undefined
 }
 
 export default Vue.extend({
@@ -32,7 +31,7 @@ export default Vue.extend({
 		users: {
 			type: Array,
 			required: true,
-		} as Vue.PropOptions<UserListItemType[]>,
+		} as Vue.PropOptions<UserListType[]>,
 	},
 })
 </script>
