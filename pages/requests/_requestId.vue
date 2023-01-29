@@ -37,17 +37,33 @@
 				</v-chip>
 			</v-chip-group>
 
-			<Paragraph
-				:text="`この人${
-					request.direction === 'from' ? 'から' : 'へ'
-				}送られた　${request.status}のリクエスト`"
-				class="text-h6"
-			/>
+			<Paragraph class="text-h6">
+				この人{{ request.direction === 'from' ? 'から' : 'へ' }}送られた
+				<v-chip v-if="request.status" :color="chipColor">
+					{{ request.status }}
+				</v-chip>
+				のリクエスト
+			</Paragraph>
 
 			<v-row>
 				<v-col cols="12">
 					<v-card>
-						<v-card-title text="依頼詳細" />
+						<v-card-title> 依頼日時 </v-card-title>
+
+						<v-card-text>
+							<Paragraph
+								:key="index"
+								v-for="(date, index) in request.dates"
+								class="mb-2"
+							>
+								第{{ index + 1 }}希望：{{ date }}
+							</Paragraph>
+						</v-card-text>
+					</v-card>
+				</v-col>
+				<v-col cols="12">
+					<v-card>
+						<v-card-title> 依頼詳細 </v-card-title>
 
 						<v-card-text v-text="request.detail" />
 					</v-card>
@@ -79,11 +95,34 @@ export default Vue.extend({
 			},
 			request: {
 				direction: 'from',
-				status: 'status',
+				status: '未承認',
+				dates: ['2023/1/1', '2023/1/2', '2023/1/3'],
 				detail:
 					'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
 			},
 		}
+	},
+	computed: {
+		chipColor(): string {
+			let color = ''
+			switch (this.request.status) {
+				case '承認済':
+					color = 'primary'
+					break
+
+				case '未承認':
+					color = 'warning'
+					break
+
+				case '拒否済':
+					color = 'accent'
+					break
+
+				default:
+					break
+			}
+			return color
+		},
 	},
 })
 </script>
