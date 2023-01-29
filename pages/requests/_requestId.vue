@@ -79,7 +79,7 @@ import Vue from 'vue'
 export default Vue.extend({
 	head() {
 		return {
-			title: '社員詳細',
+			title: 'リクエスト詳細',
 		}
 	},
 	data() {
