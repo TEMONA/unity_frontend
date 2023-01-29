@@ -14,6 +14,7 @@
 				</span>
 			</v-list-item-title>
 			<slot name="chip" />
+			<v-chip v-if="status" :color="chipColor">{{ status }}</v-chip>
 
 			<v-list-item-subtitle>
 				{{ detail }}
@@ -49,9 +50,36 @@ export default Vue.extend({
 			required: false,
 			default: '',
 		},
+		status: {
+			type: String,
+			required: false,
+			default: '',
+		},
 		detail: {
 			type: String,
 			required: true,
+		},
+	},
+	computed: {
+		chipColor(): string {
+			let color = ''
+			switch (this.status) {
+				case '承認済':
+					color = 'primary'
+					break
+
+				case '未承認':
+					color = 'warning'
+					break
+
+				case '拒否済':
+					color = 'accent'
+					break
+
+				default:
+					break
+			}
+			return color
 		},
 	},
 })
