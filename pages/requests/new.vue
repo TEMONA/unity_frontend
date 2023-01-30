@@ -227,7 +227,7 @@ export default Vue.extend({
 </script>
 
 <style lang="scss">
-.user {
+.request {
 	&__sidebar {
 		position: sticky;
 		top: calc(64px + 16px);
