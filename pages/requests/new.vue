@@ -209,7 +209,7 @@ export default Vue.extend({
 			request: {
 				name: 'フルネーム',
 				status: '未承認',
-				dates: ['2023/1/1', '2023/1/2', '2023/1/3'],
+				dates: ['', '', ''],
 				detail:
 					'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
 			},
