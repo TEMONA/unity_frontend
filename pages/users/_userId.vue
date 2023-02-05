@@ -1,28 +1,18 @@
 <template>
 	<v-row class="user">
 		<v-col cols="12" md="4" class="user__sidebar">
-			<v-avatar size="auto" width="100%" class="mb-2">
-				<v-img :aspect-ratio="1" :src="user.image" alt="社員画像" />
-			</v-avatar>
-			<div class="text-center">
-				<Heading :level="2" :text="user.name" class="font-weight-medium" />
-				<Paragraph
-					:text="`${user.department}事業部 ${user.group}グループ ${user.role}`"
-					class="mb-1"
-				/>
-				<Paragraph :text="user.chatworkId" class="grey--text" />
-				<v-row>
-					<v-col cols="6">
-						<v-btn outlined block color="primary">チャットを開く</v-btn>
-					</v-col>
-					<v-col cols="6">
-						<v-btn outlined block color="primary">meetsを依頼する</v-btn>
-					</v-col>
-					<v-col cols="12">
-						<v-btn block color="primary">ランチを申請する</v-btn>
-					</v-col>
-				</v-row>
-			</div>
+			<UserOverview v-bind="user" />
+			<v-row>
+				<v-col cols="6">
+					<v-btn outlined block color="primary">チャットを開く</v-btn>
+				</v-col>
+				<v-col cols="6">
+					<v-btn outlined block color="primary">meetsを依頼する</v-btn>
+				</v-col>
+				<v-col cols="12">
+					<v-btn block color="primary">ランチを申請する</v-btn>
+				</v-col>
+			</v-row>
 		</v-col>
 		<v-col cols="12" md="8">
 			<v-chip-group class="mb-3">

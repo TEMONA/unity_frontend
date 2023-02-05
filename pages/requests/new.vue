@@ -1,23 +1,13 @@
 <template>
 	<v-row class="request">
 		<v-col cols="12" md="4" class="request__sidebar">
-			<v-avatar size="auto" width="100%" class="mb-2">
-				<v-img :aspect-ratio="1" :src="user.image" alt="社員画像" />
-			</v-avatar>
+			<UserOverview v-bind="user" />
 
-			<div class="text-center">
-				<Heading :level="2" :text="user.name" class="font-weight-medium" />
-				<Paragraph
-					:text="`${user.department}事業部 ${user.group}グループ ${user.role}`"
-					class="mb-1"
-				/>
-				<Paragraph :text="user.chatworkId" class="grey--text" />
-				<v-chip-group>
-					<v-chip v-for="tag in user.tags" :key="tag">
-						{{ tag }}
-					</v-chip>
-				</v-chip-group>
-			</div>
+			<v-chip-group>
+				<v-chip v-for="tag in user.tags" :key="tag">
+					{{ tag }}
+				</v-chip>
+			</v-chip-group>
 		</v-col>
 
 		<v-col cols="12" md="8">
