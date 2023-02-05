@@ -23,8 +23,8 @@
 				</template>
 			</v-text-field>
 
-			<v-card v-if="toggleSearchCard">
-				<v-card-text>
+			<FormCard v-if="toggleSearchCard" title="詳細検索">
+				<template v-slot:default>
 					<v-text-field
 						label="氏名"
 						hide-details="auto"
@@ -76,13 +76,11 @@
 						v-model="search.workDetail"
 						class="mt-3"
 					/>
-				</v-card-text>
-				<v-divider />
-				<v-card-actions>
-					<v-spacer />
+				</template>
+				<template v-slot:action>
 					<v-btn color="primary" @click="searchUsers">検索</v-btn>
-				</v-card-actions>
-			</v-card>
+				</template>
+			</FormCard>
 		</v-col>
 		<v-col cols="12" md="8">
 			<UserSearchResult :meta="meta" :users="users" />

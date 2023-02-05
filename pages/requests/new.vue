@@ -21,10 +21,8 @@
 		</v-col>
 
 		<v-col cols="12" md="8">
-			<v-card class="align-end">
-				<v-card-title>新規リクエスト作成</v-card-title>
-
-				<v-card-text>
+			<FormCard title="新規リクエスト作成">
+				<template v-slot:default>
 					<v-select
 						:items="users"
 						hide-details="auto"
@@ -174,15 +172,14 @@
 						name="detail"
 						label="リクエスト詳細"
 						auto-grow
+						rows="1"
 						class="mt-2"
 					/>
-				</v-card-text>
-				<v-divider />
-				<v-card-actions>
-					<v-spacer />
+				</template>
+				<template v-slot:action>
 					<v-btn color="primary" @click="handleSearch">申請</v-btn>
-				</v-card-actions>
-			</v-card>
+				</template>
+			</FormCard>
 		</v-col>
 	</v-row>
 </template>

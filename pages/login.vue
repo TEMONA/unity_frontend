@@ -1,22 +1,19 @@
 <template>
 	<v-row align="center">
 		<v-col cols="10" md="6" offset="1" offset-md="3" class="login">
-			<v-card class="align-end">
-				<v-card-title>ログイン</v-card-title>
-				<v-card-text>
+			<FormCard title="ログイン">
+				<template v-slot:default>
 					<v-text-field
 						label="メールアドレス"
 						:hide-details="false"
 						v-model="email"
 					/>
 					<v-text-field label="パスワード" type="password" v-model="password" />
-				</v-card-text>
-				<v-divider />
-				<v-card-actions>
-					<v-spacer />
+				</template>
+				<template v-slot:action>
 					<v-btn color="primary" @click="handleLogin">ログイン</v-btn>
-				</v-card-actions>
-			</v-card>
+				</template>
+			</FormCard>
 		</v-col>
 	</v-row>
 </template>

@@ -1,8 +1,8 @@
 <template>
 	<v-row class="requests">
 		<v-col cols="12" md="4" class="requests__sidebar">
-			<v-card>
-				<v-card-text>
+			<FormCard title="リクエストを検索">
+				<template v-slot:default>
 					<v-text-field
 						label="相手の氏名"
 						hide-details="auto"
@@ -66,7 +66,7 @@
 						<template v-slot:activator="{ on, attrs }">
 							<v-text-field
 								:value="dateRangeText"
-								label="リクエスト日時"
+								label="リクエスト日時（範囲）"
 								hide-details="auto"
 								readonly
 								v-bind="attrs"
@@ -91,13 +91,11 @@
 							</v-btn>
 						</v-date-picker>
 					</v-menu>
-				</v-card-text>
-				<v-divider />
-				<v-card-actions>
-					<v-spacer />
+				</template>
+				<template v-slot:action>
 					<v-btn color="primary" @click="searchRequests">検索</v-btn>
-				</v-card-actions>
-			</v-card>
+				</template>
+			</FormCard>
 		</v-col>
 
 		<v-col cols="12" md="8">

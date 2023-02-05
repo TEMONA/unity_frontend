@@ -1,5 +1,5 @@
 <template>
-	<component :is="`h${level}`" class="Heading" :class="[`text-h${level}`]">
+	<component :is="`h${level}`" class="Heading" :class="[`text-${textSize}`]">
 		{{ text }}
 	</component>
 </template>
@@ -24,6 +24,37 @@ export default Vue.extend({
 		text: {
 			type: String,
 			required: true,
+		},
+	},
+	computed: {
+		textSize(): string {
+			let size = ''
+			switch (Number(this.level)) {
+				case 1:
+					size = 'h3'
+					break
+
+				case 2:
+					size = 'h4'
+					break
+
+				case 3:
+					size = 'h5'
+					break
+
+				case 4:
+					size = 'h6'
+					break
+
+				case 5:
+					size = 'subtitle-1'
+					break
+
+				default:
+					size = 'subtitle-2'
+					break
+			}
+			return size
 		},
 	},
 })

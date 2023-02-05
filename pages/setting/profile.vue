@@ -21,10 +21,8 @@
 		</v-col>
 
 		<v-col cols="12" md="8">
-			<v-card class="align-end">
-				<v-card-title>プロフィール編集</v-card-title>
-
-				<v-card-text>
+			<FormCard title="プロフィール編集">
+				<template v-slot:default>
 					<v-file-input accept="image/*" label="プロフィール画像" />
 					<v-select
 						:items="dates"
@@ -95,13 +93,11 @@
 						hide-details="auto"
 						class="mt-3"
 					/>
-				</v-card-text>
-				<v-divider />
-				<v-card-actions>
-					<v-spacer />
+				</template>
+				<template v-slot:action>
 					<v-btn color="primary" @click="handleSubmit">保存</v-btn>
-				</v-card-actions>
-			</v-card>
+				</template>
+			</FormCard>
 		</v-col>
 	</v-row>
 </template>
