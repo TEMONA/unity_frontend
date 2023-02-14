@@ -1,11 +1,16 @@
 <template>
 	<v-card class="align-end">
+		<slot name="header" />
+		<v-divider v-if="$scopedSlots.header" />
+
 		<v-card-title>{{ title }}</v-card-title>
 
 		<v-card-text>
 			<slot />
 		</v-card-text>
+
 		<v-divider />
+
 		<v-card-actions>
 			<v-spacer />
 			<slot name="action" />

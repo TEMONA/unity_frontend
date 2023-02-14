@@ -5,10 +5,16 @@
 				<template v-slot:default>
 					<v-text-field
 						label="メールアドレス"
-						:hide-details="false"
+						type="email"
+						hide-details="auto"
 						v-model="email"
 					/>
-					<v-text-field label="パスワード" type="password" v-model="password" />
+					<v-text-field
+						label="パスワード"
+						type="password"
+						hide-details="auto"
+						v-model="password"
+					/>
 				</template>
 				<template v-slot:action>
 					<v-btn color="primary" @click="handleLogin">ログイン</v-btn>
