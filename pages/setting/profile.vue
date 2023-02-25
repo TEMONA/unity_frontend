@@ -1,10 +1,10 @@
 <template>
 	<v-row class="profile">
 		<v-col cols="12" md="4" class="profile__sidebar">
-			<UserOverview v-bind="user" />
+			<UserOverview v-bind="overview" />
 
 			<v-chip-group>
-				<v-chip v-for="tag in user.tags" :key="tag">
+				<v-chip v-for="tag in tags" :key="tag">
 					{{ tag }}
 				</v-chip>
 			</v-chip-group>
@@ -13,16 +13,8 @@
 		<v-col cols="12" md="8">
 			<FormCard title="プロフィール編集">
 				<template v-slot:default>
-					<v-file-input accept="image/*" label="プロフィール画像" />
-					<v-select
-						:items="dates"
-						hide-details="auto"
-						label="出社曜日"
-						v-model="profile.workDay"
-						class="mt-3"
-					/>
 					<v-textarea
-						v-model="profile.workDetail"
+						v-model="profile.jobDescription"
 						label="業務内容"
 						hide-details="auto"
 						auto-grow
@@ -30,7 +22,7 @@
 						class="mt-3"
 					/>
 					<v-textarea
-						v-model="profile.workRole"
+						v-model="profile.jobRole"
 						label="仕事の役割"
 						hide-details="auto"
 						auto-grow
@@ -40,14 +32,6 @@
 					<v-textarea
 						v-model="profile.career"
 						label="経歴"
-						hide-details="auto"
-						auto-grow
-						rows="1"
-						class="mt-3"
-					/>
-					<v-text-field
-						v-model="profile.birthplace"
-						label="出身地"
 						hide-details="auto"
 						auto-grow
 						rows="1"
@@ -70,7 +54,7 @@
 						class="mt-3"
 					/>
 					<v-textarea
-						v-model="profile.point"
+						v-model="profile.strengths"
 						label="アピールポイント"
 						hide-details="auto"
 						auto-grow
@@ -78,7 +62,7 @@
 						class="mt-3"
 					/>
 					<v-text-field
-						v-model="profile.comment"
+						v-model="profile.message"
 						label="最後にひとこと"
 						hide-details="auto"
 						class="mt-3"
@@ -94,6 +78,22 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { UserOverviewType } from '~/components/organisms/UserOverview.vue'
+
+interface dataType {
+	overview: UserOverviewType
+	tags: string[]
+	profile: {
+		jobDescription: string
+		jobRole: string
+		career: string
+		hobby: string
+		specialty: string
+		strengths: string
+		message: string
+	}
+	request: any
+}
 
 export default Vue.extend({
 	head() {
@@ -101,31 +101,47 @@ export default Vue.extend({
 			title: 'プロフィール編集',
 		}
 	},
-	data() {
+	async asyncData({ app, store, route }) {
+		const response = app.$axios
+			.get(`/api/users/${store.state.authorization.userId}`)
+			.then((res: any) => {
+				const { overview, tags, detail } = res
+				const profile = Object.keys(detail).reduce((target: any, key) => {
+					target[key] = detail[key].text
+					return target
+				}, {})
+
+				return { overview, tags, profile }
+			})
+			.catch((err: any) => {
+				this.$store.commit('snackbar/displaySnackbar', {
+					status: err.response.status,
+				})
+			})
+
+		return { ...response }
+	},
+	data(): dataType {
 		return {
-			dates: ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日'],
-			user: {
+			overview: {
 				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
 				name: 'User Name',
-				department: '〇〇',
-				group: '〇〇',
+				headquarters: '〇〇事業本部',
+				department: '〇〇事業部',
+				group: '〇〇グループ',
 				role: 'グループ長',
-				chatworkId: '@chatwork_id',
-				tags: ['エンジニア職', '勤続3年', 'Aグレード'],
+				chatworkId: 'chatwork_id',
 			},
+			tags: [],
 			profile: {
-				image: '',
-				birthplace: '',
-				workDay: [],
-				workDetail: '',
-				workRole: '',
+				jobDescription: '',
+				jobRole: '',
 				career: '',
 				hobby: '',
 				specialty: '',
-				point: '',
-				comment: '',
+				strengths: '',
+				message: '',
 			},
-			datePickerIsActive: [false, false, false],
 			request: {
 				name: 'フルネーム',
 				status: '未承認',
@@ -137,7 +153,17 @@ export default Vue.extend({
 	},
 	methods: {
 		handleSubmit() {
-			console.log('submit')
+			this.$axios
+				.patch('/api/users/', {
+					user_id: this.$store.state.authorization.userId,
+					contents: { ...this.$toSnakeCaseObject(this.profile) },
+				})
+				.then(() => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: 200,
+						message: '社員情報を更新しました',
+					})
+				})
 		},
 	},
 })

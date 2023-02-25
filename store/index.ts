@@ -6,6 +6,7 @@ import get from 'lodash/get'
 interface AuthorizationStateType {
 	access: string | false
 	refresh: string | false
+	userId: string
 }
 
 interface configStateType {
@@ -20,6 +21,7 @@ interface StateType {
 const initialAuthorizationState: AuthorizationStateType = {
 	access: false,
 	refresh: false,
+	userId: '',
 }
 
 const initialconfigState: configStateType = {

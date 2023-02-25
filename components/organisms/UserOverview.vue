@@ -7,10 +7,10 @@
 		<div class="text-center">
 			<Heading :level="2" :text="name" class="font-weight-medium" />
 			<Paragraph
-				:text="`${department}事業部 ${group}グループ ${role}`"
+				:text="`${headquarters} ${department} ${group} ${role}`"
 				class="mb-1"
 			/>
-			<Paragraph :text="chatworkId" class="grey--text" />
+			<Paragraph :text="`@${chatworkId}`" class="grey--text" />
 		</div>
 	</div>
 </template>

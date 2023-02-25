@@ -50,9 +50,8 @@ export default Vue.extend({
 					password: this.password,
 				})
 				.then((res: any) => {
-					const { access, refresh } = res
 					this.$store.dispatch('login', {
-						authorization: { access, refresh },
+						authorization: { ...res },
 						redirectTo,
 					})
 				})

@@ -5,7 +5,7 @@
 			<v-row>
 				<v-col cols="6">
 					<v-btn
-						:href="`https://www.chatwork.com/${user.chatworkId}`"
+						:href="`https://www.chatwork.com/${detail.chatworkId}`"
 						outlined
 						block
 						color="primary"
@@ -17,7 +17,7 @@
 				</v-col>
 				<v-col cols="12">
 					<v-btn
-						:href="`/requests/new?user_id=${user.user_id}`"
+						:href="`/requests/new?user_id=${detail.user_id}`"
 						block
 						color="primary"
 						>ランチを申請する</v-btn
@@ -33,7 +33,7 @@
 			</v-chip-group>
 
 			<v-row>
-				<v-col cols="12" :key="index" v-for="(item, index) in user.details">
+				<v-col cols="12" :key="index" v-for="(item, index) in detail.details">
 					<v-card>
 						<v-card-title v-text="item.title" />
 
@@ -52,7 +52,7 @@ import { UserOverviewType } from '~/components/organisms/UserOverview.vue'
 interface dataType {
 	overview: UserOverviewType
 	tags: string[]
-	user: any
+	detail: any
 }
 
 export default Vue.extend({
@@ -60,6 +60,17 @@ export default Vue.extend({
 		return {
 			title: '社員詳細',
 		}
+	},
+	async asyncData({ app, route }) {
+		const response = app.$axios
+			.get(`/api/users/${route.params.userId}`)
+			.catch((err: any) => {
+				this.$store.commit('snackbar/displaySnackbar', {
+					status: err.response.status,
+				})
+			})
+
+		return { ...response }
 	},
 	data(): dataType {
 		return {
@@ -70,55 +81,14 @@ export default Vue.extend({
 				department: '〇〇事業部',
 				group: '〇〇グループ',
 				role: 'グループ長',
-				chatworkId: '@chatwork_id',
+				chatworkId: 'chatwork_id',
 			},
 			tags: ['エンジニア職', '勤続3年', 'Aグレード'],
-			user: {
+			detail: {
 				user_id: '',
-				details: [
-					{
-						title: '業務内容',
-						text: 'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
-					},
-					{
-						title: '仕事の役割',
-						text: 'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
-					},
-					{
-						title: '経歴',
-						text: 'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
-					},
-					{
-						title: '趣味',
-						text: 'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
-					},
-					{
-						title: '特技、強み',
-						text: 'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
-					},
-					{
-						title: 'アピールポイント',
-						text: 'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
-					},
-					{
-						title: '最後にひとこと',
-						text: 'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
-					},
-				],
+				details: [],
 			},
 		}
-	},
-	created() {
-		this.$axios
-			.get('/api/users')
-			.then((res: any) => {
-				this.user = res
-			})
-			.catch((err: any) => {
-				this.$store.commit('snackbar/displaySnackbar', {
-					status: err.response.status,
-				})
-			})
 	},
 })
 </script>
