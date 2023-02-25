@@ -3,7 +3,7 @@
 		<v-col cols="10" md="6" offset="1" offset-md="3" class="login">
 			<FormCard title="パスワード変更">
 				<template v-slot:header>
-					<v-stepper alt-labels flat="true" v-model="step">
+					<v-stepper alt-labels :flat="true" v-model="step">
 						<v-stepper-header>
 							<v-stepper-step step="1">変更メール送信</v-stepper-step>
 							<v-divider />
