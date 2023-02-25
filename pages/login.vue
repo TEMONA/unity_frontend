@@ -43,7 +43,7 @@ export default Vue.extend({
 	},
 	methods: {
 		handleLogin(): void {
-			const redirectTo = this.$route.query.to || '/mypage'
+			const redirectTo = this.$route.query.to || '/users'
 			this.$axios
 				.post('/authen/jwt/create', {
 					email: this.email,
