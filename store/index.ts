@@ -4,8 +4,8 @@ import { ActionContext } from 'vuex/types'
 import get from 'lodash/get'
 
 interface AuthorizationStateType {
-	access: string | null
-	refresh: string | null
+	access: string | false
+	refresh: string | false
 }
 
 interface configStateType {
@@ -18,8 +18,8 @@ interface StateType {
 }
 
 const initialAuthorizationState: AuthorizationStateType = {
-	access: null,
-	refresh: null,
+	access: false,
+	refresh: false,
 }
 
 const initialconfigState: configStateType = {
@@ -71,6 +71,7 @@ export const actions: ActionTree<RootState, RootState> = {
 			.$post(`${state.config.baseUrl}/api/login`, { authorization })
 			.then(() => {
 				commit('login', authorization)
+				this.$axios.setToken(authorization.access, 'JWT')
 				this.$router.push(redirectTo)
 			})
 			.catch(() => {
@@ -95,6 +96,7 @@ export const actions: ActionTree<RootState, RootState> = {
 			.$delete(`${state.config.baseUrl}/api/logout`)
 			.then(() => {
 				commit('logout')
+				this.$axios.setToken(false, 'JWT')
 				if (isRedirect) {
 					this.$router.push('/login')
 				}

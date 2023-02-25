@@ -14,6 +14,7 @@
 						type="password"
 						hide-details="auto"
 						v-model="password"
+						class="mt-3"
 					/>
 				</template>
 				<template v-slot:action>
@@ -43,22 +44,26 @@ export default Vue.extend({
 	methods: {
 		handleLogin(): void {
 			const redirectTo = this.$route.query.to || '/mypage'
-			this.$store.dispatch('login', {
-				authorization: { access: 'hoge', refresh: 'fuga' },
-				redirectTo,
-			})
-			// this.$axios
-			// 	.post('/auth/sign_in', {
-			// 		email: this.email,
-			// 		password: this.password,
-			// 	})
-			// 	.then((res: any) => {
-			// 		console.log(res)
-			// 	})
-			// 	.catch((err: any) => {
-			// 		console.log(err)
-			// 		console.log(err.response)
-			// 	})
+			this.$axios
+				.post('/authen/jwt/create', {
+					email: this.email,
+					password: this.password,
+				})
+				.then((res: any) => {
+					const { access, refresh } = res
+					this.$store.dispatch('login', {
+						authorization: { access, refresh },
+						redirectTo,
+					})
+				})
+				.catch((err: any) => {
+					console.log(err)
+					console.log(err.response)
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response.status,
+						message: 'メールアドレスかパスワードが正しくありません',
+					})
+				})
 		},
 	},
 })
