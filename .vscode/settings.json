@@ -17,5 +17,6 @@
 	// vue docs
 	"vueDocs.links": {
 		"Vuetify": "https://vuetifyjs.com/getting-started/quick-start"
-	}
+	},
+	"vetur.experimental.templateInterpolationService": true
 }

@@ -143,7 +143,11 @@ export default Vue.extend({
 			this.$axios
 				.get('/api/users')
 				.then((res: UserListType[]) => {
-					this.users.splice(0, this.users.length, ...res)
+					this.users.splice(
+						0,
+						this.users.length,
+						...this.$toCamelCaseObjectArray(res),
+					)
 				})
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
