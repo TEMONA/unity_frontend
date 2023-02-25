@@ -1,22 +1,33 @@
 <template>
 	<v-row class="user">
 		<v-col cols="12" md="4" class="user__sidebar">
-			<UserOverview v-bind="user" />
+			<UserOverview v-bind="overview" />
 			<v-row>
 				<v-col cols="6">
-					<v-btn outlined block color="primary">チャットを開く</v-btn>
+					<v-btn
+						:href="`https://www.chatwork.com/${user.chatworkId}`"
+						outlined
+						block
+						color="primary"
+						>チャットを開く</v-btn
+					>
 				</v-col>
 				<v-col cols="6">
 					<v-btn outlined block color="primary">meetsを依頼する</v-btn>
 				</v-col>
 				<v-col cols="12">
-					<v-btn block color="primary">ランチを申請する</v-btn>
+					<v-btn
+						:href="`/requests/new?user_id=${user.user_id}`"
+						block
+						color="primary"
+						>ランチを申請する</v-btn
+					>
 				</v-col>
 			</v-row>
 		</v-col>
 		<v-col cols="12" md="8">
 			<v-chip-group class="mb-3">
-				<v-chip v-for="tag in user.tags" :key="tag">
+				<v-chip v-for="tag in tags" :key="tag">
 					{{ tag }}
 				</v-chip>
 			</v-chip-group>
@@ -36,6 +47,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { UserOverviewType } from '~/components/organisms/UserOverview.vue'
+
+interface dataType {
+	overview: UserOverviewType
+	tags: string[]
+	user: any
+}
 
 export default Vue.extend({
 	head() {
@@ -43,16 +61,20 @@ export default Vue.extend({
 			title: '社員詳細',
 		}
 	},
-	data() {
+	data(): dataType {
 		return {
-			user: {
+			overview: {
 				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
 				name: 'User Name',
-				department: '〇〇',
-				group: '〇〇',
+				headquarters: '〇〇事業本部',
+				department: '〇〇事業部',
+				group: '〇〇グループ',
 				role: 'グループ長',
 				chatworkId: '@chatwork_id',
-				tags: ['エンジニア職', '勤続3年', 'Aグレード'],
+			},
+			tags: ['エンジニア職', '勤続3年', 'Aグレード'],
+			user: {
+				user_id: '',
 				details: [
 					{
 						title: '業務内容',
@@ -85,6 +107,18 @@ export default Vue.extend({
 				],
 			},
 		}
+	},
+	created() {
+		this.$axios
+			.get('/api/users')
+			.then((res: any) => {
+				this.user = res
+			})
+			.catch((err: any) => {
+				this.$store.commit('snackbar/displaySnackbar', {
+					status: err.response.status,
+				})
+			})
 	},
 })
 </script>

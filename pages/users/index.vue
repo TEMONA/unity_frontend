@@ -90,6 +90,19 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { UserListType } from '~/components/organisms/UserList.vue'
+
+interface dataType {
+	toggleSearchCard: boolean
+	selectItems: any
+	search: any
+	meta: {
+		start: number
+		end: number
+		total: number
+	}
+	users: UserListType[]
+}
 
 export default Vue.extend({
 	head() {
@@ -97,7 +110,7 @@ export default Vue.extend({
 			title: '社員一覧',
 		}
 	},
-	data() {
+	data(): dataType {
 		return {
 			toggleSearchCard: false,
 			selectItems: {
@@ -108,6 +121,7 @@ export default Vue.extend({
 			},
 			search: {
 				name: '',
+				headquarters: '',
 				department: '',
 				group: '',
 				role: '',
@@ -121,21 +135,21 @@ export default Vue.extend({
 				end: 3,
 				total: 30,
 			},
-			users: [
-				{
-					image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
-					name: '氏名',
-					department: '事業部',
-					group: 'グループ',
-					role: '役職',
-					detail: '業務内容を２行だけ表示...',
-				},
-			],
+			users: [],
 		}
 	},
 	methods: {
 		searchUsers(): void {
-			console.log('search')
+			this.$axios
+				.get('/api/users')
+				.then((res: UserListType[]) => {
+					this.users.splice(0, this.users.length, ...res)
+				})
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response.status,
+					})
+				})
 		},
 	},
 })

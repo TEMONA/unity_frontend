@@ -18,6 +18,16 @@
 <script lang="ts">
 import Vue from 'vue'
 
+export interface UserOverviewType {
+	image: string
+	name: string
+	headquarters: string
+	department?: string | null
+	group?: string | null
+	role?: string | null
+	chatworkId: string
+}
+
 export default Vue.extend({
 	name: 'UserOverview',
 	props: {
@@ -29,13 +39,19 @@ export default Vue.extend({
 			type: String,
 			required: true,
 		},
-		department: {
+		headquarters: {
 			type: String,
 			required: true,
 		},
+		department: {
+			type: String,
+			required: false,
+			default: '',
+		},
 		group: {
 			type: String,
-			required: true,
+			required: false,
+			default: '',
 		},
 		role: {
 			type: String,

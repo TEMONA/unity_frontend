@@ -9,7 +9,7 @@
 				<slot name="prepend" />
 				{{ name }}
 				<span class="grey--text text-caption">
-					{{ department }} {{ group }}
+					{{ headquarters }} {{ group }}
 					{{ role }}
 				</span>
 			</v-list-item-title>
@@ -35,8 +35,9 @@ import Vue from 'vue'
 export interface UserListItemType {
 	image: string
 	name: string
-	department: string
-	group: string
+	headquarters: string
+	department?: string
+	group?: string
 	role?: string
 	status?: string
 	detail: string
@@ -53,13 +54,19 @@ export default Vue.extend({
 			type: String,
 			required: true,
 		},
-		department: {
+		headquarters: {
 			type: String,
 			required: true,
 		},
+		department: {
+			type: String,
+			required: false,
+			default: '',
+		},
 		group: {
 			type: String,
-			required: true,
+			required: false,
+			default: '',
 		},
 		role: {
 			type: String,

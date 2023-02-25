@@ -17,7 +17,7 @@ import Vue from 'vue'
 import { UserListItemType } from '../molecules/UserListItem.vue'
 
 export interface UserListType extends UserListItemType {
-	direction: 'from' | 'to' | undefined
+	direction?: 'from' | 'to' | undefined
 }
 
 export default Vue.extend({
