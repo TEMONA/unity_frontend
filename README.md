@@ -1,5 +1,9 @@
 # unity_frontend
 
+## Backlog
+
+TEMONA_UNITY-62
+
 ## Build Setup
 
 ```bash
@@ -15,7 +19,38 @@ $ yarn start
 
 # generate static project
 $ yarn generate
+
+# deploy
+$ yarn run deploy
 ```
+
+## 環境構築
+
+1. git clone git@github.com:TEMONA/unity_frontend.git
+2. yarn install
+3. https://github.com/aws/aws-elastic-beanstalk-cli-setup から eb cli をインストール
+4. AWS 立ち上げ（新しく stage 作る時とかのみ）
+   1. eb init --platform node.js --region ap-northeast-1 --interactive（aws-access-id 必要になるので注意）
+      - Do you want to set up SSH for your instances? → Y
+   1. eb create --sample unity-frontend --platform node.js-14
+   1. eb open（ページを開いて確認）
+   1. EB 管理画面から設定 → ソフトウェアの「環境プロパティ」で環境変数設定
+5. AWS（Elastic Beanstalk）への ssh 接続（新しく stage 作る時とかのみ）
+   1. ターミナルのコマンドで eb ssh
+6. AWS への yarn install（新しく stage 作る時とかのみ）
+   1. eb ssh
+   1. curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+   1. source .bashrc
+   1. nvm --version
+   1. nvm install 14.17.1
+   1. node -v
+   1. npm -v
+   1. curl -o- -L https://yarnpkg.com/install.sh | bash
+   1. source .bashrc
+   1. yarn -V
+7. AWS へのデプロイ
+   1. ソース修正したら
+   1. yarn run deploy
 
 ## フォルダ構成
 
@@ -41,6 +76,26 @@ root
 ```
 
 ## 開発環境
+
+### 各種バージョン
+
+node -v
+
+> v14.17.1
+
+yarn -v
+
+> 1.22.17
+
+uname -v
+
+> Darwin Kernel Version 20.5.0: Sat May 8 05:10:33 PDT 2021; root:xnu-7195.121.3~9/RELEASE_X86_64
+
+sw_vers
+
+> ProductName: macOS
+> ProductVersion: 11.4
+> BuildVersion: 20F71
 
 ### エディタ
 

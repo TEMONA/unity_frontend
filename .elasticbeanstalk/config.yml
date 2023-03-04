@@ -1,0 +1,22 @@
+branch-defaults:
+  develop:
+    environment: unity-frontend
+    group_suffix: null
+environment-defaults:
+  node-express-env:
+    branch: develop
+    repository: unity_frontend
+global:
+  application_name: unity_frontend
+  branch: null
+  default_ec2_keyname: stg_unity_frontend
+  default_platform: Node.js 16
+  default_region: ap-northeast-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  repository: null
+  sc: git
+  workspace_type: Application
