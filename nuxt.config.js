@@ -1,6 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
 import { Sass } from 'sass'
-import { Fibers } from 'fibers'
 import bodyParser from 'body-parser'
 import session from 'cookie-session'
 
@@ -99,10 +98,6 @@ export default {
 		loaders: {
 			scss: {
 				implementation: Sass,
-				// fibersをインストールした場合
-				sassOptions: {
-					fiber: Fibers,
-				},
 			},
 		},
 	},
