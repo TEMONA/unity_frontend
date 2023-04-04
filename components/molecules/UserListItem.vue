@@ -14,16 +14,9 @@
 				</span>
 			</v-list-item-title>
 			<slot name="chip" />
-			<v-chip
-				v-if="status"
-				:color="chipColor"
-				class="UserListItem__chip mt-3 mr-4"
-			>
-				{{ status }}
-			</v-chip>
 
 			<v-list-item-subtitle>
-				{{ detail }}
+				{{ jobDescription }}
 			</v-list-item-subtitle>
 		</v-list-item-content>
 	</v-list-item>
@@ -39,8 +32,7 @@ export interface UserListItemType {
 	department?: string
 	group?: string
 	role?: string
-	status?: string
-	detail: string
+	jobDescription: string
 }
 
 export default Vue.extend({
@@ -73,36 +65,9 @@ export default Vue.extend({
 			required: false,
 			default: '',
 		},
-		status: {
-			type: String,
-			required: false,
-			default: '',
-		},
-		detail: {
+		jobDescription: {
 			type: String,
 			required: true,
-		},
-	},
-	computed: {
-		chipColor(): string {
-			let color = ''
-			switch (this.status) {
-				case '承認済':
-					color = 'primary'
-					break
-
-				case '未承認':
-					color = 'warning'
-					break
-
-				case '拒否済':
-					color = 'accent'
-					break
-
-				default:
-					break
-			}
-			return color
 		},
 	},
 })

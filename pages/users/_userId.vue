@@ -5,7 +5,8 @@
 			<v-row>
 				<v-col cols="6">
 					<v-btn
-						:href="`https://www.chatwork.com/${detail.chatworkId}`"
+						v-if="overview.chatworkId"
+						:href="`https://www.chatwork.com/${overview.chatworkId}`"
 						outlined
 						block
 						color="primary"
@@ -13,15 +14,23 @@
 					>
 				</v-col>
 				<v-col cols="6">
-					<v-btn outlined block color="primary">meetsを依頼する</v-btn>
+					<v-btn
+						href="https://calendar.google.com/calendar/u/0/r/day"
+						outlined
+						block
+						color="primary"
+					>
+						meetsを依頼する
+					</v-btn>
 				</v-col>
 				<v-col cols="12">
 					<v-btn
-						:href="`/requests/new?user_id=${detail.user_id}`"
+						:href="`/requests/new?user_id=${$route.params.userId}`"
 						block
 						color="primary"
-						>ランチを申請する</v-btn
 					>
+						ランチを申請する
+					</v-btn>
 				</v-col>
 			</v-row>
 		</v-col>
@@ -33,13 +42,15 @@
 			</v-chip-group>
 
 			<v-row>
-				<v-col cols="12" :key="index" v-for="(item, index) in detail.details">
-					<v-card>
-						<v-card-title v-text="item.title" />
+				<template v-for="(item, index) in details">
+					<v-col v-if="item.value" cols="12" :key="index">
+						<v-card>
+							<v-card-title v-text="item.title" />
 
-						<v-card-text v-text="item.text" />
-					</v-card>
-				</v-col>
+							<v-card-text v-text="item.value" />
+						</v-card>
+					</v-col>
+				</template>
 			</v-row>
 		</v-col>
 	</v-row>
@@ -52,7 +63,7 @@ import { UserOverviewType } from '~/components/organisms/UserOverview.vue'
 interface dataType {
 	overview: UserOverviewType
 	tags: string[]
-	detail: any
+	details: any
 }
 
 export default Vue.extend({
@@ -77,17 +88,15 @@ export default Vue.extend({
 			overview: {
 				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
 				name: 'User Name',
+				nameKana: 'hoge',
 				headquarters: '〇〇事業本部',
 				department: '〇〇事業部',
 				group: '〇〇グループ',
 				role: 'グループ長',
 				chatworkId: 'chatwork_id',
 			},
-			tags: ['エンジニア職', '勤続3年', 'Aグレード'],
-			detail: {
-				user_id: '',
-				details: [],
-			},
+			tags: [],
+			details: [],
 		}
 	},
 })

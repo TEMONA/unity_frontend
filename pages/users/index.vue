@@ -31,6 +31,12 @@
 						v-model="search.name"
 					/>
 					<v-text-field
+						label="事業本部"
+						hide-details="auto"
+						v-model="search.headquarters"
+						class="mt-3"
+					/>
+					<v-text-field
 						label="事業部"
 						hide-details="auto"
 						v-model="search.department"
@@ -42,38 +48,10 @@
 						v-model="search.group"
 						class="mt-3"
 					/>
-					<v-select
-						:items="selectItems.role"
-						hide-details="auto"
-						label="役職"
-						v-model="search.role"
-						class="mt-3"
-					/>
-					<v-select
-						:items="selectItems.type"
-						hide-details="auto"
-						label="職種"
-						v-model="search.type"
-						class="mt-3"
-					/>
-					<v-select
-						:items="selectItems.grade"
-						hide-details="auto"
-						label="グレード"
-						v-model="search.grade"
-						class="mt-3"
-					/>
-					<v-select
-						:items="selectItems.workLength"
-						hide-details="auto"
-						label="勤続年数"
-						v-model="search.workLength"
-						class="mt-3"
-					/>
 					<v-text-field
 						label="業務内容"
 						hide-details="auto"
-						v-model="search.workDetail"
+						v-model="search.jobDescription"
 						class="mt-3"
 					/>
 				</template>
@@ -94,7 +72,6 @@ import { UserListType } from '~/components/organisms/UserList.vue'
 
 interface dataType {
 	toggleSearchCard: boolean
-	selectItems: any
 	search: any
 	meta: {
 		start: number
@@ -113,22 +90,12 @@ export default Vue.extend({
 	data(): dataType {
 		return {
 			toggleSearchCard: false,
-			selectItems: {
-				role: ['Foo', 'Bar', 'Fizz', 'Buzz'],
-				type: ['Foo', 'Bar', 'Fizz', 'Buzz'],
-				grade: ['Foo', 'Bar', 'Fizz', 'Buzz'],
-				workLength: ['Foo', 'Bar', 'Fizz', 'Buzz'],
-			},
 			search: {
 				name: '',
 				headquarters: '',
 				department: '',
 				group: '',
-				role: '',
-				type: '',
-				grade: '',
-				workLength: '',
-				workDetail: '',
+				jobDescription: '',
 			},
 			meta: {
 				start: 1,

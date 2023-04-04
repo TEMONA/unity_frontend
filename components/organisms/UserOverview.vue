@@ -5,12 +5,17 @@
 		</v-avatar>
 
 		<div class="text-center">
+			<Paragraph :text="nameKana" class="text-caption" />
 			<Heading :level="2" :text="name" class="font-weight-medium" />
 			<Paragraph
 				:text="`${headquarters} ${department} ${group} ${role}`"
 				class="mb-1"
 			/>
-			<Paragraph :text="`@${chatworkId}`" class="grey--text" />
+			<Paragraph
+				v-if="chatworkId"
+				:text="`@${chatworkId}`"
+				class="grey--text"
+			/>
 		</div>
 	</div>
 </template>
@@ -21,11 +26,12 @@ import Vue from 'vue'
 export interface UserOverviewType {
 	image: string
 	name: string
+	nameKana: string
 	headquarters: string
 	department?: string | null
 	group?: string | null
 	role?: string | null
-	chatworkId: string
+	chatworkId?: string | null
 }
 
 export default Vue.extend({
@@ -36,6 +42,10 @@ export default Vue.extend({
 			required: true,
 		},
 		name: {
+			type: String,
+			required: true,
+		},
+		nameKana: {
 			type: String,
 			required: true,
 		},
@@ -60,7 +70,8 @@ export default Vue.extend({
 		},
 		chatworkId: {
 			type: String,
-			required: true,
+			required: false,
+			default: '',
 		},
 	},
 })
