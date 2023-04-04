@@ -87,6 +87,16 @@ export default Vue.extend({
 			title: '社員一覧',
 		}
 	},
+	async asyncData({ app }) {
+		const response = app.$axios.get(`/api/users`).catch((err: any) => {
+			this.$store.commit('snackbar/displaySnackbar', {
+				status: err.response.status,
+			})
+			return []
+		})
+
+		return { users: response }
+	},
 	data(): dataType {
 		return {
 			toggleSearchCard: false,
@@ -107,8 +117,9 @@ export default Vue.extend({
 	},
 	methods: {
 		searchUsers(): void {
+			const params = this.$toSnakeCaseObject(this.search)
 			this.$axios
-				.get('/api/users')
+				.get('/api/users', params)
 				.then((res: UserListType[]) => {
 					this.users.splice(
 						0,
