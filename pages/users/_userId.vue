@@ -79,6 +79,11 @@ export default Vue.extend({
 				this.$store.commit('snackbar/displaySnackbar', {
 					status: err.response.status,
 				})
+				return {
+					overview: {},
+					tags: [],
+					details: [],
+				}
 			})
 
 		return { ...response }
