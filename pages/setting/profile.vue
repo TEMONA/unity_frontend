@@ -120,6 +120,11 @@ export default Vue.extend({
 						message: '社員情報を更新しました',
 					})
 				})
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response.status,
+					})
+				})
 		},
 	},
 })
