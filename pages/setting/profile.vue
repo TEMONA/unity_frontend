@@ -123,6 +123,7 @@ export default Vue.extend({
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
 						status: err.response.status,
+						message: err.response.data.errors.join(' '),
 					})
 				})
 		},
