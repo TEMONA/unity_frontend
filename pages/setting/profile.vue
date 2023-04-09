@@ -111,8 +111,7 @@ export default Vue.extend({
 				{},
 			)
 			this.$axios
-				.patch('/api/users/', {
-					user_id: this.$store.state.authorization.userId,
+				.patch(`/api/users/${this.$store.state.authorization.userId}`, {
 					contents: { ...this.$toSnakeCaseObject(params) },
 				})
 				.then(() => {
