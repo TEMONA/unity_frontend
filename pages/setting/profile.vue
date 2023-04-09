@@ -14,57 +14,13 @@
 			<FormCard title="プロフィール編集">
 				<template v-slot:default>
 					<v-textarea
-						v-model="profile.jobDescription"
-						label="業務内容"
+						v-for="(detail, index) in details"
+						:key="index"
+						v-model="detail.value"
+						:label="detail.title"
 						hide-details="auto"
 						auto-grow
 						rows="1"
-						class="mt-3"
-					/>
-					<v-textarea
-						v-model="profile.jobRole"
-						label="仕事の役割"
-						hide-details="auto"
-						auto-grow
-						rows="1"
-						class="mt-3"
-					/>
-					<v-textarea
-						v-model="profile.career"
-						label="経歴"
-						hide-details="auto"
-						auto-grow
-						rows="1"
-						class="mt-3"
-					/>
-					<v-textarea
-						v-model="profile.hobby"
-						label="趣味"
-						hide-details="auto"
-						auto-grow
-						rows="1"
-						class="mt-3"
-					/>
-					<v-textarea
-						v-model="profile.specialty"
-						label="特技、強み"
-						hide-details="auto"
-						auto-grow
-						rows="1"
-						class="mt-3"
-					/>
-					<v-textarea
-						v-model="profile.strengths"
-						label="アピールポイント"
-						hide-details="auto"
-						auto-grow
-						rows="1"
-						class="mt-3"
-					/>
-					<v-text-field
-						v-model="profile.message"
-						label="最後にひとこと"
-						hide-details="auto"
 						class="mt-3"
 					/>
 				</template>
@@ -80,19 +36,23 @@
 import Vue from 'vue'
 import { UserOverviewType } from '~/components/organisms/UserOverview.vue'
 
+interface detailType {
+	title: string
+	value: string
+}
+
 interface dataType {
 	overview: UserOverviewType
 	tags: string[]
-	profile: {
-		jobDescription: string
-		jobRole: string
-		career: string
-		hobby: string
-		specialty: string
-		strengths: string
-		message: string
+	details: {
+		birthPlace: detailType
+		jobDescription: detailType
+		career: detailType
+		hobby: detailType
+		specialty: detailType
+		strengths: detailType
+		message: detailType
 	}
-	request: any
 }
 
 export default Vue.extend({
@@ -101,22 +61,18 @@ export default Vue.extend({
 			title: 'プロフィール編集',
 		}
 	},
-	async asyncData({ app, store, route }) {
+	async asyncData({ app, store }) {
 		const response = app.$axios
 			.get(`/api/users/${store.state.authorization.userId}`)
-			.then((res: any) => {
-				const { overview, tags, detail } = res
-				const profile = Object.keys(detail).reduce((target: any, key) => {
-					target[key] = detail[key].text
-					return target
-				}, {})
-
-				return { overview, tags, profile }
-			})
 			.catch((err: any) => {
 				this.$store.commit('snackbar/displaySnackbar', {
 					status: err.response.status,
 				})
+				return {
+					overview: {},
+					tags: [],
+					details: [],
+				}
 			})
 
 		return { ...response }
@@ -126,6 +82,7 @@ export default Vue.extend({
 			overview: {
 				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
 				name: 'User Name',
+				nameKana: 'ホゲ',
 				headquarters: '〇〇事業本部',
 				department: '〇〇事業部',
 				group: '〇〇グループ',
@@ -133,30 +90,30 @@ export default Vue.extend({
 				chatworkId: 'chatwork_id',
 			},
 			tags: [],
-			profile: {
-				jobDescription: '',
-				jobRole: '',
-				career: '',
-				hobby: '',
-				specialty: '',
-				strengths: '',
-				message: '',
-			},
-			request: {
-				name: 'フルネーム',
-				status: '未承認',
-				dates: ['2023/1/1', '2023/1/2', '2023/1/3'],
-				detail:
-					'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
+			details: {
+				birthPlace: { title: '出身地', value: '' },
+				jobDescription: { title: '業務内容、役割', value: '' },
+				career: { title: '経歴、職歴', value: '' },
+				hobby: { title: '趣味', value: '' },
+				specialty: { title: '特技', value: '' },
+				strengths: { title: 'アピールポイント', value: '' },
+				message: { title: '最後にひとこと', value: '' },
 			},
 		}
 	},
 	methods: {
 		handleSubmit() {
+			const params = Object.keys(this.details).reduce(
+				(object: { [key: string]: string }, item: any) => {
+					object[item.title] = item.value
+					return object
+				},
+				{},
+			)
 			this.$axios
 				.patch('/api/users/', {
 					user_id: this.$store.state.authorization.userId,
-					contents: { ...this.$toSnakeCaseObject(this.profile) },
+					contents: { ...this.$toSnakeCaseObject(params) },
 				})
 				.then(() => {
 					this.$store.commit('snackbar/displaySnackbar', {

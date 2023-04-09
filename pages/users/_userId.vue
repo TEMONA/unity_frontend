@@ -93,7 +93,7 @@ export default Vue.extend({
 			overview: {
 				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
 				name: 'User Name',
-				nameKana: 'hoge',
+				nameKana: 'ホゲ',
 				headquarters: '〇〇事業本部',
 				department: '〇〇事業部',
 				group: '〇〇グループ',
