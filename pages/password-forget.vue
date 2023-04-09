@@ -47,7 +47,23 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		handleSubmit(): void {},
+		handleSubmit(): void {
+			this.$axios
+				.post('/authen/users/reset_password', {
+					email: this.email,
+				})
+				.then(() => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: 200,
+						message: 'パスワード更新用メールを送信しました',
+					})
+				})
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response.status,
+					})
+				})
+		},
 	},
 })
 </script>

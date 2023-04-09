@@ -29,15 +29,20 @@
 							v-model="password_confirm"
 						/>
 					</div>
-					<div v-else-if="step === 3">
+					<Paragraph v-else-if="step === 3">
 						パスワードの変更が完了しました。<br />
 						新しいパスワードでログインしてください。
-					</div>
+					</Paragraph>
 				</template>
 
 				<template v-slot:action>
-					<v-btn v-if="step === 2" color="primary" @click="handleChange">
-						変更
+					<v-btn
+						v-if="step === 2"
+						color="primary"
+						:disabled="password && password === password_confirm ? true : false"
+						@click="handleChange"
+					>
+						このパスワードに変更する
 					</v-btn>
 					<v-btn v-else-if="step === 3" color="primary" href="/login">
 						ログインページへ
@@ -60,15 +65,43 @@ export default Vue.extend({
 	},
 	data() {
 		return {
+			uid: '',
+			token: '',
 			step: 2,
 			password: '',
 			password_confirm: '',
-			isChanged: false,
+		}
+	},
+	mounted() {
+		if (!this.uid || !this.token) {
+			this.$store.commit('snackbar/displaySnackbar', {
+				status: 400,
+				message:
+					'必要なパラメータが存在しません。パスワード変更メールのリンクからアクセスしてください',
+			})
+			this.$router.push('/password-forget')
 		}
 	},
 	methods: {
 		handleChange(): void {
-			this.step++
+			this.$axios
+				.post('/authen/users/reset_password_confirm', {
+					uid: this.uid,
+					token: this.token,
+					new_password: this.password,
+				})
+				.then(() => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: 200,
+						message: 'パスワードを更新しました',
+					})
+					this.step++
+				})
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response.status,
+					})
+				})
 		},
 	},
 })
