@@ -56,8 +56,6 @@ export default Vue.extend({
 					})
 				})
 				.catch((err: any) => {
-					console.log(err)
-					console.log(err.response)
 					this.$store.commit('snackbar/displaySnackbar', {
 						status: err.response.status,
 						message: 'メールアドレスかパスワードが正しくありません',
