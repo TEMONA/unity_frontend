@@ -36,8 +36,14 @@
 <script lang="ts">
 import Vue from 'vue'
 
+interface dataType {
+	breadcrumbs: { text: string; disabled: boolean; href: string }[]
+	drawer: boolean
+	links: string[][]
+}
+
 export default Vue.extend({
-	data() {
+	data(): dataType {
 		return {
 			breadcrumbs: [
 				{
@@ -46,7 +52,7 @@ export default Vue.extend({
 					href: '/',
 				},
 			],
-			drawer: null,
+			drawer: false,
 
 			links: [
 				['mdi-inbox-arrow-down', 'Inbox'],
