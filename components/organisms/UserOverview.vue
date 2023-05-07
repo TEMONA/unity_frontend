@@ -1,15 +1,15 @@
 <template>
 	<div>
-		<v-avatar size="auto" width="100%" class="mb-2">
+		<v-avatar v-if="image" size="auto" width="100%" class="mb-2">
 			<v-img :aspect-ratio="1" :src="image" alt="社員画像" />
 		</v-avatar>
 
 		<div class="text-center">
-			<Paragraph :text="nameKana" class="text-caption" />
-			<Heading :level="2" :text="name" class="font-weight-medium" />
+			<Paragraph :text="nameKana" class="text-caption mb-0" />
+			<Heading :level="2" :text="name" class="font-weight-medium mb-1" />
 			<Paragraph
 				:text="`${headquarters} ${department} ${group} ${role}`"
-				class="mb-1"
+				class="mb-2"
 			/>
 			<Paragraph
 				v-if="chatworkId"
@@ -24,7 +24,7 @@
 import Vue from 'vue'
 
 export interface UserOverviewType {
-	image: string
+	image?: string
 	name: string
 	nameKana: string
 	headquarters: string
@@ -39,7 +39,8 @@ export default Vue.extend({
 	props: {
 		image: {
 			type: String,
-			required: true,
+			required: false,
+			default: '',
 		},
 		name: {
 			type: String,

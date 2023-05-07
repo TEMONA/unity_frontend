@@ -2,10 +2,9 @@
 	<v-row class="user">
 		<v-col cols="12" md="4" class="user__sidebar">
 			<UserOverview v-bind="overview" />
-			<v-row>
-				<v-col cols="6">
+			<v-row class="mt-3">
+				<v-col v-if="overview.chatworkId" cols="6">
 					<v-btn
-						v-if="overview.chatworkId"
 						:href="`https://www.chatwork.com/${overview.chatworkId}`"
 						outlined
 						block
@@ -36,7 +35,12 @@
 		</v-col>
 		<v-col cols="12" md="8">
 			<v-chip-group class="mb-3">
-				<v-chip v-for="tag in tags" :key="tag">
+				<v-chip
+					v-for="tag in tags"
+					:key="tag"
+					:ripple="false"
+					color="secondary"
+				>
 					{{ tag }}
 				</v-chip>
 			</v-chip-group>
@@ -47,7 +51,7 @@
 						<v-card>
 							<v-card-title v-text="item.title" />
 
-							<v-card-text v-text="item.value" />
+							<v-card-text v-html="item.value" />
 						</v-card>
 					</v-col>
 				</template>
@@ -91,17 +95,44 @@ export default Vue.extend({
 	data(): dataType {
 		return {
 			overview: {
-				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
-				name: 'User Name',
-				nameKana: 'ホゲ',
-				headquarters: '〇〇事業本部',
-				department: '〇〇事業部',
-				group: '〇〇グループ',
-				role: 'グループ長',
-				chatworkId: 'chatwork_id',
+				image: '',
+				name: '',
+				nameKana: '',
+				headquarters: '',
+				department: '',
+				group: '',
 			},
-			tags: [],
-			details: [],
+			tags: [''],
+			details: {
+				jobDescription: {
+					title: '',
+					value: '',
+				},
+				birth_place: {
+					title: '',
+					value: '',
+				},
+				career: {
+					title: '',
+					value: '',
+				},
+				hobby: {
+					title: '',
+					value: '',
+				},
+				specialty: {
+					title: '',
+					value: '',
+				},
+				strengths: {
+					title: '',
+					value: '',
+				},
+				message: {
+					title: '',
+					value: '',
+				},
+			},
 		}
 	},
 })
