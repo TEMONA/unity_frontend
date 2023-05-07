@@ -60,9 +60,13 @@ export default Vue.extend({
 			title: 'プロフィール編集',
 		}
 	},
-	async asyncData({ app, store }) {
-		const response = app.$axios
-			.get(`/api/users/${store.state.authorization.userId}`)
+	async asyncData({ app }) {
+		const { id } = await app.$axios
+			.get('/authen/users/me/')
+			.then((res: any) => res)
+
+		const response = await app.$axios
+			.get(`/api/users/${id}`)
 			.catch((err: any) => {
 				this.$store.commit('snackbar/displaySnackbar', {
 					status: err.response.status,

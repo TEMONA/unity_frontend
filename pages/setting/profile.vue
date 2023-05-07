@@ -42,6 +42,7 @@ interface detailType {
 }
 
 interface dataType {
+	userId: string
 	overview: UserOverviewType
 	tags: string[]
 	details: {
@@ -61,24 +62,27 @@ export default Vue.extend({
 			title: 'プロフィール編集',
 		}
 	},
-	async asyncData({ app, store }) {
-		const response = app.$axios
-			.get(`/api/users/${store.state.authorization.userId}`)
-			.catch((err: any) => {
-				this.$store.commit('snackbar/displaySnackbar', {
-					status: err.response.status,
-				})
-				return {
-					overview: {},
-					tags: [],
-					details: [],
-				}
-			})
+	async asyncData({ app }) {
+		const { id } = await app.$axios
+			.get('/authen/users/me/')
+			.then((res: any) => res)
 
-		return { ...response }
+		const response = app.$axios.get(`/api/users/${id}`).catch((err: any) => {
+			this.$store.commit('snackbar/displaySnackbar', {
+				status: err.response.status,
+			})
+			return {
+				overview: {},
+				tags: [],
+				details: [],
+			}
+		})
+
+		return { userId: id, ...response }
 	},
 	data(): dataType {
 		return {
+			userId: '',
 			overview: {
 				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
 				name: 'User Name',
@@ -111,7 +115,7 @@ export default Vue.extend({
 				{},
 			)
 			this.$axios
-				.patch(`/api/users/${this.$store.state.authorization.userId}`, {
+				.patch(`/api/users/${this.userId}`, {
 					contents: { ...this.$toSnakeCaseObject(params) },
 				})
 				.then(() => {
