@@ -6,11 +6,12 @@
 				solo
 				outlined
 				dense
-				label="氏名・所属から社員を検索"
+				label="氏名から社員を検索"
+				v-model="search.name.value"
 				hide-details="auto"
 			>
 				<template v-slot:prepend-inner>
-					<v-btn icon>
+					<v-btn icon @click="searchUsers">
 						<v-icon>mdi-magnify</v-icon>
 					</v-btn>
 				</template>
@@ -26,33 +27,12 @@
 			<FormCard v-if="toggleSearchCard" title="詳細検索">
 				<template v-slot:default>
 					<v-text-field
-						label="氏名"
+						v-for="(item, index) in search"
+						:key="index"
+						v-model="item.value"
+						:label="item.title"
 						hide-details="auto"
-						v-model="search.name"
-					/>
-					<v-text-field
-						label="事業本部"
-						hide-details="auto"
-						v-model="search.headquarters"
-						class="mt-3"
-					/>
-					<v-text-field
-						label="事業部"
-						hide-details="auto"
-						v-model="search.department"
-						class="mt-3"
-					/>
-					<v-text-field
-						label="グループ"
-						hide-details="auto"
-						v-model="search.group"
-						class="mt-3"
-					/>
-					<v-text-field
-						label="業務内容"
-						hide-details="auto"
-						v-model="search.jobDescription"
-						class="mt-3"
+						class="mt-2"
 					/>
 				</template>
 				<template v-slot:action>
@@ -70,13 +50,27 @@
 import Vue from 'vue'
 import { UserListType } from '~/components/organisms/UserList.vue'
 
+interface searchItemType {
+	title: string
+	value: string
+}
+
+interface searchType {
+	name: searchItemType
+	headquarters: searchItemType
+	department: searchItemType
+	group: searchItemType
+	jobDescription: searchItemType
+}
+
 interface dataType {
 	toggleSearchCard: boolean
-	search: any
+	search: searchType
 	meta: {
-		start: number
-		end: number
 		total: number
+		limit: number
+		page: number
+		limitPerPage: number
 	}
 	users: UserListType[]
 }
@@ -87,39 +81,82 @@ export default Vue.extend({
 			title: '社員一覧',
 		}
 	},
-	async asyncData({ app }) {
-		const response = app.$axios.get(`/api/users`).catch((err: any) => {
-			this.$store.commit('snackbar/displaySnackbar', {
-				status: err.response.status,
+	async asyncData({ app, store }) {
+		const response = app.$axios
+			.get(`/api/users`)
+			.then((res: any) => {
+				return {
+					users: this.$toCamelCaseObjectArray(res.users),
+					meta: this.$toCamelCaseObject(res.meta),
+				}
 			})
-			return []
-		})
+			.catch((err: any) => {
+				store.commit('snackbar/displaySnackbar', {
+					status: err.response?.status | 500,
+				})
+				return { users: [], meta: {} }
+			})
 
-		return { users: response }
+		return { ...response }
 	},
 	data(): dataType {
 		return {
 			toggleSearchCard: false,
 			search: {
-				name: '',
-				headquarters: '',
-				department: '',
-				group: '',
-				jobDescription: '',
+				name: { title: '氏名', value: '' },
+				headquarters: { title: '事業本部', value: '' },
+				department: { title: '事業部', value: '' },
+				group: { title: 'グループ', value: '' },
+				jobDescription: { title: '業務内容', value: '' },
 			},
 			meta: {
-				start: 1,
-				end: 3,
 				total: 30,
+				limit: 3,
+				page: 1,
+				limitPerPage: 10,
 			},
-			users: [],
+			users: [
+				{
+					userId: 'b9daa274-de02-4153-b90e-84dcad8a4019',
+					name: '佐川隼人',
+					headquarters: 'SaaS事業本部',
+					department: '',
+					group: '',
+					role: '代表取締役',
+					jobDescription: '',
+				},
+				{
+					userId: 'f6cd570c-8fa8-4191-af4f-a34d872daa3c',
+					name: '金木友宏',
+					headquarters: 'サブスク事業本部',
+					department: 'ES事業部',
+					group: 'ES保守グループ',
+					role: 'グループ長',
+					jobDescription: 'たまごリピートとサブスクストアの守護神',
+				},
+				{
+					userId: '3f240c6a-d40a-4d17-98f5-b5344f68f727',
+					name: '西山光彦',
+					headquarters: 'SaaS事業本部',
+					department: 'サブスクコンシェルジュ事業部',
+					group: 'ソリューショングループ',
+					role: 'グループ長',
+					jobDescription: '',
+				},
+			],
 		}
 	},
 	methods: {
 		searchUsers(): void {
-			const params = this.$toSnakeCaseObject(this.search)
+			const params = Object.entries(this.search).reduce(
+				(object: { [key: string]: string }, item: any) => {
+					object[item[0]] = item[1].value
+					return object
+				},
+				{},
+			)
 			this.$axios
-				.get('/api/users', params)
+				.get('/api/users', this.$toSnakeCaseObject(params))
 				.then((res: UserListType[]) => {
 					this.users.splice(
 						0,

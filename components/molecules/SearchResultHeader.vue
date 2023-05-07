@@ -3,7 +3,12 @@
 		<v-subheader>
 			検索結果
 			<v-spacer />
-			<div class="mr-2">{{ start }}-{{ end }} / {{ total }}</div>
+			<div class="mr-2">
+				{{ (page - 1) * limitPerPage + 1 }}-{{
+					page * limitPerPage >= total ? total : page * limitPerPage
+				}}
+				/ {{ total }}
+			</div>
 			<v-icon>mdi-dots-vertical</v-icon>
 		</v-subheader>
 
@@ -23,15 +28,19 @@ export interface SearchResultHeaderType {
 export default Vue.extend({
 	name: 'SearchResultHeader',
 	props: {
-		start: {
-			type: Number,
-			required: true,
-		},
-		end: {
-			type: Number,
-			required: true,
-		},
 		total: {
+			type: Number,
+			required: true,
+		},
+		limit: {
+			type: Number,
+			required: true,
+		},
+		page: {
+			type: Number,
+			required: true,
+		},
+		limitPerPage: {
 			type: Number,
 			required: true,
 		},

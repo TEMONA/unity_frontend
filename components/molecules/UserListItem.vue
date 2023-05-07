@@ -1,6 +1,6 @@
 <template>
-	<v-list-item link class="UserListItem">
-		<v-list-item-avatar color="grey darken-1">
+	<v-list-item link class="UserListItem" :href="`users/${userId}`">
+		<v-list-item-avatar v-if="image" color="grey darken-1">
 			<v-img :aspect-ratio="1" :src="image" alt="社員画像" />
 		</v-list-item-avatar>
 
@@ -26,7 +26,8 @@
 import Vue from 'vue'
 
 export interface UserListItemType {
-	image: string
+	userId: string
+	image?: string
 	name: string
 	headquarters: string
 	department?: string
@@ -38,9 +39,14 @@ export interface UserListItemType {
 export default Vue.extend({
 	name: 'UserListItem',
 	props: {
-		image: {
+		userId: {
 			type: String,
 			required: true,
+		},
+		image: {
+			type: String,
+			required: false,
+			default: '',
 		},
 		name: {
 			type: String,

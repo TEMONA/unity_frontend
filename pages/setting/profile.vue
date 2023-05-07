@@ -107,9 +107,9 @@ export default Vue.extend({
 	},
 	methods: {
 		handleSubmit() {
-			const params = Object.keys(this.details).reduce(
+			const params = Object.entries(this.details).reduce(
 				(object: { [key: string]: string }, item: any) => {
-					object[item.title] = item.value
+					params[item[0]] = item[1].value
 					return object
 				},
 				{},
