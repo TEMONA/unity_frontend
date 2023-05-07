@@ -115,35 +115,7 @@ export default Vue.extend({
 				page: 1,
 				limitPerPage: 10,
 			},
-			users: [
-				{
-					userId: 'b9daa274-de02-4153-b90e-84dcad8a4019',
-					name: '佐川隼人',
-					headquarters: 'SaaS事業本部',
-					department: '',
-					group: '',
-					role: '代表取締役',
-					jobDescription: '',
-				},
-				{
-					userId: 'f6cd570c-8fa8-4191-af4f-a34d872daa3c',
-					name: '金木友宏',
-					headquarters: 'サブスク事業本部',
-					department: 'ES事業部',
-					group: 'ES保守グループ',
-					role: 'グループ長',
-					jobDescription: 'たまごリピートとサブスクストアの守護神',
-				},
-				{
-					userId: '3f240c6a-d40a-4d17-98f5-b5344f68f727',
-					name: '西山光彦',
-					headquarters: 'SaaS事業本部',
-					department: 'サブスクコンシェルジュ事業部',
-					group: 'ソリューショングループ',
-					role: 'グループ長',
-					jobDescription: '',
-				},
-			],
+			users: [],
 		}
 	},
 	methods: {
