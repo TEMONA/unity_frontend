@@ -52,14 +52,64 @@ export default {
 	],
 
 	// Modules: https://go.nuxtjs.dev/config-modules
-	modules: ['@nuxtjs/axios'],
+	modules: ['@nuxtjs/auth-next', '@nuxtjs/axios'],
+
+	// authを追加
+	auth: {
+		redirect: {
+			login: '/login',
+			logout: '/login',
+			callback: '/oauth2_callback',
+			home: '/users',
+		},
+		localStorage: false,
+		strategies: {
+			local: {
+				tokenType: 'jwt',
+				token: {
+					property: 'access_token',
+					maxAge: 60 * 60 * 24,
+				},
+				refreshToken: {
+					property: 'access_token',
+					maxAge: 60 * 60 * 24 * 7,
+				},
+				endpoints: {
+					login: {
+						url: '/authen/jwt/create',
+						method: 'post',
+						propertyName: 'access_token',
+					},
+					refresh: {
+						url: '/authen/jwt/refresh/',
+						method: 'post',
+						propertyName: 'access_token',
+					},
+					user: {
+						url: '/authen/users/me/',
+						method: 'get',
+						propertyName: false,
+					},
+				},
+			},
+			google: {
+				scope: ['calendar'],
+				client_id: process.env.GOOGLE_CLIENT_ID,
+			},
+		},
+	},
+
 	axios: {
-		baseURL: process.env.API_URL || 'http://localhost:3000',
+		baseURL: process.env.API_URL,
 		timeout: 10000,
 		headers: {
-			'Cache-Control': 'no-cache',
 			'Access-Control-Allow-Origin': process.env.BASE_URL,
 		},
+	},
+
+	router: {
+		// See https://auth.nuxtjs.org/guide/middleware.html
+		middleware: ['auth'],
 	},
 
 	// ブラウザのセッションが閉じても認証情報を保持できるようにする

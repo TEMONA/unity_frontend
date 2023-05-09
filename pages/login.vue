@@ -7,18 +7,19 @@
 						label="メールアドレス"
 						type="email"
 						hide-details="auto"
-						v-model="email"
+						v-model="auth.email"
 					/>
 					<v-text-field
 						label="パスワード"
 						type="password"
 						hide-details="auto"
-						v-model="password"
+						v-model="auth.password"
 						class="mt-3"
 					/>
 				</template>
 				<template v-slot:action>
 					<v-btn color="primary" @click="handleLogin">ログイン</v-btn>
+					<v-btn color="primary" @click="authenticate">Login with Google</v-btn>
 				</template>
 			</FormCard>
 		</v-col>
@@ -37,30 +38,38 @@ export default Vue.extend({
 	},
 	data() {
 		return {
-			email: '',
-			password: '',
+			auth: {
+				email: '',
+				password: '',
+			},
+			processing: false,
 		}
 	},
 	methods: {
-		handleLogin(): void {
-			const redirectTo = this.$route.query.to || '/users'
-			this.$axios
-				.post('/authen/jwt/create', {
-					email: this.email,
-					password: this.password,
-				})
-				.then((res: any) => {
-					this.$store.dispatch('login', {
-						authorization: { ...res },
-						redirectTo,
-					})
+		async handleLogin(): Promise<void> {
+			this.processing = true
+			await this.$auth
+				.loginWith('local', { data: this.auth })
+				.then(() => {
+					this.processing = false
 				})
 				.catch((err: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response.status,
-						message: 'メールアドレスかパスワードが正しくありません',
-					})
+					const errorMessage = Object.keys(err.response).length
+						? {
+								status: err.response.status,
+								message: 'メールアドレスかパスワードが正しくありません',
+						  }
+						: {
+								status: 500,
+								message:
+									'サーバーの応答がありません。次回をおいて再度お試しください',
+						  }
+					this.$store.commit('snackbar/displaySnackbar', errorMessage)
+					this.processing = false
 				})
+		},
+		authenticate() {
+			this.$auth.loginWith('google')
 		},
 	},
 })
