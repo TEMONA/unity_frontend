@@ -20,7 +20,10 @@
 			"@nuxtjs/auth-next",
 			"@nuxtjs/axios",
 			"@types/node",
-			"lodash"
+			"lodash",
+			"gapi",
+			"gapi.auth2",
+			"gapi.calendar"
 		]
 	},
 	"vueCompilerOptions": { "target": 2.7, "extensions": [".vue"] },

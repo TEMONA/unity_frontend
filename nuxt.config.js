@@ -1,14 +1,12 @@
 import colors from 'vuetify/es5/util/colors'
 import { Sass } from 'sass'
-import bodyParser from 'body-parser'
-import session from 'cookie-session'
-
-const authorizationTokenMaxAge = 1000 * 60 * 60 * 24 * 7
 
 export default {
 	publicRuntimeConfig: {
 		baseUrl: process.env.BASE_URL || 'http://localhost:3000',
 		apiUrl: process.env.API_URL || 'http://localhost:3000',
+		googleClientId: process.env.GOOGLE_CLIENT_ID || 'hoge',
+		googleApiKey: process.env.GOOGLE_API_KEY,
 	},
 	// Global page headers: https://go.nuxtjs.dev/config-head
 	head: {
@@ -56,12 +54,6 @@ export default {
 
 	// authを追加
 	auth: {
-		redirect: {
-			login: '/login',
-			logout: '/login',
-			callback: '/oauth2_callback',
-			home: '/users',
-		},
 		localStorage: false,
 		strategies: {
 			local: {
@@ -88,13 +80,8 @@ export default {
 					user: {
 						url: '/authen/users/me/',
 						method: 'get',
-						propertyName: false,
 					},
 				},
-			},
-			google: {
-				scope: ['calendar'],
-				client_id: process.env.GOOGLE_CLIENT_ID,
 			},
 		},
 	},
@@ -111,18 +98,6 @@ export default {
 		// See https://auth.nuxtjs.org/guide/middleware.html
 		middleware: ['auth'],
 	},
-
-	// ブラウザのセッションが閉じても認証情報を保持できるようにする
-	serverMiddleware: [
-		bodyParser.json(),
-		session({
-			secret: 'super-secret-key',
-			resave: false,
-			saveUninitialized: false,
-			cookie: { maxAge: authorizationTokenMaxAge },
-		}),
-		{ path: '/api', handler: '~/api/index.ts' },
-	],
 
 	// Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
 	vuetify: {

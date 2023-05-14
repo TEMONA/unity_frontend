@@ -24,7 +24,7 @@
 				</v-col>
 				<v-col cols="12">
 					<v-btn
-						:href="`/requests/new?user_id=${$route.params.userId}`"
+						:href="`/requests/new?users=${$route.params.userId}`"
 						block
 						color="primary"
 					>
@@ -97,6 +97,7 @@ export default Vue.extend({
 			overview: {
 				image: '',
 				name: '',
+				email: '',
 				nameKana: '',
 				headquarters: '',
 				department: '',

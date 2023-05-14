@@ -26,6 +26,7 @@ import Vue from 'vue'
 export interface UserOverviewType {
 	image?: string
 	name: string
+	email: string
 	nameKana: string
 	headquarters: string
 	department?: string | null
@@ -43,6 +44,10 @@ export default Vue.extend({
 			default: '',
 		},
 		name: {
+			type: String,
+			required: true,
+		},
+		email: {
 			type: String,
 			required: true,
 		},
