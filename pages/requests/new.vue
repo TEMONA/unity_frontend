@@ -102,6 +102,7 @@ export default Vue.extend({
 			],
 		}
 	},
+	auth: false,
 	async asyncData({ app, route }) {
 		let response = {}
 		if (route.query.users) {

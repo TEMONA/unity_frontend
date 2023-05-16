@@ -1,5 +1,16 @@
 <template>
-	<v-breadcrumbs :items="items" />
+	<v-breadcrumbs :items="items">
+		<template v-slot:item="props">
+			<v-breadcrumbs-item
+				exact
+				:disabled="props.item.disabled"
+				:to="props.item.href"
+				nuxt
+			>
+				{{ props.item.text }}
+			</v-breadcrumbs-item>
+		</template>
+	</v-breadcrumbs>
 </template>
 
 <script lang="ts">

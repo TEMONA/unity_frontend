@@ -11,7 +11,8 @@
 				<v-list-item
 					v-for="(item, index) in links"
 					:key="index"
-					:href="item.link"
+					:to="item.link"
+					nuxt
 				>
 					<v-list-item-icon>
 						<v-icon>{{ item.icon }}</v-icon>
@@ -76,24 +77,12 @@ export default Vue.extend({
 			],
 		}
 	},
-
+	created() {
+		this.updateBreadcrumbs()
+	},
 	watch: {
 		$route: function (to, from) {
-			const breadcrumbs: breadcrumbItemType[] = [
-				{
-					text: '社員一覧',
-					href: '/users',
-				},
-			]
-			//遷移元と遷移先のパスが違った場合に発火する
-			if (to.path !== from.path && this.$route.path !== 'users') {
-				breadcrumbs.push({
-					text: this.$route.name,
-					href: this.$route.path,
-					disabled: true,
-				})
-				this.breadcrumbs.splice(0, this.breadcrumbs.length, ...breadcrumbs)
-			}
+			this.updateBreadcrumbs()
 		},
 	},
 	head() {
@@ -108,6 +97,23 @@ export default Vue.extend({
 			],
 		}
 	},
-	methods: {},
+	methods: {
+		updateBreadcrumbs() {
+			if (this.$route.path !== 'users') {
+				const breadcrumbs: breadcrumbItemType[] = [
+					{
+						text: '社員一覧',
+						href: '/users',
+					},
+				]
+				breadcrumbs.push({
+					text: this.$route.name,
+					href: this.$route.path,
+					disabled: true,
+				})
+				this.breadcrumbs.splice(0, this.breadcrumbs.length, ...breadcrumbs)
+			}
+		},
+	},
 })
 </script>
