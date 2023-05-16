@@ -3,7 +3,7 @@
 		<v-col cols="12" md="4" class="password__sidebar">
 			<UserOverview v-bind="overview" />
 
-			<v-chip-group>
+			<v-chip-group v-if="tags.length">
 				<v-chip v-for="tag in tags" :key="tag">
 					{{ tag }}
 				</v-chip>
@@ -57,7 +57,7 @@ interface dataType {
 export default Vue.extend({
 	head() {
 		return {
-			title: 'プロフィール編集',
+			title: 'パスワード変更',
 		}
 	},
 	async asyncData({ app }) {
@@ -114,9 +114,10 @@ export default Vue.extend({
 	},
 	methods: {
 		handleSubmit() {
-			const params = Object.fromEntries(
-				Object.entries(this.items).map(([key, value]) => [key, value.value]),
-			)
+			const params = {
+				newPassword: this.items.newPassword.value,
+				currentPassword: this.items.currentPassword.value,
+			}
 			this.$axios
 				.patch('/authen/users/set_password', {
 					...this.$toSnakeCaseObject(params),

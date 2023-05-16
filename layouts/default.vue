@@ -4,20 +4,21 @@
 			<v-app-bar-nav-icon @click="drawer = !drawer" class="white--text" />
 			<v-toolbar-title>Unity - Temona SNS</v-toolbar-title>
 			<v-spacer />
-			<v-btn icon class="white--text">
-				<v-icon>mdi-account-circle</v-icon>
-			</v-btn>
 		</v-app-bar>
 
 		<v-navigation-drawer v-model="drawer" fixed temporary>
 			<v-list>
-				<v-list-item v-for="[icon, text] in links" :key="icon" link>
+				<v-list-item
+					v-for="(item, index) in links"
+					:key="index"
+					:href="item.link"
+				>
 					<v-list-item-icon>
-						<v-icon>{{ icon }}</v-icon>
+						<v-icon>{{ item.icon }}</v-icon>
 					</v-list-item-icon>
 
 					<v-list-item-content>
-						<v-list-item-title>{{ text }}</v-list-item-title>
+						<v-list-item-title>{{ item.title }}</v-list-item-title>
 					</v-list-item-content>
 				</v-list-item>
 			</v-list>
@@ -36,10 +37,16 @@
 <script lang="ts">
 import Vue from 'vue'
 
+interface breadcrumbItemType {
+	text: string
+	disabled?: boolean
+	href: string
+}
+
 interface dataType {
-	breadcrumbs: { text: string; disabled: boolean; href: string }[]
+	breadcrumbs: breadcrumbItemType[]
 	drawer: boolean
-	links: string[][]
+	links: { icon: string; title: string; link: string }[]
 }
 
 export default Vue.extend({
@@ -47,29 +54,56 @@ export default Vue.extend({
 		return {
 			breadcrumbs: [
 				{
-					text: 'ダッシュボード',
-					disabled: false,
-					href: '/',
+					text: '社員一覧',
+					href: '/users',
 				},
 			],
 			drawer: false,
 
 			links: [
-				['mdi-inbox-arrow-down', 'Inbox'],
-				['mdi-send', 'Send'],
-				['mdi-delete', 'Trash'],
-				['mdi-alert-octagon', 'Spam'],
+				{ icon: 'mdi-account-group', title: '社員一覧', link: '/users' },
+				{ icon: 'mdi-send', title: 'ランチリクエスト一覧', link: '/requests' },
+				{
+					icon: 'mdi-cog',
+					title: 'プロフィール設定',
+					link: '/setting/profile',
+				},
+				{
+					icon: 'mdi-lock-reset',
+					title: 'パスワード変更',
+					link: '/setting/password',
+				},
 			],
 		}
 	},
+
+	watch: {
+		$route: function (to, from) {
+			const breadcrumbs: breadcrumbItemType[] = [
+				{
+					text: '社員一覧',
+					href: '/users',
+				},
+			]
+			//遷移元と遷移先のパスが違った場合に発火する
+			if (to.path !== from.path && this.$route.path !== 'users') {
+				breadcrumbs.push({
+					text: this.$route.name,
+					href: this.$route.path,
+					disabled: true,
+				})
+				this.breadcrumbs.splice(0, this.breadcrumbs.length, ...breadcrumbs)
+			}
+		},
+	},
 	head() {
 		return {
-			title: 'Unity',
+			title: '社内SNS「Unity」',
 			meta: [
 				{
 					hid: 'description',
-					name: 'NuxtJs UI kit',
-					content: 'NuxtJs UI kit is the best way',
+					name: '社内SNS「Unity」',
+					content: 'テモナ社内の交流を深めるためのSNSです',
 				},
 			],
 		}
