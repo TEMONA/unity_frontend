@@ -113,6 +113,16 @@ export default Vue.extend({
 			title: 'リクエスト一覧',
 		}
 	},
+	fetch({ store, route }) {
+		const breadcrumbs = [
+			{
+				text: 'リクエスト一覧',
+				href: route.fullPath,
+				disabled: true,
+			},
+		]
+		store.commit('updateBreadcrumbs', breadcrumbs)
+	},
 	data() {
 		return {
 			datePickerIsActive: false,

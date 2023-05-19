@@ -92,6 +92,16 @@ export default Vue.extend({
 
 		return { ...response }
 	},
+	fetch({ store, route }) {
+		const breadcrumbs = [
+			{
+				text: '社員詳細',
+				href: route.fullPath,
+				disabled: true,
+			},
+		]
+		store.commit('updateBreadcrumbs', breadcrumbs)
+	},
 	data(): dataType {
 		return {
 			overview: {

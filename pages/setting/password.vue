@@ -79,6 +79,16 @@ export default Vue.extend({
 
 		return { ...response }
 	},
+	fetch({ store, route }) {
+		const breadcrumbs = [
+			{
+				text: 'パスワード変更',
+				href: route.fullPath,
+				disabled: true,
+			},
+		]
+		store.commit('updateBreadcrumbs', breadcrumbs)
+	},
 	data(): dataType {
 		return {
 			overview: {

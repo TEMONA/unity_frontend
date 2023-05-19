@@ -80,6 +80,16 @@ export default Vue.extend({
 
 		return { userId: id, ...response }
 	},
+	fetch({ store, route }) {
+		const breadcrumbs = [
+			{
+				text: 'プロフィール変更',
+				href: route.fullPath,
+				disabled: true,
+			},
+		]
+		store.commit('updateBreadcrumbs', breadcrumbs)
+	},
 	data(): dataType {
 		return {
 			userId: '',

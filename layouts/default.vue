@@ -38,14 +38,7 @@
 <script lang="ts">
 import Vue from 'vue'
 
-interface breadcrumbItemType {
-	text: string
-	disabled?: boolean
-	href: string
-}
-
 interface dataType {
-	breadcrumbs: breadcrumbItemType[]
 	drawer: boolean
 	links: { icon: string; title: string; link: string }[]
 }
@@ -53,12 +46,6 @@ interface dataType {
 export default Vue.extend({
 	data(): dataType {
 		return {
-			breadcrumbs: [
-				{
-					text: '社員一覧',
-					href: '/users',
-				},
-			],
 			drawer: false,
 
 			links: [
@@ -77,13 +64,10 @@ export default Vue.extend({
 			],
 		}
 	},
-	created() {
-		this.updateBreadcrumbs()
-	},
-	watch: {
-		$route: function (to, from) {
-			this.updateBreadcrumbs()
-		},
+	computed: {
+		breadcrumbs() {
+			return this.$store.getters.breadcrumbs
+		}
 	},
 	head() {
 		return {
@@ -96,24 +80,6 @@ export default Vue.extend({
 				},
 			],
 		}
-	},
-	methods: {
-		updateBreadcrumbs() {
-			if (this.$route.path !== 'users') {
-				const breadcrumbs: breadcrumbItemType[] = [
-					{
-						text: '社員一覧',
-						href: '/users',
-					},
-				]
-				breadcrumbs.push({
-					text: this.$route.name,
-					href: this.$route.path,
-					disabled: true,
-				})
-				this.breadcrumbs.splice(0, this.breadcrumbs.length, ...breadcrumbs)
-			}
-		},
 	},
 })
 </script>

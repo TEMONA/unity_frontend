@@ -99,6 +99,10 @@ export default Vue.extend({
 
 		return { ...response }
 	},
+	fetch({ store, route }) {
+		const breadcrumbs: [] = []
+		store.commit('updateBreadcrumbs', breadcrumbs)
+	},
 	data(): dataType {
 		return {
 			toggleSearchCard: false,

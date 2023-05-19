@@ -121,6 +121,20 @@ export default Vue.extend({
 
 		return { ...response }
 	},
+	fetch({ store, route }) {
+		const breadcrumbs = [
+			{
+				text: 'リクエスト一覧',
+				href: '/requests',
+			},
+			{
+				text: 'リクエスト登録',
+				href: route.fullPath,
+				disabled: true,
+			},
+		]
+		store.commit('updateBreadcrumbs', breadcrumbs)
+	},
 	data() {
 		return {
 			overview: {
@@ -246,7 +260,7 @@ ${this.request.detail}`,
 				})
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.status,
+						status: err.status || 500,
 					})
 				})
 		},
