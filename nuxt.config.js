@@ -55,27 +55,32 @@ export default {
 	// authを追加
 	auth: {
 		localStorage: false,
+		redirect: {
+			home: '/users',
+		},
 		strategies: {
 			local: {
 				tokenType: 'jwt',
 				token: {
-					property: 'access_token',
+					property: 'access',
 					maxAge: 60 * 60 * 24,
+					type: 'JWT',
 				},
 				refreshToken: {
-					property: 'access_token',
+					property: 'refresh',
 					maxAge: 60 * 60 * 24 * 7,
+				},
+				user: {
+					property: false,
 				},
 				endpoints: {
 					login: {
 						url: '/authen/jwt/create',
 						method: 'post',
-						propertyName: 'access_token',
 					},
 					refresh: {
 						url: '/authen/jwt/refresh/',
 						method: 'post',
-						propertyName: 'access_token',
 					},
 					user: {
 						url: '/authen/users/me/',

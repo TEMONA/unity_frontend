@@ -19,7 +19,6 @@
 				</template>
 				<template v-slot:action>
 					<v-btn color="primary" @click="handleLogin">ログイン</v-btn>
-					<v-btn color="primary" @click="authenticate">Login with Google</v-btn>
 				</template>
 			</FormCard>
 		</v-col>
@@ -67,9 +66,6 @@ export default Vue.extend({
 					this.$store.commit('snackbar/displaySnackbar', errorMessage)
 					this.processing = false
 				})
-		},
-		authenticate() {
-			this.$auth.loginWith('google')
 		},
 	},
 })
