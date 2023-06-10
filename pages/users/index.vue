@@ -41,7 +41,7 @@
 			</FormCard>
 		</v-col>
 		<v-col cols="12" md="8">
-			<UserSearchResult :meta="meta" :users="users" />
+			<UserSearchResult :users="users" />
 		</v-col>
 	</v-row>
 </template>
@@ -66,12 +66,12 @@ interface searchType {
 interface dataType {
 	toggleSearchCard: boolean
 	search: searchType
-	meta: {
-		total: number
-		limit: number
-		page: number
-		limitPerPage: number
-	}
+	// meta: {
+	// 	total: number
+	// 	limit: number
+	// 	page: number
+	// 	limitPerPage: number
+	// }
 	users: UserListType[]
 }
 
@@ -81,13 +81,13 @@ export default Vue.extend({
 			title: '社員一覧',
 		}
 	},
-	async asyncData({ app, store }) {
-		const response = app.$axios
-			.get(`/api/users`)
+	async asyncData({ app, store, $toCamelCaseObjectArray }) {
+		const response = await app.$axios
+			.get(`/api/users/`)
 			.then((res: any) => {
 				return {
-					users: this.$toCamelCaseObjectArray(res.users),
-					meta: this.$toCamelCaseObject(res.meta),
+					users: $toCamelCaseObjectArray(res.data),
+					// meta: this.$toCamelCaseObject(res.meta),
 				}
 			})
 			.catch((err: any) => {
@@ -99,7 +99,7 @@ export default Vue.extend({
 
 		return { ...response }
 	},
-	fetch({ store, route }) {
+	fetch({ store }) {
 		const breadcrumbs: [] = []
 		store.commit('updateBreadcrumbs', breadcrumbs)
 	},
@@ -113,17 +113,17 @@ export default Vue.extend({
 				group: { title: 'グループ', value: '' },
 				jobDescription: { title: '業務内容', value: '' },
 			},
-			meta: {
-				total: 30,
-				limit: 3,
-				page: 1,
-				limitPerPage: 10,
-			},
+			// meta: {
+			// 	total: 30,
+			// 	limit: 3,
+			// 	page: 1,
+			// 	limitPerPage: 10,
+			// },
 			users: [],
 		}
 	},
 	methods: {
-		searchUsers(): void {
+		async searchUsers() {
 			const params = Object.entries(this.search).reduce(
 				(object: { [key: string]: string }, item: any) => {
 					object[item[0]] = item[1].value
@@ -131,18 +131,18 @@ export default Vue.extend({
 				},
 				{},
 			)
-			this.$axios
-				.get('/api/users', this.$toSnakeCaseObject(params))
-				.then((res: UserListType[]) => {
+			await this.$axios
+				.get('/api/users/', { params: this.$toSnakeCaseObject(params) })
+				.then((res: { data: UserListType[] }) => {
 					this.users.splice(
 						0,
 						this.users.length,
-						...this.$toCamelCaseObjectArray(res),
+						...this.$toCamelCaseObjectArray(res.data),
 					)
 				})
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response.status,
+						status: err.response?.status | 500,
 					})
 				})
 		},

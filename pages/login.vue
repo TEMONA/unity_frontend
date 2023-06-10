@@ -8,12 +8,14 @@
 						type="email"
 						hide-details="auto"
 						v-model="auth.email"
+						autocomplete="email"
 					/>
 					<v-text-field
 						label="パスワード"
 						type="password"
 						hide-details="auto"
 						v-model="auth.password"
+						autocomplete="current-password"
 						class="mt-3"
 					/>
 				</template>
@@ -55,7 +57,7 @@ export default Vue.extend({
 				.catch((err: any) => {
 					const errorMessage = Object.keys(err.response).length
 						? {
-								status: err.response.status,
+								status: err.response?.status | 500,
 								message: 'メールアドレスかパスワードが正しくありません',
 						  }
 						: {

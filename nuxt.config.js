@@ -56,6 +56,7 @@ export default {
 	auth: {
 		localStorage: false,
 		redirect: {
+			login: '/login',
 			home: '/users',
 		},
 		strategies: {

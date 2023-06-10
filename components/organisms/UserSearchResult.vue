@@ -1,6 +1,6 @@
 <template>
 	<v-list two-line class="pt-0">
-		<SearchResultHeader v-bind="meta" />
+		<!-- <SearchResultHeader v-bind="meta" /> -->
 
 		<UserList :users="users" />
 	</v-list>
@@ -14,10 +14,10 @@ import { UserListType } from './UserList.vue'
 export default Vue.extend({
 	name: 'UserSearchResult',
 	props: {
-		meta: {
-			type: Object,
-			required: true,
-		} as Vue.PropOptions<SearchResultHeaderType>,
+		// meta: {
+		// 	type: Object,
+		// 	required: true,
+		// } as Vue.PropOptions<SearchResultHeaderType>,
 		users: {
 			type: Array,
 			required: true,

@@ -110,7 +110,7 @@ export default Vue.extend({
 				.get(`/api/users/${route.query.users}`)
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response.status,
+						status: err.response?.status | 500,
 					})
 					return {
 						overview: {},
