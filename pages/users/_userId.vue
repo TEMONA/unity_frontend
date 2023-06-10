@@ -9,6 +9,7 @@
 						outlined
 						block
 						color="primary"
+						target="_blank"
 						>チャットを開く</v-btn
 					>
 				</v-col>
@@ -18,6 +19,7 @@
 						outlined
 						block
 						color="primary"
+						target="_blank"
 					>
 						meetsを依頼する
 					</v-btn>
@@ -39,6 +41,7 @@
 					v-for="tag in tags"
 					:key="tag"
 					:ripple="false"
+					:disabled="true"
 					color="secondary"
 				>
 					{{ tag }}
@@ -76,9 +79,12 @@ export default Vue.extend({
 			title: '社員詳細',
 		}
 	},
-	async asyncData({ app, route }) {
-		const response = app.$axios
+	async asyncData({ app, route, $toCamelCaseObject }) {
+		const response = await app.$axios
 			.get(`/api/users/${route.params.userId}`)
+			.then((res: any) => {
+				return { ...res.data, overview: $toCamelCaseObject(res.data.overview) }
+			})
 			.catch((err: any) => {
 				this.$store.commit('snackbar/displaySnackbar', {
 					status: err.response?.status | 500,
