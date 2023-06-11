@@ -192,7 +192,6 @@ export default Vue.extend({
 			})
 			this.request.target = target
 		}
-		console.log(this.request.target)
 	},
 	methods: {
 		async changeTargetUser() {
