@@ -1,7 +1,7 @@
 <template>
 	<v-row class="request">
 		<v-col cols="12" md="4" class="request__sidebar">
-			<UserOverview v-if="$route.query.users" v-bind="overview" />
+			<UserOverview v-if="request.target.value" v-bind="overview" />
 			<Paragraph v-else text="リクエストを送る相手を選んでください" />
 
 			<v-chip-group v-if="tags.length" column>
@@ -18,10 +18,12 @@
 						:items="users"
 						hide-details="auto"
 						label="氏名"
-						v-model="request.name"
+						v-model="request.target"
 						:disabled="$route.query.users ? true : false"
-						hint="選択済みです"
+						:hint="$route.query.users ? '選択済みです' : ''"
 						persistent-hint
+						return-object
+						@change="changeTargetUser"
 						class="mt-3"
 					/>
 
@@ -107,7 +109,11 @@ export default Vue.extend({
 			.get('/api/users/')
 			.then((res: any) => {
 				return res.data.map((item: any) => {
-					return { text: item.name, value: item.email }
+					return {
+						text: item.name,
+						value: item.user_id,
+						email: item.email,
+					}
 				})
 			})
 			.catch((err: any) => {
@@ -165,11 +171,11 @@ export default Vue.extend({
 				department: '',
 				group: '',
 			},
-			tags: [],
-			users: [{ text: 'フルネーム', value: 'hoge' }],
+			tags: [] as string[],
+			users: [{ text: 'フルネーム', value: '', email: 'fuga' }],
 			datePickerIsActive: [false, false, false],
 			request: {
-				name: '氏名',
+				target: { text: '', value: '', email: '' },
 				dates: ['', '', ''],
 				detail: '',
 			},
@@ -181,10 +187,31 @@ export default Vue.extend({
 	},
 	mounted() {
 		if (this.$route.query.users) {
-			this.request.name = this.overview.name
+			const target: any = this.users.find((item) => {
+				return item.value === this.$route.query.users
+			})
+			this.request.target = target
 		}
+		console.log(this.request.target)
 	},
 	methods: {
+		async changeTargetUser() {
+			await this.$axios
+				.get(`/api/users/${this.request.target.value}/`)
+				.then((res: any) => {
+					Object.assign(
+						this.overview,
+						this.$toCamelCaseObject(res.data.overview),
+						{},
+					)
+					this.tags.splice(0, this.tags.length, ...res.data.tags)
+				})
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response?.status | 500,
+					})
+				})
+		},
 		gapiLoaded() {
 			return new Promise<void>((resolve, reject) => {
 				gapi.load('client', () => resolve())
