@@ -4,7 +4,7 @@
 			<UserOverview v-if="$route.query.users" v-bind="overview" />
 			<Paragraph v-else text="リクエストを送る相手を選んでください" />
 
-			<v-chip-group v-if="tags.length">
+			<v-chip-group v-if="tags.length" column>
 				<v-chip v-for="tag in tags" :key="tag">
 					{{ tag }}
 				</v-chip>
@@ -84,7 +84,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import Paragraph from '~/components/atoms/Paragraph.vue'
 declare const gapi: any
 declare const google: any
 
@@ -103,13 +102,33 @@ export default Vue.extend({
 		}
 	},
 	auth: false,
-	async asyncData({ app, route }) {
-		let response = {}
+	async asyncData({ app, route, store, $toCamelCaseObject }) {
+		const users = await app.$axios
+			.get('/api/users/')
+			.then((res: any) => {
+				return res.data.map((item: any) => {
+					return { text: item.name, value: item.email }
+				})
+			})
+			.catch((err: any) => {
+				store.commit('snackbar/displaySnackbar', {
+					status: err.response?.status | 500,
+				})
+				return []
+			})
+
+		let userResponse = {}
 		if (route.query.users) {
-			response = app.$axios
-				.get(`/api/users/${route.query.users}`)
+			userResponse = await app.$axios
+				.get(`/api/users/${route.query.users}/`)
+				.then((res: any) => {
+					return {
+						...res.data,
+						overview: $toCamelCaseObject(res.data.overview),
+					}
+				})
 				.catch((err: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
+					store.commit('snackbar/displaySnackbar', {
 						status: err.response?.status | 500,
 					})
 					return {
@@ -119,7 +138,7 @@ export default Vue.extend({
 				})
 		}
 
-		return { ...response }
+		return { ...userResponse, users }
 	},
 	fetch({ store, route }) {
 		const breadcrumbs = [
@@ -147,11 +166,10 @@ export default Vue.extend({
 				group: '',
 			},
 			tags: [],
-			users: ['フルネーム'],
+			users: [{ text: 'フルネーム', value: 'hoge' }],
 			datePickerIsActive: [false, false, false],
 			request: {
-				name: 'フルネーム',
-				status: '未承認',
+				name: '氏名',
 				dates: ['', '', ''],
 				detail: '',
 			},
