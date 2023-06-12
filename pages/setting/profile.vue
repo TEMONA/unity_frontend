@@ -42,7 +42,6 @@ interface detailType {
 }
 
 interface dataType {
-	userId: string
 	overview: UserOverviewType
 	tags: string[]
 	details: {
@@ -62,23 +61,28 @@ export default Vue.extend({
 			title: 'プロフィール編集',
 		}
 	},
-	async asyncData({ app }) {
-		const { id } = await app.$axios
-			.get('/authen/users/me/')
-			.then((res: any) => res)
-
-		const response = app.$axios.get(`/api/users/${id}`).catch((err: any) => {
-			this.$store.commit('snackbar/displaySnackbar', {
-				status: err.response?.status | 500,
+	async asyncData({ app, $auth, $toCamelCaseObject }) {
+		const response = await app.$axios
+			.get(`/api/users/${$auth.user?.id}/`)
+			.then((res: any) => {
+				return {
+					...res.data,
+					overview: $toCamelCaseObject(res.data.overview),
+					details: $toCamelCaseObject(res.data.details),
+				}
 			})
-			return {
-				overview: {},
-				tags: [],
-				details: [],
-			}
-		})
+			.catch((err: any) => {
+				this.$store.commit('snackbar/displaySnackbar', {
+					status: err.response?.status | 500,
+				})
+				return {
+					overview: {},
+					tags: [],
+					details: [],
+				}
+			})
 
-		return { userId: id, ...response }
+		return { ...response }
 	},
 	fetch({ store, route }) {
 		const breadcrumbs = [
@@ -92,7 +96,6 @@ export default Vue.extend({
 	},
 	data(): dataType {
 		return {
-			userId: '',
 			overview: {
 				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
 				name: 'User Name',
@@ -118,15 +121,11 @@ export default Vue.extend({
 	},
 	methods: {
 		handleSubmit() {
-			const params = Object.entries(this.details).reduce(
-				(object: { [key: string]: string }, item: any) => {
-					params[item[0]] = item[1].value
-					return object
-				},
-				{},
+			const params = Object.fromEntries(
+				Object.entries(this.details).map(([key, val]) => [key, val.value]),
 			)
 			this.$axios
-				.patch(`/api/users/${this.userId}`, {
+				.patch(`/api/users/${this.$auth.user?.id}/`, {
 					contents: { ...this.$toSnakeCaseObject(params) },
 				})
 				.then(() => {
