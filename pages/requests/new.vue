@@ -103,7 +103,6 @@ export default Vue.extend({
 			],
 		}
 	},
-	auth: false,
 	async asyncData({ app, route, store, $toCamelCaseObject }) {
 		const users = await app.$axios
 			.get('/api/users/')

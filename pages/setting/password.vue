@@ -60,15 +60,18 @@ export default Vue.extend({
 			title: 'パスワード変更',
 		}
 	},
-	async asyncData({ app }) {
-		const { id } = await app.$axios
-			.get('/authen/users/me/')
-			.then((res: any) => res)
-
+	async asyncData({ app, store, $auth, $toCamelCaseObject }) {
 		const response = await app.$axios
-			.get(`/api/users/${id}`)
+			.get(`/api/users/${$auth.user?.id}/`)
+			.then((res: any) => {
+				return {
+					...res.data,
+					overview: $toCamelCaseObject(res.data.overview),
+					details: $toCamelCaseObject(res.data.details),
+				}
+			})
 			.catch((err: any) => {
-				this.$store.commit('snackbar/displaySnackbar', {
+				store.commit('snackbar/displaySnackbar', {
 					status: err.response?.status | 500,
 				})
 				return {
@@ -129,7 +132,7 @@ export default Vue.extend({
 				currentPassword: this.items.currentPassword.value,
 			}
 			this.$axios
-				.patch('/authen/users/set_password', {
+				.post('/authen/users/set_password/', {
 					...this.$toSnakeCaseObject(params),
 				})
 				.then(() => {
@@ -139,8 +142,19 @@ export default Vue.extend({
 					})
 				})
 				.catch((err: any) => {
+					let message = ''
+					const keyMap: any = {
+						current_password: '現在のパスワード',
+						new_password: '新しいパスワード',
+					}
+					Object.keys(err.response.data).forEach((key) => {
+						message += keyMap[key] + '：' + err.response.data[key][0]
+					})
+
+					console.log(err.response)
 					this.$store.commit('snackbar/displaySnackbar', {
 						status: err.response?.status | 500,
+						message,
 					})
 				})
 		},
