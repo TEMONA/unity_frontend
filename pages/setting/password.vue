@@ -72,7 +72,7 @@ export default Vue.extend({
 			})
 			.catch((err: any) => {
 				store.commit('snackbar/displaySnackbar', {
-					status: err.response?.status | 500,
+					status: err.response?.status || 500,
 				})
 				return {
 					overview: {},
@@ -153,7 +153,7 @@ export default Vue.extend({
 
 					console.log(err.response)
 					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status | 500,
+						status: err.response?.status || 500,
 						message,
 					})
 				})

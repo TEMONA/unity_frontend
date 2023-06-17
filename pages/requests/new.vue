@@ -117,7 +117,7 @@ export default Vue.extend({
 			})
 			.catch((err: any) => {
 				store.commit('snackbar/displaySnackbar', {
-					status: err.response?.status | 500,
+					status: err.response?.status || 500,
 				})
 				return []
 			})
@@ -134,7 +134,7 @@ export default Vue.extend({
 				})
 				.catch((err: any) => {
 					store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status | 500,
+						status: err.response?.status || 500,
 					})
 					return {
 						overview: {},
@@ -206,7 +206,7 @@ export default Vue.extend({
 				})
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status | 500,
+						status: err.response?.status || 500,
 					})
 				})
 		},

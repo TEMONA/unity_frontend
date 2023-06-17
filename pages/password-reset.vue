@@ -99,7 +99,7 @@ export default Vue.extend({
 				})
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status | 500,
+						status: err.response?.status || 500,
 					})
 				})
 		},

@@ -49,7 +49,7 @@ export default Vue.extend({
 	methods: {
 		handleSubmit(): void {
 			this.$axios
-				.post('/authen/users/reset_password', {
+				.post('/authen/users/reset_password/', {
 					email: this.email,
 				})
 				.then(() => {
@@ -59,8 +59,9 @@ export default Vue.extend({
 					})
 				})
 				.catch((err: any) => {
+					console.log(err.response?.status || 500)
 					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status | 500,
+						status: err.response?.status || 500,
 					})
 				})
 		},
