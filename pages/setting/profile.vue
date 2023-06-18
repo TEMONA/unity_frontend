@@ -120,11 +120,11 @@ export default Vue.extend({
 		}
 	},
 	methods: {
-		handleSubmit() {
+		async handleSubmit() {
 			const params = Object.fromEntries(
 				Object.entries(this.details).map(([key, val]) => [key, val.value]),
 			)
-			this.$axios
+			await this.$axios
 				.patch(`/api/users/${this.$auth.user?.id}/`, {
 					contents: { ...this.$toSnakeCaseObject(params) },
 				})
