@@ -11,25 +11,29 @@
 		</v-col>
 
 		<v-col cols="12" md="8">
-			<FormCard title="パスワード変更">
-				<template v-slot:default>
-					<v-text-field
-						v-for="(item, index) in items"
-						:key="index"
-						v-model="item.value"
-						:label="item.title"
-						type="password"
-						:autocomplete="item.autocomplete"
-						hide-details="auto"
-						auto-grow
-						rows="1"
-						class="mt-3"
-					/>
-				</template>
-				<template v-slot:action>
-					<v-btn color="primary" @click="handleSubmit">保存</v-btn>
-				</template>
-			</FormCard>
+			<v-form :value="valid" ref="items">
+				<FormCard title="パスワード変更">
+					<template v-slot:default>
+						<v-text-field
+							v-for="(item, index) in items"
+							:key="index"
+							v-model="item.value"
+							:label="item.title"
+							type="password"
+							:autocomplete="item.autocomplete"
+							hide-details="auto"
+							required
+							auto-grow
+							rows="1"
+							:rules="[rules.required, rules.minLength]"
+							class="mt-3"
+						/>
+					</template>
+					<template v-slot:action>
+						<v-btn color="primary" @click="handleSubmit">保存</v-btn>
+					</template>
+				</FormCard>
+			</v-form>
 		</v-col>
 	</v-row>
 </template>
@@ -47,10 +51,15 @@ interface itemType {
 interface dataType {
 	overview: UserOverviewType
 	tags: string[]
+	valid: boolean
 	items: {
 		currentPassword: itemType
 		newPassword: itemType
 		newPasswordConfirm: itemType
+	}
+	rules: {
+		required(value: string | number): boolean | string
+		minLength(value: string): boolean | string
 	}
 }
 
@@ -106,6 +115,7 @@ export default Vue.extend({
 				chatworkId: 'chatwork_id',
 			},
 			tags: [],
+			valid: false,
 			items: {
 				currentPassword: {
 					title: '現在のパスワード',
@@ -123,10 +133,19 @@ export default Vue.extend({
 					value: '',
 				},
 			},
+			rules: {
+				required: (value) => !!value || '必ず入力してください',
+				minLength: (value) =>
+					value.length >= 7 || '８文字以上で入力してください',
+			},
 		}
 	},
 	methods: {
 		handleSubmit() {
+			if (!this.$refs.items.validate()) {
+				return
+			}
+
 			const params = {
 				newPassword: this.items.newPassword.value,
 				currentPassword: this.items.currentPassword.value,
