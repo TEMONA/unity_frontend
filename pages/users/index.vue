@@ -41,7 +41,8 @@
 			</FormCard>
 		</v-col>
 		<v-col cols="12" md="8">
-			<UserSearchResult :users="users" />
+			<UserSearchResult v-if="users.length" :users="users" />
+			<Paragraph v-else text="検索結果はありません" />
 		</v-col>
 	</v-row>
 </template>
