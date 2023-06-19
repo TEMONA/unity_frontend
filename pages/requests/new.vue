@@ -24,6 +24,7 @@
 						persistent-hint
 						return-object
 						@change="changeTargetUser"
+						:rules="[rules.required]"
 						class="mt-3"
 					/>
 
@@ -38,6 +39,7 @@
 								clearable
 								@click:clear="request.dates[0] = ''"
 								suffix="から１時間"
+								:rules="[rules.required]"
 								class="mt-3"
 							/>
 						</v-col>
@@ -50,6 +52,7 @@
 								clearable
 								@click:clear="request.dates[1] = ''"
 								suffix="から１時間"
+								:rules="[rules.required]"
 								class="mt-3"
 							/>
 						</v-col>
@@ -62,6 +65,7 @@
 								clearable
 								@click:clear="request.dates[2] = ''"
 								suffix="から１時間"
+								:rules="[rules.required]"
 								class="mt-3"
 							/>
 						</v-col>
@@ -73,6 +77,7 @@
 						label="依頼文"
 						auto-grow
 						rows="1"
+						:rules="[rules.required]"
 						class="mt-2"
 					/>
 				</template>
@@ -86,12 +91,33 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { UserOverviewType } from '~/components/organisms/UserOverview.vue'
+
 declare const gapi: any
 declare const google: any
 
 const DISCOVERY_DOC =
 	'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'
 const SCOPES = 'https://www.googleapis.com/auth/calendar'
+
+interface dataType {
+	overview: UserOverviewType
+	tags: string[]
+	users: { text: string; value: string; email: string }[]
+	datePickerIsActive: boolean[]
+	request: {
+		target: { text: string; value: string; email: string }
+		dates: Date[] | string[]
+		detail: string
+	}
+	tokenClient: any
+	gapiInited: any
+	gisInited: any
+	message: ''
+	rules: {
+		required(value: string | number): boolean | string
+	}
+}
 
 export default Vue.extend({
 	head() {
@@ -159,7 +185,7 @@ export default Vue.extend({
 		]
 		store.commit('updateBreadcrumbs', breadcrumbs)
 	},
-	data() {
+	data(): dataType {
 		return {
 			overview: {
 				image: '',
@@ -170,7 +196,7 @@ export default Vue.extend({
 				department: '',
 				group: '',
 			},
-			tags: [] as string[],
+			tags: [],
 			users: [{ text: 'フルネーム', value: '', email: 'fuga' }],
 			datePickerIsActive: [false, false, false],
 			request: {
@@ -178,10 +204,13 @@ export default Vue.extend({
 				dates: ['', '', ''],
 				detail: '',
 			},
-			tokenClient: {} as any,
+			tokenClient: {},
 			gapiInited: false,
 			gisInited: false,
 			message: '',
+			rules: {
+				required: (value) => !!value || '必ず入力してください',
+			},
 		}
 	},
 	mounted() {
@@ -249,6 +278,25 @@ export default Vue.extend({
 				// Skip display of account chooser and consent dialog for an existing session.
 				this.tokenClient.requestAccessToken({ prompt: '' })
 			}
+
+			await this.$axios
+				.post(`/api/lunch-requests/`, {
+					applicant: this.$auth.user?.id,
+					recipient_calender_uid: 'aaa',
+					apply_content: 'hoge',
+					preferred_days: { hoge: 'fuga' },
+				})
+				.then((res: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: 200,
+						message: '社員情報を更新しました',
+					})
+				})
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response?.status || 500,
+					})
+				})
 		},
 		async intertEvents() {
 			// リクエスト用のパラメータを生成
@@ -265,7 +313,7 @@ export default Vue.extend({
 ${this.request.detail}`,
 				attendees: [
 					{ email: this.$auth.user.email, responseStatus: 'needsAction' },
-					{ email: 'kawashita@temona.co.jp', responseStatus: 'needsAction' },
+					{ email: this.request.target.email, responseStatus: 'needsAction' },
 				],
 				reminders: {
 					useDefault: false,
