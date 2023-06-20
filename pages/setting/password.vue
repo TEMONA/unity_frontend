@@ -55,7 +55,6 @@ interface dataType {
 	items: {
 		currentPassword: itemType
 		newPassword: itemType
-		newPasswordConfirm: itemType
 	}
 	rules: {
 		required(value: string | number): boolean | string
@@ -125,11 +124,6 @@ export default Vue.extend({
 				newPassword: {
 					title: '新しいパスワード',
 					autocomplete: 'new-password',
-					value: '',
-				},
-				newPasswordConfirm: {
-					title: '新しいパスワード（確認）',
-					autocomplete: 'off',
 					value: '',
 				},
 			},
