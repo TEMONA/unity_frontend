@@ -130,24 +130,6 @@ export default Vue.extend({
 		}
 	},
 	async asyncData({ app, route, store, $toCamelCaseObject }) {
-		const users = await app.$axios
-			.get('/api/users/')
-			.then((res: any) => {
-				return res.data.map((item: any) => {
-					return {
-						text: item.name,
-						value: item.user_id,
-						email: item.email,
-					}
-				})
-			})
-			.catch((err: any) => {
-				store.commit('snackbar/displaySnackbar', {
-					status: err.response?.status || 500,
-				})
-				return []
-			})
-
 		let userResponse = {}
 		if (route.query.users) {
 			userResponse = await app.$axios
@@ -169,7 +151,7 @@ export default Vue.extend({
 				})
 		}
 
-		return { ...userResponse, users }
+		return { ...userResponse }
 	},
 	fetch({ store, route }) {
 		const breadcrumbs = [
@@ -213,13 +195,31 @@ export default Vue.extend({
 			},
 		}
 	},
-	mounted() {
-		if (this.$route.query.users) {
-			const target: any = this.users.find((item) => {
-				return item.value === this.$route.query.users
+	async mounted() {
+		await this.$axios
+			.get('/api/users/', { params: { per_page: 999 } })
+			.then((res: any) => {
+				const users = res.data.records.map((item: any) => {
+					return {
+						text: item.name,
+						value: item.user_id,
+						email: item.email,
+					}
+				})
+				this.users.splice(0, this.users.length, ...users)
+
+				if (this.$route.query.users) {
+					const target: any = this.users.find((item) => {
+						return item.value === this.$route.query.users
+					})
+					this.request.target = target
+				}
 			})
-			this.request.target = target
-		}
+			.catch((err: any) => {
+				this.$store.commit('snackbar/displaySnackbar', {
+					status: err.response?.status || 500,
+				})
+			})
 	},
 	methods: {
 		async changeTargetUser() {
@@ -279,24 +279,24 @@ export default Vue.extend({
 				this.tokenClient.requestAccessToken({ prompt: '' })
 			}
 
-			await this.$axios
-				.post(`/api/lunch-requests/`, {
-					applicant: this.$auth.user?.id,
-					recipient_calender_uid: 'aaa',
-					apply_content: 'hoge',
-					preferred_days: { hoge: 'fuga' },
-				})
-				.then((res: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: 200,
-						message: '社員情報を更新しました',
-					})
-				})
-				.catch((err: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status || 500,
-					})
-				})
+			// await this.$axios
+			// 	.post(`/api/lunch-requests/`, {
+			// 		applicant: this.$auth.user?.id,
+			// 		recipient_calender_uid: 'aaa',
+			// 		apply_content: 'hoge',
+			// 		preferred_days: { hoge: 'fuga' },
+			// 	})
+			// 	.then((res: any) => {
+			// 		this.$store.commit('snackbar/displaySnackbar', {
+			// 			status: 200,
+			// 			message: '社員情報を更新しました',
+			// 		})
+			// 	})
+			// 	.catch((err: any) => {
+			// 		this.$store.commit('snackbar/displaySnackbar', {
+			// 			status: err.response?.status || 500,
+			// 		})
+			// 	})
 		},
 		async intertEvents() {
 			// リクエスト用のパラメータを生成
