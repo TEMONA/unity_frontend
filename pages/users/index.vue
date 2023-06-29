@@ -7,7 +7,7 @@
 				outlined
 				dense
 				label="氏名から社員を検索"
-				v-model="search.name.value"
+				v-model="search.form.name.value"
 				hide-details="auto"
 			>
 				<template v-slot:prepend-inner>
@@ -27,7 +27,7 @@
 			<FormCard v-if="toggleSearchCard" title="詳細検索">
 				<template v-slot:default>
 					<v-text-field
-						v-for="(item, index) in search"
+						v-for="(item, index) in search.form"
 						:key="index"
 						v-model="item.value"
 						:label="item.title"
@@ -41,15 +41,20 @@
 			</FormCard>
 		</v-col>
 		<v-col cols="12" md="8">
-			<UserSearchResult v-if="users.length" :users="users" />
-			<Paragraph v-else text="検索結果はありません" />
+			<UserSearchResult
+				:meta="meta"
+				:users="users"
+				@changeMeta="searchUsersByMeta"
+			/>
 		</v-col>
 	</v-row>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { SearchResultHeaderType } from '~/components/molecules/SearchResultHeader.vue'
 import { UserListType } from '~/components/organisms/UserList.vue'
+import { SearchResultMetaType } from '~/components/organisms/UserSearchResult.vue'
 
 interface searchItemType {
 	title: string
@@ -57,22 +62,20 @@ interface searchItemType {
 }
 
 interface searchType {
-	name: searchItemType
-	headquarters: searchItemType
-	department: searchItemType
-	group: searchItemType
-	jobDescription: searchItemType
+	form: {
+		name: searchItemType
+		headquarters: searchItemType
+		department: searchItemType
+		group: searchItemType
+		jobDescription: searchItemType
+	}
+	meta: SearchResultMetaType & { [key: string]: number }
 }
 
 interface dataType {
 	toggleSearchCard: boolean
 	search: searchType
-	// meta: {
-	// 	total: number
-	// 	limit: number
-	// 	page: number
-	// 	limitPerPage: number
-	// }
+	meta: SearchResultHeaderType
 	users: UserListType[]
 }
 
@@ -82,13 +85,13 @@ export default Vue.extend({
 			title: '社員一覧',
 		}
 	},
-	async asyncData({ app, store, $toCamelCaseObjectArray }) {
+	async asyncData({ app, store, $toCamelCaseObjectArray, $toCamelCaseObject }) {
 		const response = await app.$axios
 			.get(`/api/users/`)
 			.then((res: any) => {
 				return {
-					users: $toCamelCaseObjectArray(res.data),
-					// meta: this.$toCamelCaseObject(res.meta),
+					users: $toCamelCaseObjectArray(res.data.records),
+					meta: $toCamelCaseObject(res.data.meta),
 				}
 			})
 			.catch((err: any) => {
@@ -108,39 +111,59 @@ export default Vue.extend({
 		return {
 			toggleSearchCard: false,
 			search: {
-				name: { title: '氏名', value: '' },
-				headquarters: { title: '事業本部', value: '' },
-				department: { title: '事業部', value: '' },
-				group: { title: 'グループ', value: '' },
-				jobDescription: { title: '業務内容', value: '' },
+				form: {
+					name: { title: '氏名', value: '' },
+					headquarters: { title: '事業本部', value: '' },
+					department: { title: '事業部', value: '' },
+					group: { title: 'グループ', value: '' },
+					jobDescription: { title: '業務内容', value: '' },
+				},
+				meta: {
+					perPage: 30,
+					page: 1,
+				},
 			},
-			// meta: {
-			// 	total: 30,
-			// 	limit: 3,
-			// 	page: 1,
-			// 	limitPerPage: 10,
-			// },
+			meta: {
+				totalCount: 30,
+				perPage: 3,
+				currentPage: 1,
+				totalPages: 1,
+			},
 			users: [],
 		}
 	},
 	methods: {
+		searchUsersByMeta(e: SearchResultMetaType) {
+			Object.assign(this.search.meta, e, {})
+			this.searchUsers()
+		},
 		async searchUsers() {
-			const params = Object.entries(this.search).reduce(
-				(object: { [key: string]: string }, item: any) => {
-					object[item[0]] = item[1].value
-					return object
-				},
-				{},
-			)
+			const params: { [key: string]: string | number } = Object.entries(
+				this.search.form,
+			).reduce((object: { [key: string]: string }, item: any) => {
+				object[item[0]] = item[1].value
+				return object
+			}, {})
+
+			Object.keys(this.search.meta).forEach((key: string) => {
+				params[key] = this.search.meta[key]
+			})
+			console.log(params)
+
 			await this.$axios
 				.get('/api/users/', { params: this.$toSnakeCaseObject(params) })
-				.then((res: { data: UserListType[] }) => {
-					this.users.splice(
-						0,
-						this.users.length,
-						...this.$toCamelCaseObjectArray(res.data),
-					)
-				})
+				.then(
+					(res: {
+						data: { records: UserListType[]; meta: SearchResultHeaderType }
+					}) => {
+						this.users.splice(
+							0,
+							this.users.length,
+							...this.$toCamelCaseObjectArray(res.data.records),
+						)
+						Object.assign(this.meta, this.$toCamelCaseObject(res.data.meta), {})
+					},
+				)
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
 						status: err.response?.status || 500,

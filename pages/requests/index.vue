@@ -1,101 +1,116 @@
 <template>
 	<v-row class="requests">
 		<v-col cols="12" md="4" class="requests__sidebar">
-			<FormCard title="リクエストを検索">
-				<template v-slot:default>
-					<v-text-field
-						label="相手の氏名"
-						hide-details="auto"
-						v-model="search.name"
-					/>
-					<v-row no-gutters class="pt-3 mt-1">
-						<v-col cols="12" class="text-subtitle-1">リクエストの方向</v-col>
-						<v-col>
-							<v-checkbox
-								v-model="search.direction.from"
-								label="相手から"
-								hide-details="auto"
-								class="mt-0"
-							/>
-						</v-col>
-						<v-col>
-							<v-checkbox
-								v-model="search.direction.to"
-								label="自分から"
-								hide-details="auto"
-								class="mt-0"
-							/>
-						</v-col>
-					</v-row>
-					<v-row no-gutters class="pt-3 mt-1">
-						<v-col cols="12" class="text-subtitle-1">承認状況</v-col>
-						<v-col cols="6">
-							<v-checkbox
-								v-model="search.status.waiting"
-								label="未承認"
-								hide-details="auto"
-								class="mt-0"
-							/>
-						</v-col>
-						<v-col cols="6">
-							<v-checkbox
-								v-model="search.status.approved"
-								label="承認済"
-								hide-details="auto"
-								class="mt-0"
-							/>
-						</v-col>
-						<v-col cols="6">
-							<v-checkbox
-								v-model="search.status.denied"
-								label="拒否済"
-								hide-details="auto"
-								class="mt-0"
-							/>
-						</v-col>
-					</v-row>
-					<v-menu
-						ref="menu"
-						v-model="datePickerIsActive"
-						:close-on-content-click="false"
-						:return-value.sync="search.dates"
-						transition="scale-transition"
-						offset-y
-						min-width="auto"
-					>
-						<template v-slot:activator="{ on, attrs }">
+			<v-row>
+				<v-col cols="12">
+					<FormCard title="リクエストを検索">
+						<template v-slot:default>
 							<v-text-field
-								:value="dateRangeText"
-								label="リクエスト日時（範囲）"
+								label="相手の氏名"
 								hide-details="auto"
-								readonly
-								v-bind="attrs"
-								v-on="on"
-								clear-icon="mdi-close-circle"
-								clearable
-								@click:clear="search.dates = []"
-								class="mt-3"
-							></v-text-field>
-						</template>
-						<v-date-picker v-model="search.dates" no-title scrollable range>
-							<v-spacer></v-spacer>
-							<v-btn text color="primary" @click="datePickerIsActive = false">
-								Cancel
-							</v-btn>
-							<v-btn
-								text
-								color="primary"
-								@click="$refs.menu.save(search.dates)"
+								v-model="search.name"
+							/>
+							<v-row no-gutters class="pt-3 mt-1">
+								<v-col cols="12" class="text-subtitle-1"
+									>リクエストの方向</v-col
+								>
+								<v-col>
+									<v-checkbox
+										v-model="search.direction.from"
+										label="相手から"
+										hide-details="auto"
+										class="mt-0"
+									/>
+								</v-col>
+								<v-col>
+									<v-checkbox
+										v-model="search.direction.to"
+										label="自分から"
+										hide-details="auto"
+										class="mt-0"
+									/>
+								</v-col>
+							</v-row>
+							<v-row no-gutters class="pt-3 mt-1">
+								<v-col cols="12" class="text-subtitle-1">承認状況</v-col>
+								<v-col cols="6">
+									<v-checkbox
+										v-model="search.status.waiting"
+										label="未承認"
+										hide-details="auto"
+										class="mt-0"
+									/>
+								</v-col>
+								<v-col cols="6">
+									<v-checkbox
+										v-model="search.status.approved"
+										label="承認済"
+										hide-details="auto"
+										class="mt-0"
+									/>
+								</v-col>
+								<v-col cols="6">
+									<v-checkbox
+										v-model="search.status.denied"
+										label="拒否済"
+										hide-details="auto"
+										class="mt-0"
+									/>
+								</v-col>
+							</v-row>
+							<v-menu
+								ref="menu"
+								v-model="datePickerIsActive"
+								:close-on-content-click="false"
+								:return-value.sync="search.dates"
+								transition="scale-transition"
+								offset-y
+								min-width="auto"
 							>
-								OK
-							</v-btn>
-						</v-date-picker>
-					</v-menu>
-				</template>
-				<template v-slot:action>
-					<v-btn color="primary" @click="searchRequests">検索</v-btn>
-				</template>
-			</FormCard>
+								<template v-slot:activator="{ on, attrs }">
+									<v-text-field
+										:value="dateRangeText"
+										label="リクエスト日時（範囲）"
+										hide-details="auto"
+										readonly
+										v-bind="attrs"
+										v-on="on"
+										clear-icon="mdi-close-circle"
+										clearable
+										@click:clear="search.dates = []"
+										class="mt-3"
+									></v-text-field>
+								</template>
+								<v-date-picker v-model="search.dates" no-title scrollable range>
+									<v-spacer></v-spacer>
+									<v-btn
+										text
+										color="primary"
+										@click="datePickerIsActive = false"
+									>
+										Cancel
+									</v-btn>
+									<v-btn
+										text
+										color="primary"
+										@click="$refs.menu.save(search.dates)"
+									>
+										OK
+									</v-btn>
+								</v-date-picker>
+							</v-menu>
+						</template>
+						<template v-slot:action>
+							<v-btn color="primary" @click="searchRequests">検索</v-btn>
+						</template>
+					</FormCard>
+				</v-col>
+				<v-col cols="12">
+					<v-btn to="/requests/new" nuxt block color="primary">
+						新しくランチを申請する
+					</v-btn>
+				</v-col>
+			</v-row>
 		</v-col>
 
 		<v-col cols="12" md="8">
@@ -112,6 +127,19 @@ export default Vue.extend({
 		return {
 			title: 'リクエスト一覧',
 		}
+	},
+	async asyncData({ app, store }) {
+		const users = await app.$axios
+			.get('/api/lunch-requests/')
+			.then((res: any) => {
+				console.log(res)
+			})
+			.catch((err: any) => {
+				store.commit('snackbar/displaySnackbar', {
+					status: err.response?.status || 500,
+				})
+				return []
+			})
 	},
 	fetch({ store, route }) {
 		const breadcrumbs = [

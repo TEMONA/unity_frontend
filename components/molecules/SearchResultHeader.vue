@@ -4,12 +4,15 @@
 			検索結果
 			<v-spacer />
 			<div class="mr-2">
-				{{ (page - 1) * limitPerPage + 1 }}-{{
-					page * limitPerPage >= total ? total : page * limitPerPage
-				}}
-				/ {{ total }}
+				{{ (currentPage - 1) * perPage + 1 }}
+				-
+				{{
+					currentPage * perPage >= totalCount
+						? totalCount
+						: currentPage * perPage
+				}}件 / {{ totalCount }}件
 			</div>
-			<v-icon>mdi-dots-vertical</v-icon>
+			<!-- <v-icon>mdi-dots-vertical</v-icon> -->
 		</v-subheader>
 
 		<v-divider />
@@ -20,27 +23,24 @@
 import Vue from 'vue'
 
 export interface SearchResultHeaderType {
-	start: number
-	end: number
-	total: number
+	totalCount: number
+	perPage: number
+	currentPage: number
+	totalPages: number
 }
 
 export default Vue.extend({
 	name: 'SearchResultHeader',
 	props: {
-		total: {
+		totalCount: {
 			type: Number,
 			required: true,
 		},
-		limit: {
+		perPage: {
 			type: Number,
 			required: true,
 		},
-		page: {
-			type: Number,
-			required: true,
-		},
-		limitPerPage: {
+		currentPage: {
 			type: Number,
 			required: true,
 		},
