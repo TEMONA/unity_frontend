@@ -31,33 +31,6 @@
 									/>
 								</v-col>
 							</v-row>
-							<v-row no-gutters class="pt-3 mt-1">
-								<v-col cols="12" class="text-subtitle-1">承認状況</v-col>
-								<v-col cols="6">
-									<v-checkbox
-										v-model="search.status.waiting"
-										label="未承認"
-										hide-details="auto"
-										class="mt-0"
-									/>
-								</v-col>
-								<v-col cols="6">
-									<v-checkbox
-										v-model="search.status.approved"
-										label="承認済"
-										hide-details="auto"
-										class="mt-0"
-									/>
-								</v-col>
-								<v-col cols="6">
-									<v-checkbox
-										v-model="search.status.denied"
-										label="拒否済"
-										hide-details="auto"
-										class="mt-0"
-									/>
-								</v-col>
-							</v-row>
 							<v-menu
 								ref="menu"
 								v-model="datePickerIsActive"
@@ -114,32 +87,45 @@
 		</v-col>
 
 		<v-col cols="12" md="8">
-			<UserSearchResult :meta="meta" :users="users" />
+			<RequestSearchResult :meta="meta" :requests="requests" />
 		</v-col>
 	</v-row>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { SearchResultHeaderType } from '~/components/molecules/SearchResultHeader.vue'
+import { RequestListItemType } from '~/components/molecules/RequestListItem.vue'
+import { SearchResultMetaType } from '~/components/organisms/UserSearchResult.vue'
+
+interface searchItemType {
+	title: string
+	value: string
+}
+
+interface searchType {
+	name: string
+	direction: {
+		from: boolean
+		to: boolean
+	}
+	dates: string[]
+	meta: SearchResultMetaType & { [key: string]: number }
+}
+
+interface dataType {
+	isLoading: boolean
+	datePickerIsActive: boolean
+	search: searchType
+	meta: SearchResultHeaderType
+	requests: RequestListItemType[]
+}
 
 export default Vue.extend({
 	head() {
 		return {
 			title: 'リクエスト一覧',
 		}
-	},
-	async asyncData({ app, store }) {
-		const users = await app.$axios
-			.get('/api/lunch-requests/')
-			.then((res: any) => {
-				console.log(res)
-			})
-			.catch((err: any) => {
-				store.commit('snackbar/displaySnackbar', {
-					status: err.response?.status || 500,
-				})
-				return []
-			})
 	},
 	fetch({ store, route }) {
 		const breadcrumbs = [
@@ -151,8 +137,9 @@ export default Vue.extend({
 		]
 		store.commit('updateBreadcrumbs', breadcrumbs)
 	},
-	data() {
+	data(): dataType {
 		return {
+			isLoading: true,
 			datePickerIsActive: false,
 			search: {
 				name: '',
@@ -160,41 +147,23 @@ export default Vue.extend({
 					from: true,
 					to: false,
 				},
-				status: {
-					waiting: true,
-					approved: false,
-					denied: false,
-				},
 				dates: [],
+				meta: {
+					perPage: 30,
+					page: 1,
+				},
 			},
 			meta: {
-				start: 1,
-				end: 3,
-				total: 30,
+				totalCount: 30,
+				perPage: 3,
+				currentPage: 1,
+				totalPages: 1,
 			},
-			users: [
-				{
-					image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
-					name: '氏名',
-					department: '事業部',
-					group: 'グループ',
-					role: '役職',
-					status: '承認済',
-					detail: '業務内容を２行だけ表示...',
-					direction: 'from',
-				},
-				{
-					image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
-					name: '氏名',
-					department: '事業部',
-					group: 'グループ',
-					role: '役職',
-					status: '未承認',
-					detail: '業務内容を２行だけ表示...',
-					direction: 'to',
-				},
-			],
+			requests: [],
 		}
+	},
+	async mounted() {
+		await this.searchRequests()
 	},
 	computed: {
 		dateRangeText(): string {
@@ -202,8 +171,46 @@ export default Vue.extend({
 		},
 	},
 	methods: {
-		searchRequests(): void {
-			console.log('search')
+		async searchRequests() {
+			this.isLoading = true
+			const params: { [key: string]: string | number } = Object.entries(
+				this.search,
+			).reduce((object: { [key: string]: string }, item: any) => {
+				object[item[0]] = item[1].value
+				return object
+			}, {})
+
+			Object.keys(this.search.meta).forEach((key: string) => {
+				params[key] = this.search.meta[key]
+			})
+			console.log(params)
+
+			await this.$axios
+				.get('/api/lunch-requests/', {
+					params: this.$toSnakeCaseObject(params),
+				})
+				.then(
+					(res: {
+						data: {
+							records: RequestListItemType[]
+							meta: SearchResultHeaderType
+						}
+					}) => {
+						this.requests.splice(
+							0,
+							this.requests.length,
+							...this.$toCamelCaseObjectArray(res.data.records),
+						)
+						Object.assign(this.meta, this.$toCamelCaseObject(res.data.meta), {})
+
+						this.isLoading = false
+					},
+				)
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response?.status || 500,
+					})
+				})
 		},
 	},
 })
