@@ -179,7 +179,7 @@ export default Vue.extend({
 				group: '',
 			},
 			tags: [],
-			users: [{ text: 'フルネーム', value: '', email: 'fuga' }],
+			users: [{ text: '選択してください', value: '', email: 'fuga' }],
 			datePickerIsActive: [false, false, false],
 			request: {
 				target: { text: '', value: '', email: '' },
@@ -279,24 +279,32 @@ export default Vue.extend({
 				this.tokenClient.requestAccessToken({ prompt: '' })
 			}
 
-			// await this.$axios
-			// 	.post(`/api/lunch-requests/`, {
-			// 		applicant: this.$auth.user?.id,
-			// 		recipient_calender_uid: 'aaa',
-			// 		apply_content: 'hoge',
-			// 		preferred_days: { hoge: 'fuga' },
-			// 	})
-			// 	.then((res: any) => {
-			// 		this.$store.commit('snackbar/displaySnackbar', {
-			// 			status: 200,
-			// 			message: '社員情報を更新しました',
-			// 		})
-			// 	})
-			// 	.catch((err: any) => {
-			// 		this.$store.commit('snackbar/displaySnackbar', {
-			// 			status: err.response?.status || 500,
-			// 		})
-			// 	})
+			// BEにリクエストデータを共有
+			const preferred_days = {
+				first: this.request.dates[0],
+				second: this.request.dates[1],
+				third: this.request.dates[2],
+			}
+			await this.$axios
+				.post(`/api/lunch-requests/`, {
+					applicant: this.$auth.user?.id,
+					recipient_calender_uid: this.request.target.email,
+					apply_content: this.request.detail,
+					preferred_days,
+				})
+				.then((res: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: 200,
+						message:
+							'リクエストを送信しました。Googleカレンダーをご確認ください',
+					})
+					this.$router.push('/requests')
+				})
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response?.status || 500,
+					})
+				})
 		},
 		async intertEvents() {
 			// リクエスト用のパラメータを生成
