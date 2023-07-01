@@ -44,6 +44,7 @@
 			<UserSearchResult
 				:meta="meta"
 				:users="users"
+				:is-loading="isLoading"
 				@changeMeta="searchUsersByMeta"
 			/>
 		</v-col>
@@ -73,6 +74,7 @@ interface searchType {
 }
 
 interface dataType {
+	isLoading: boolean
 	toggleSearchCard: boolean
 	search: searchType
 	meta: SearchResultHeaderType
@@ -85,30 +87,13 @@ export default Vue.extend({
 			title: '社員一覧',
 		}
 	},
-	async asyncData({ app, store, $toCamelCaseObjectArray, $toCamelCaseObject }) {
-		const response = await app.$axios
-			.get(`/api/users/`)
-			.then((res: any) => {
-				return {
-					users: $toCamelCaseObjectArray(res.data.records),
-					meta: $toCamelCaseObject(res.data.meta),
-				}
-			})
-			.catch((err: any) => {
-				store.commit('snackbar/displaySnackbar', {
-					status: err.response?.status || 500,
-				})
-				return { users: [], meta: {} }
-			})
-
-		return { ...response }
-	},
 	fetch({ store }) {
 		const breadcrumbs: [] = []
 		store.commit('updateBreadcrumbs', breadcrumbs)
 	},
 	data(): dataType {
 		return {
+			isLoading: true,
 			toggleSearchCard: false,
 			search: {
 				form: {
@@ -132,12 +117,16 @@ export default Vue.extend({
 			users: [],
 		}
 	},
+	async mounted() {
+		await this.searchUsers()
+	},
 	methods: {
 		searchUsersByMeta(e: SearchResultMetaType) {
 			Object.assign(this.search.meta, e, {})
 			this.searchUsers()
 		},
 		async searchUsers() {
+			this.isLoading = true
 			const params: { [key: string]: string | number } = Object.entries(
 				this.search.form,
 			).reduce((object: { [key: string]: string }, item: any) => {
@@ -162,6 +151,8 @@ export default Vue.extend({
 							...this.$toCamelCaseObjectArray(res.data.records),
 						)
 						Object.assign(this.meta, this.$toCamelCaseObject(res.data.meta), {})
+
+						this.isLoading = false
 					},
 				)
 				.catch((err: any) => {

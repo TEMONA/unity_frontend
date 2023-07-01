@@ -1,12 +1,13 @@
 <template>
 	<div>
 		<SearchResultHeader v-bind="meta" />
-		<v-list v-if="users.length" two-line class="pt-0">
-			<!-- <SearchResultHeader v-bind="meta" /> -->
-
-			<UserList :users="users" />
-		</v-list>
-		<Paragraph v-else text="検索結果はありません" />
+		<div v-if="!isLoading">
+			<v-list v-if="users.length" two-line class="pt-0">
+				<UserList :users="users" />
+			</v-list>
+			<Paragraph v-else text="検索結果はありません" />
+		</div>
+		<Paragraph v-else text="読み込み中です" class="m-3" />
 		<div v-if="meta.totalPages > 1" class="text-center">
 			<v-pagination
 				:value="meta.currentPage"
@@ -39,6 +40,10 @@ export default Vue.extend({
 			type: Array,
 			required: true,
 		} as Vue.PropOptions<UserListType[]>,
+		isLoading: {
+			type: Boolean,
+			required: true,
+		},
 	},
 	methods: {
 		changeCurrentPage(e: number) {
