@@ -22,7 +22,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { SearchResultHeaderType } from '../molecules/SearchResultHeader.vue'
-import { UserListType } from './UserList.vue'
+import { UserListItemType } from '../molecules/UserListItem.vue'
 
 export interface SearchResultMetaType {
 	perPage: number
@@ -39,7 +39,7 @@ export default Vue.extend({
 		users: {
 			type: Array,
 			required: true,
-		} as Vue.PropOptions<UserListType[]>,
+		} as Vue.PropOptions<UserListItemType[]>,
 		isLoading: {
 			type: Boolean,
 			required: true,

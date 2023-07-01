@@ -6,14 +6,12 @@
 
 		<v-list-item-content>
 			<v-list-item-title>
-				<slot name="prepend" />
 				{{ name }}
 				<span class="grey--text text-caption">
 					{{ headquarters }} {{ group }}
 					{{ role }}
 				</span>
 			</v-list-item-title>
-			<slot name="chip" />
 
 			<v-list-item-subtitle>
 				{{ jobDescription }}

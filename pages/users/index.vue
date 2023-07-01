@@ -54,7 +54,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { SearchResultHeaderType } from '~/components/molecules/SearchResultHeader.vue'
-import { UserListType } from '~/components/organisms/UserList.vue'
+import { UserListItemType } from '~/components/molecules/UserListItem.vue'
 import { SearchResultMetaType } from '~/components/organisms/UserSearchResult.vue'
 
 interface searchItemType {
@@ -78,7 +78,7 @@ interface dataType {
 	toggleSearchCard: boolean
 	search: searchType
 	meta: SearchResultHeaderType
-	users: UserListType[]
+	users: UserListItemType[]
 }
 
 export default Vue.extend({
@@ -143,7 +143,7 @@ export default Vue.extend({
 				.get('/api/users/', { params: this.$toSnakeCaseObject(params) })
 				.then(
 					(res: {
-						data: { records: UserListType[]; meta: SearchResultHeaderType }
+						data: { records: UserListItemType[]; meta: SearchResultHeaderType }
 					}) => {
 						this.users.splice(
 							0,
