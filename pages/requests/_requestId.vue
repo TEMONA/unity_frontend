@@ -29,11 +29,9 @@
 			</v-chip-group>
 
 			<Paragraph class="text-h6">
-				この人{{ request.direction === 'from' ? 'から' : 'へ' }}送られた
-				<v-chip v-if="request.status" :color="chipColor">
-					{{ request.status }}
-				</v-chip>
-				のリクエスト
+				この人{{
+					request.direction === 'from' ? 'から' : 'へ'
+				}}送られたリクエスト
 			</Paragraph>
 
 			<v-row>
@@ -73,6 +71,25 @@ export default Vue.extend({
 			title: 'リクエスト詳細',
 		}
 	},
+	async asyncData({ app, route, store, $toCamelCaseObject }) {
+		const response = await app.$axios
+			.get(`/api/lunch-requests/${route.params.requestId}`)
+			.then((res: any) => {
+				return { ...res.data, overview: $toCamelCaseObject(res.data.overview) }
+			})
+			.catch((err: any) => {
+				store.commit('snackbar/displaySnackbar', {
+					status: err.response?.status || 500,
+				})
+				return {
+					overview: {},
+					tags: [],
+					details: [],
+				}
+			})
+
+		return { ...response }
+	},
 	fetch({ store, route }) {
 		const breadcrumbs = [
 			{
@@ -100,40 +117,17 @@ export default Vue.extend({
 			},
 			request: {
 				direction: 'from',
-				status: '未承認',
 				dates: ['2023/1/1', '2023/1/2', '2023/1/3'],
 				detail:
 					'Let Google help apps determine location. This means sending anonymous location data to Google, even when no apps are running.',
 			},
 		}
 	},
-	computed: {
-		chipColor(): string {
-			let color = ''
-			switch (this.request.status) {
-				case '承認済':
-					color = 'primary'
-					break
-
-				case '未承認':
-					color = 'warning'
-					break
-
-				case '拒否済':
-					color = 'accent'
-					break
-
-				default:
-					break
-			}
-			return color
-		},
-	},
 })
 </script>
 
 <style lang="scss">
-.user {
+.request {
 	&__sidebar {
 		position: sticky;
 		top: calc(64px + 16px);
