@@ -1,21 +1,31 @@
 {
-  "compilerOptions": {
-    "target": "ES2018",
-    "module": "ESNext",
-    "moduleResolution": "Node",
-    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
-    "esModuleInterop": true,
-    "allowJs": true,
-    "sourceMap": true,
-    "strict": true,
-    "noEmit": true,
-    "experimentalDecorators": true,
-    "baseUrl": ".",
-    "paths": {
-      "~/*": ["./*"],
-      "@/*": ["./*"]
-    },
-    "types": ["@nuxt/types", "@types/node"]
-  },
-  "exclude": ["node_modules", ".nuxt", "dist"]
+	"compilerOptions": {
+		"target": "ES2018",
+		"module": "ESNext",
+		"moduleResolution": "Node",
+		"lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
+		"esModuleInterop": true,
+		"allowJs": true,
+		"sourceMap": true,
+		"strict": true,
+		"noEmit": true,
+		"experimentalDecorators": true,
+		"baseUrl": ".",
+		"paths": {
+			"~/*": ["./*"],
+			"@/*": ["./*"]
+		},
+		"types": [
+			"@nuxt/types",
+			"@nuxtjs/auth-next",
+			"@nuxtjs/axios",
+			"@types/node",
+			"lodash",
+			"gapi",
+			"gapi.auth2",
+			"gapi.calendar"
+		]
+	},
+	"vueCompilerOptions": { "target": 2.7, "extensions": [".vue"] },
+	"exclude": ["node_modules", ".nuxt", "dist"]
 }

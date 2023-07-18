@@ -1,0 +1,45 @@
+$font-family: 'Zen Kaku Gothic Antique', '游ゴシック体', YuGothic,
+	'游ゴシック Medium', 'Yu Gothic Medium', '游ゴシック', 'Yu Gothic',
+	'ヒラギノ角ゴ Pro W3', 'メイリオ', sans-serif;
+
+$font-family-eng: 'Montserrat';
+
+$font-size-xs-pc: 12px;
+$font-size-sm-pc: 14px;
+$font-size-md-pc: 16px;
+$font-size-ml-pc: 20px;
+$font-size-lg-pc: 24px;
+$font-size-xl-pc: 32px;
+$font-size-ex-pc: 40px;
+$font-size-xx-pc: 48px;
+
+$font-size-xs-sp: 10px;
+$font-size-sm-sp: 12px;
+$font-size-md-sp: 14px;
+$font-size-ml-sp: 16px;
+$font-size-lg-sp: 20px;
+$font-size-xl-sp: 24px;
+$font-size-ex-sp: 28px;
+$font-size-xx-sp: 32px;
+
+$font-map-pc: (
+	xs: $font-size-xs-pc,
+	sm: $font-size-sm-pc,
+	md: $font-size-md-pc,
+	ml: $font-size-ml-pc,
+	lg: $font-size-lg-pc,
+	xl: $font-size-xl-pc,
+	ex: $font-size-ex-pc,
+	xx: $font-size-xx-pc,
+);
+
+$font-map-sp: (
+	xs: $font-size-xs-sp,
+	sm: $font-size-sm-sp,
+	md: $font-size-md-sp,
+	ml: $font-size-ml-sp,
+	lg: $font-size-lg-sp,
+	xl: $font-size-xl-sp,
+	ex: $font-size-ex-sp,
+	xx: $font-size-xx-sp,
+);
