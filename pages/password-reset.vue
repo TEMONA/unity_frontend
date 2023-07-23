@@ -58,6 +58,7 @@ import Vue from 'vue'
 
 export default Vue.extend({
 	layout: 'noauth',
+	auth: false,
 	head() {
 		return {
 			title: 'パスワード変更',

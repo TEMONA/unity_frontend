@@ -1,7 +1,11 @@
 <template>
-	<v-app>
+	<v-app class="noauth">
 		<v-app-bar app color="primary" class="white--text">
-			<v-toolbar-title>Unity - Temona SNS</v-toolbar-title>
+			<v-toolbar-title
+				><nuxt-link to="/login" class="white--text noauth__logo">
+					Unity - Temona SNS
+				</nuxt-link>
+			</v-toolbar-title>
 		</v-app-bar>
 		<v-main>
 			<v-container class="mb-16 fill-height">
@@ -15,7 +19,13 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({
-	auth: false,
-})
+export default Vue.extend({})
 </script>
+
+<style lang="scss">
+.noauth {
+	&__logo {
+		text-decoration: none;
+	}
+}
+</style>

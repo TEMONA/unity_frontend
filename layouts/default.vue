@@ -50,7 +50,11 @@ export default Vue.extend({
 
 			links: [
 				{ icon: 'mdi-account-group', title: '社員一覧', link: '/users' },
-				{ icon: 'mdi-send', title: 'ランチリクエスト一覧', link: '/requests' },
+				{
+					icon: 'mdi-send',
+					title: 'ランチリクエスト登録',
+					link: '/requests/new',
+				},
 				{
 					icon: 'mdi-cog',
 					title: 'プロフィール設定',
@@ -67,7 +71,7 @@ export default Vue.extend({
 	computed: {
 		breadcrumbs() {
 			return this.$store.getters.breadcrumbs
-		}
+		},
 	},
 	head() {
 		return {

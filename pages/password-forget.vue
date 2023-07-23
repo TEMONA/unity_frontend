@@ -48,6 +48,7 @@ interface dataType {
 
 export default Vue.extend({
 	layout: 'noauth',
+	auth: false,
 	head() {
 		return {
 			title: 'パスワードを忘れた方',
