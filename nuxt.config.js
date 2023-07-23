@@ -2,6 +2,7 @@ import colors from 'vuetify/es5/util/colors'
 import { Sass } from 'sass'
 
 export default {
+	target: 'static',
 	publicRuntimeConfig: {
 		baseUrl: process.env.BASE_URL || 'http://localhost:3000',
 		apiUrl: process.env.API_URL || 'http://localhost:3000',
