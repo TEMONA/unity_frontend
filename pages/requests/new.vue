@@ -1,14 +1,7 @@
 <template>
 	<v-row class="request">
 		<v-col cols="12" md="4" class="request__sidebar">
-			<UserOverview v-if="request.target.value" v-bind="overview" />
-			<Paragraph v-else text="リクエストを送る相手を選んでください" />
-
-			<v-chip-group v-if="tags.length" column>
-				<v-chip v-for="tag in tags" :key="tag">
-					{{ tag }}
-				</v-chip>
-			</v-chip-group>
+			<Paragraph text="リクエストを送る相手を選んでください" />
 		</v-col>
 
 		<v-col cols="12" md="8">
@@ -19,11 +12,8 @@
 						hide-details="auto"
 						label="氏名"
 						v-model="request.target"
-						:disabled="$route.query.users ? true : false"
-						:hint="$route.query.users ? '選択済みです' : ''"
-						persistent-hint
 						return-object
-						@change="changeTargetUser"
+						multiple
 						:rules="[rules.required]"
 						class="mt-3"
 					/>
@@ -91,7 +81,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { UserOverviewType } from '~/components/organisms/UserOverview.vue'
 
 declare const gapi: any
 declare const google: any
@@ -101,12 +90,11 @@ const DISCOVERY_DOC =
 const SCOPES = 'https://www.googleapis.com/auth/calendar'
 
 interface dataType {
-	overview: UserOverviewType
 	tags: string[]
 	users: { text: string; value: string; email: string }[]
 	datePickerIsActive: boolean[]
 	request: {
-		target: { text: string; value: string; email: string }
+		target: { text: string; value: string; email: string }[]
 		dates: Date[] | string[]
 		detail: string
 	}
@@ -120,6 +108,7 @@ interface dataType {
 }
 
 export default Vue.extend({
+	auth: false,
 	head() {
 		return {
 			title: 'リクエスト作成',
@@ -128,30 +117,6 @@ export default Vue.extend({
 				{ src: 'https://accounts.google.com/gsi/client', defer: true },
 			],
 		}
-	},
-	async asyncData({ app, route, store, $toCamelCaseObject }) {
-		let userResponse = {}
-		if (route.query.users) {
-			userResponse = await app.$axios
-				.get(`/api/users/${route.query.users}/`)
-				.then((res: any) => {
-					return {
-						...res.data,
-						overview: $toCamelCaseObject(res.data.overview),
-					}
-				})
-				.catch((err: any) => {
-					store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status || 500,
-					})
-					return {
-						overview: {},
-						tags: [],
-					}
-				})
-		}
-
-		return { ...userResponse }
 	},
 	fetch({ store, route }) {
 		const breadcrumbs = [
@@ -169,20 +134,11 @@ export default Vue.extend({
 	},
 	data(): dataType {
 		return {
-			overview: {
-				image: '',
-				name: '',
-				email: '',
-				nameKana: '',
-				headquarters: '',
-				department: '',
-				group: '',
-			},
 			tags: [],
 			users: [{ text: '選択してください', value: '', email: 'fuga' }],
 			datePickerIsActive: [false, false, false],
 			request: {
-				target: { text: '', value: '', email: '' },
+				target: [],
 				dates: ['', '', ''],
 				detail: '',
 			},
@@ -209,10 +165,9 @@ export default Vue.extend({
 				this.users.splice(0, this.users.length, ...users)
 
 				if (this.$route.query.users) {
-					const target: any = this.users.find((item) => {
+					this.request.target = this.users.filter((item) => {
 						return item.value === this.$route.query.users
 					})
-					this.request.target = target
 				}
 			})
 			.catch((err: any) => {
@@ -222,28 +177,31 @@ export default Vue.extend({
 			})
 	},
 	methods: {
-		async changeTargetUser() {
-			await this.$axios
-				.get(`/api/users/${this.request.target.value}/`)
-				.then((res: any) => {
-					Object.assign(
-						this.overview,
-						this.$toCamelCaseObject(res.data.overview),
-						{},
-					)
-					this.tags.splice(0, this.tags.length, ...res.data.tags)
-				})
-				.catch((err: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status || 500,
-					})
-				})
+		/**
+		 * ランチリクエストのターゲットの配列から任意のキーのみを配列で出力する関数
+		 *
+		 * @param key 配列の値として選択したいキー
+		 * @returns keyで指定された値のみを入れた配列
+		 */
+		listTargetByKey(key: 'text' | 'email' | 'value' = 'email') {
+			return this.request.target.map((item) => {
+				return item[key]
+			})
 		},
+		/**
+		 * google apiの読み込みを行う関数
+		 *
+		 * @returns なんかよくわからない値
+		 */
 		gapiLoaded() {
 			return new Promise<void>((resolve, reject) => {
 				gapi.load('client', () => resolve())
 			})
 		},
+		/**
+		 * google apiの初期化をする関数
+		 *
+		 */
 		async initializeGapiClient() {
 			await gapi.client.init({
 				apiKey: this.$config.googleApiKey,
@@ -251,6 +209,10 @@ export default Vue.extend({
 			})
 			this.gapiInited = true
 		},
+		/**
+		 * Google Identity Servicesの読み込みとクライアントサイドのトークン初期化をする関数
+		 *
+		 */
 		gisLoaded() {
 			this.tokenClient = google.accounts.oauth2.initTokenClient({
 				client_id: this.$config.googleClientId,
@@ -259,6 +221,10 @@ export default Vue.extend({
 			})
 			this.gisInited = true
 		},
+		/**
+		 * 送信ボタン押下時にgoogle apiの読み込みからバックエンドへのリクエスト登録まで、全てをまとめる関数
+		 *
+		 */
 		async handleInsertCalendar() {
 			await this.gapiLoaded().then(() => {
 				this.initializeGapiClient()
@@ -268,7 +234,7 @@ export default Vue.extend({
 				if (res.error !== undefined) {
 					throw res
 				}
-				await this.intertEvents()
+				await this.insertEvents()
 			}
 			if (gapi.client.getToken() === null) {
 				// Prompt the user to select a Google Account and ask for consent to share their data
@@ -279,34 +245,21 @@ export default Vue.extend({
 				this.tokenClient.requestAccessToken({ prompt: '' })
 			}
 
-			// BEにリクエストデータを共有
-			const preferred_days = {
-				first: this.request.dates[0],
-				second: this.request.dates[1],
-				third: this.request.dates[2],
-			}
-			await this.$axios
-				.post(`/api/lunch-requests/`, {
-					applicant: this.$auth.user?.id,
-					recipient_calender_uid: this.request.target.email,
-					apply_content: this.request.detail,
-					preferred_days,
-				})
-				.then((res: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: 200,
-						message:
-							'リクエストを送信しました。Googleカレンダーをご確認ください',
-					})
-					this.$router.push('/requests')
-				})
-				.catch((err: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status || 500,
-					})
-				})
+			await this.submitLunchRequest()
 		},
-		async intertEvents() {
+		/**
+		 * google calendar apiにイベント登録申請をする関数
+		 *
+		 */
+		async insertEvents() {
+			const attendees = [
+				{ email: this.$auth.user.email, responseStatus: 'needsAction' },
+			]
+			attendees.push(
+				...this.listTargetByKey().map((item) => {
+					return { email: item, responseStatus: 'needsAction' }
+				}),
+			)
 			// リクエスト用のパラメータを生成
 			const eventBaseParam = {
 				summary: '【社内SNS Unity】ランチリクエスト',
@@ -319,10 +272,7 @@ export default Vue.extend({
 
 【リクエスト詳細】
 ${this.request.detail}`,
-				attendees: [
-					{ email: this.$auth.user.email, responseStatus: 'needsAction' },
-					{ email: this.request.target.email, responseStatus: 'needsAction' },
-				],
+				attendees,
 				reminders: {
 					useDefault: false,
 					overrides: [{ method: 'email', minutes: 24 * 60 }],
@@ -360,6 +310,39 @@ ${this.request.detail}`,
 				.catch((err: any) => {
 					this.$store.commit('snackbar/displaySnackbar', {
 						status: err.status || 500,
+					})
+				})
+		},
+		/**
+		 * バックエンドにリクエスト内容を送信する関数
+		 *
+		 */
+		async submitLunchRequest() {
+			// 候補日をフォーマットに合わせる
+			const preferred_days = {
+				first: this.request.dates[0],
+				second: this.request.dates[1],
+				third: this.request.dates[2],
+			}
+
+			await this.$axios
+				.post(`/api/lunch-requests/`, {
+					applicant: this.$auth.user?.id,
+					recipient_calender_uid: this.listTargetByKey('value'),
+					apply_content: this.request.detail,
+					preferred_days,
+				})
+				.then((res: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: 200,
+						message:
+							'リクエストを送信しました。Googleカレンダーをご確認ください',
+					})
+					this.$router.push('/requests')
+				})
+				.catch((err: any) => {
+					this.$store.commit('snackbar/displaySnackbar', {
+						status: err.response?.status || 500,
 					})
 				})
 		},

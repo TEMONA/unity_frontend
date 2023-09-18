@@ -55,7 +55,7 @@ export default Vue.extend({
 					this.processing = false
 				})
 				.catch((err: any) => {
-					const errorMessage = Object.keys(err.response).length
+					const errorMessage = Object.keys(err?.response).length
 						? {
 								status: err.response?.status || 500,
 								message: 'メールアドレスかパスワードが正しくありません',
