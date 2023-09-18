@@ -52,8 +52,8 @@ export default Vue.extend({
 				{ icon: 'mdi-account-group', title: '社員一覧', link: '/users' },
 				{
 					icon: 'mdi-send',
-					title: 'ランチリクエスト登録',
-					link: '/requests/new',
+					title: 'ランチリクエスト一覧',
+					link: '/requests',
 				},
 				{
 					icon: 'mdi-cog',
