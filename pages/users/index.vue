@@ -137,7 +137,6 @@ export default Vue.extend({
 			Object.keys(this.search.meta).forEach((key: string) => {
 				params[key] = this.search.meta[key]
 			})
-			console.log(params)
 
 			await this.$axios
 				.get('/api/users/', { params: this.$toSnakeCaseObject(params) })
