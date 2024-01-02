@@ -2,8 +2,11 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
+    googleClientId: '',
+    googleApiKey: '',
     public: {
-      baseURL: '', // 環境変数の NUXT_PUBLIC_BASE_URL で設定
+      baseURL: '',
+      apiUrl: '',
     },
   },
   app: {
