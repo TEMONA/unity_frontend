@@ -21,5 +21,9 @@
     "vue": "^3.4.3",
     "vue-router": "^4.2.5",
     "vuetify": "^3.4.9"
+  },
+  "dependencies": {
+    "camelcase-keys": "^9.1.2",
+    "snakecase-keys": "^5.5.0"
   }
 }
