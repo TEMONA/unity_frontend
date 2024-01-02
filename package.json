@@ -1,29 +1,37 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "devDependencies": {
-    "@mdi/font": "^7.4.47",
-    "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@typescript-eslint/eslint-plugin": "^6.17.0",
-    "@typescript-eslint/parser": "^6.17.0",
-    "eslint-plugin-vue": "^9.19.2",
-    "nuxt": "^3.9.0",
-    "sass": "^1.69.6",
-    "vite-plugin-vuetify": "^2.0.1",
-    "vue": "^3.4.3",
-    "vue-router": "^4.2.5",
-    "vuetify": "^3.4.9"
-  },
-  "dependencies": {
-    "camelcase-keys": "^9.1.2",
-    "snakecase-keys": "^5.5.0"
-  }
+	"name": "nuxt-app",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"build": "nuxt build",
+		"dev": "nuxt dev",
+		"generate": "nuxt generate",
+		"lint:js": "eslint --ext \".js,.ts,.vue\" --ignore-path .gitignore .",
+		"lint:style": "stylelint \"**/*.{css,scss,sass,html,vue}\" --ignore-path .gitignore",
+		"lint:prettier": "prettier --check .",
+		"lint": "yarn lint:js && yarn lint:style && yarn lint:prettier",
+		"lintfix": "prettier --write --list-different . && yarn lint:js --fix && yarn lint:style --fix",
+		"preview": "nuxt preview",
+		"postinstall": "nuxt prepare"
+	},
+	"devDependencies": {
+		"@mdi/font": "^7.4.47",
+		"@nuxtjs/eslint-config-typescript": "^12.1.0",
+		"@typescript-eslint/eslint-plugin": "^6.17.0",
+		"@typescript-eslint/parser": "^6.17.0",
+		"@vue/eslint-config-prettier": "^9.0.0",
+		"eslint-plugin-prettier": "^5.1.2",
+		"eslint-plugin-vue": "^9.19.2",
+		"nuxt": "^3.9.0",
+		"prettier": "^3.1.1",
+		"sass": "^1.69.6",
+		"vite-plugin-vuetify": "^2.0.1",
+		"vue": "^3.4.3",
+		"vue-router": "^4.2.5",
+		"vuetify": "^3.4.9"
+	},
+	"dependencies": {
+		"camelcase-keys": "^9.1.2",
+		"snakecase-keys": "^5.5.0"
+	}
 }
