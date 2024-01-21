@@ -53,7 +53,7 @@ const signIn = async (credentials) => {
 		.then(() => {
 			isProcessing.value = false
 		})
-		.catch((err: Error) => {
+		.catch((err: any) => {
 			const errorMessage = Object.keys(err?.response).length
 				? {
 						status: err.response?.status || 500,
@@ -66,7 +66,7 @@ const signIn = async (credentials) => {
 					}
 			snackbar.displaySnackbar(errorMessage)
 
-			this.processing = false
+			isProcessing.value = false
 		})
 	;
 };
