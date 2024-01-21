@@ -16,6 +16,10 @@
 	</v-app>
 </template>
 
+<script setup>
+definePageMeta({ auth: false });
+</script>
+
 <style lang="scss">
 .noauth {
 	&__logo {

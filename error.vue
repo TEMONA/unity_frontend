@@ -15,6 +15,8 @@ interface Props {
 const props = defineProps<Props>();
 
 useHead({title: props.error.message});
+
+definePageMeta({ auth: false });
 </script>
 
 <style scoped>
