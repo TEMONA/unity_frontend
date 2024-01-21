@@ -26,7 +26,7 @@
 		</v-navigation-drawer>
 		<v-main>
 			<v-container class="mb-16">
-				<Breadcrumbs :items="breadcrumbs" />
+				<Breadcrumbs />
 				<slot />
 			</v-container>
 			<Footer />
@@ -37,10 +37,6 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-interface dataType {
-	drawer: boolean
-	links: { icon: string; title: string; link: string }[]
-}
 
 const drawer = ref(false)
 const links = ref([
@@ -61,10 +57,4 @@ const links = ref([
     link: '/setting/password',
   },
 ])
-
-const breadcrumbs = ref([{
-  text: 'タイトル',
-  disabled: false,
-  href: '/',
-}])
 </script>

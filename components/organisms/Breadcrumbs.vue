@@ -1,15 +1,8 @@
 <template>
-	<v-breadcrumbs :items="props.items" />
+	<v-breadcrumbs :items="breadcrumbs.items" />
 </template>
 
 <script setup lang="ts">
-interface BreadcrumbsPropsType {
-	items: {
-		text: String;
-		disabled: boolean;
-		href: String;
-	}[];
-}
-
-const props = defineProps<BreadcrumbsPropsType>();
+import { useBreadcrumbsStore } from '@/store/breadcrumbs'
+const breadcrumbs = useBreadcrumbsStore()
 </script>
