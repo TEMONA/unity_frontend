@@ -23,22 +23,22 @@
 import {
 	SearchResultHeaderPropsType,
 	SearchResultEmitsParamsType,
-} from '../molecules/SearchResultHeader.vue'
-import { UserListItemPropsType } from '../molecules/UserListItem.vue'
+} from '../molecules/SearchResultHeader.vue';
+import { UserListItemPropsType } from '../molecules/UserListItem.vue';
 
-interface RequestSearchResultPropsType {
-	meta: SearchResultHeaderPropsType
-	users: UserListItemPropsType[]
-	isLoading: Boolean
+interface UserSearchResultPropsType {
+	meta: SearchResultHeaderPropsType;
+	users: UserListItemPropsType[];
+	isLoading: Boolean;
 }
-const props = defineProps<RequestSearchResultPropsType>()
+const props = defineProps<UserSearchResultPropsType>();
 
-interface RequestSearchResultEmitsType {
+interface UserSearchResultEmitsType {
 	// 関数名, 引数の型, 返り値の型
-	(e: 'changeMeta', v: SearchResultEmitsParamsType): void
+	(e: 'changeMeta', v: SearchResultEmitsParamsType): void;
 }
-const emits = defineEmits<RequestSearchResultEmitsType>()
+const emits = defineEmits<UserSearchResultEmitsType>();
 const changeCurrentPage = (e: any): void => {
-	emits('changeMeta', { perPage: props.meta.perPage, page: e })
-}
+	emits('changeMeta', { perPage: props.meta.perPage, page: e });
+};
 </script>

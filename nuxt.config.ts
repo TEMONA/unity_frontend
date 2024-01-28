@@ -11,9 +11,10 @@ export default defineNuxtConfig({
 			apiUrl: '',
 		},
 	},
+	plugins: ['utils'],
 	modules: ['@pinia/nuxt', '@sidebase/nuxt-auth'],
 	auth: {
-    globalAppMiddleware: true,
+		globalAppMiddleware: true,
 		provider: {
 			type: 'refresh',
 			baseURL: '/api/authen',
@@ -33,14 +34,14 @@ export default defineNuxtConfig({
 				},
 			},
 			token: {
-				signInResponseTokenPointer: "/token/access",
-				type: "jwt",
-				headerName: "Authorization",
+				signInResponseTokenPointer: '/token/access',
+				type: 'jwt',
+				headerName: 'Authorization',
 				maxAgeInSeconds: 60 * 60 * 24,
-				sameSiteAttribute: "none"
+				sameSiteAttribute: 'none',
 				// 5 minutes
-			}
-		}
+			},
+		},
 	},
 	build: {
 		transpile: ['vuetify'],

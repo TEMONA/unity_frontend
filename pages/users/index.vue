@@ -7,7 +7,7 @@
 				outlined
 				dense
 				label="氏名から社員を検索"
-				v-model="search.form.name.value"
+				v-model="searchParams.form.name.value"
 				hide-details="auto"
 			>
 				<template v-slot:prepend-inner>
@@ -16,18 +16,18 @@
 					</v-btn>
 				</template>
 				<template v-slot:append>
-					<v-btn icon @click="toggleSearchCard = !toggleSearchCard">
+					<v-btn icon @click="isOpenSearchCard = !isOpenSearchCard">
 						<v-icon>
-							{{ toggleSearchCard ? 'mdi-close' : 'mdi-menu-open' }}
+							{{ isOpenSearchCard ? 'mdi-close' : 'mdi-menu-open' }}
 						</v-icon>
 					</v-btn>
 				</template>
 			</v-text-field>
 
-			<FormCard v-if="toggleSearchCard" title="詳細検索">
+			<FormCard v-if="isOpenSearchCard" title="詳細検索">
 				<template v-slot:default>
 					<v-text-field
-						v-for="(item, index) in search.form"
+						v-for="(item, index) in searchParams.form"
 						:key="index"
 						v-model="item.value"
 						:label="item.title"
@@ -51,117 +51,113 @@
 	</v-row>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { SearchResultHeaderType } from '~/components/molecules/SearchResultHeader.vue'
-import { UserListItemType } from '~/components/molecules/UserListItem.vue'
-import { SearchResultMetaType } from '~/components/organisms/UserSearchResult.vue'
+<script lang="ts" setup>
+import { ref } from 'vue';
+import {
+	SearchResultHeaderPropsType,
+	SearchResultEmitsParamsType,
+} from '~/components/molecules/SearchResultHeader.vue';
+import { UserListItemPropsType } from '~/components/molecules/UserListItem.vue';
+
+import { useBreadcrumbsStore } from '@/store/breadcrumbs';
+const breadcrumbs = useBreadcrumbsStore();
+breadcrumbs.updateBreadcrumbs([]);
+
+import { useSnackbarStore } from '@/store/snackbar';
+const snackbar = useSnackbarStore();
+
+useHead({ title: '社員一覧' });
 
 interface searchItemType {
-	title: string
-	value: string
+	title: string;
+	value: string;
 }
 
 interface searchType {
 	form: {
-		name: searchItemType
-		headquarters: searchItemType
-		department: searchItemType
-		group: searchItemType
-		jobDescription: searchItemType
-	}
-	meta: SearchResultMetaType & { [key: string]: number }
+		name: searchItemType;
+		headquarters: searchItemType;
+		department: searchItemType;
+		group: searchItemType;
+		jobDescription: searchItemType;
+	};
+	meta: SearchResultEmitsParamsType;
 }
 
-interface dataType {
-	isLoading: boolean
-	toggleSearchCard: boolean
-	search: searchType
-	meta: SearchResultHeaderType
-	users: UserListItemType[]
+const isLoading = ref(false);
+const isOpenSearchCard = ref(false);
+
+const searchParams = ref<searchType>({
+	form: {
+		name: { title: '氏名', value: '' },
+		headquarters: { title: '事業本部', value: '' },
+		department: { title: '事業部', value: '' },
+		group: { title: 'グループ', value: '' },
+		jobDescription: { title: '業務内容', value: '' },
+	},
+	meta: {
+		perPage: 30,
+		page: 1,
+	},
+});
+const meta = ref<SearchResultHeaderPropsType>({
+	totalCount: 30,
+	perPage: 3,
+	currentPage: 1,
+});
+const users = ref<UserListItemPropsType[]>([]);
+
+const { $camelcaseKeys, $snakecaseKeys } = useNuxtApp();
+
+/**
+ * ユーザーを検索しその結果を格納する関数
+ */
+async function searchUsers() {
+	isLoading.value = true;
+
+	// 表示用のオブジェクト構成から検索用の構成に変更する
+	const params: { [key: string]: string | number } = Object.entries(
+		searchParams.value.form,
+	).reduce((object: { [key: string]: string }, item: any) => {
+		object[item[0]] = item[1].value;
+		return object;
+	}, {});
+	Object.entries(searchParams.value.meta).forEach(([key, value]) => {
+		params[key] = value;
+	});
+
+	await $fetch('/api/users/', {
+		method: 'GET',
+		params: $snakecaseKeys(params),
+	})
+		.then((res: any) => {
+			users.value.splice(
+				0,
+				users.value.length,
+				$camelcaseKeys(res.data.records),
+			);
+			Object.assign(meta.value, $camelcaseKeys(res.data.meta), {});
+
+			isLoading.value = false;
+		})
+		.catch((err: any) => {
+			const errorMessage = {
+				status: err.response?.status || 500,
+			};
+			snackbar.displaySnackbar(errorMessage);
+
+			isLoading.value = false;
+		});
 }
 
-export default Vue.extend({
-	head() {
-		return {
-			title: '社員一覧',
-		}
-	},
-	fetch({ store }) {
-		const breadcrumbs: [] = []
-		store.commit('updateBreadcrumbs', breadcrumbs)
-	},
-	data(): dataType {
-		return {
-			isLoading: true,
-			toggleSearchCard: false,
-			search: {
-				form: {
-					name: { title: '氏名', value: '' },
-					headquarters: { title: '事業本部', value: '' },
-					department: { title: '事業部', value: '' },
-					group: { title: 'グループ', value: '' },
-					jobDescription: { title: '業務内容', value: '' },
-				},
-				meta: {
-					perPage: 30,
-					page: 1,
-				},
-			},
-			meta: {
-				totalCount: 30,
-				perPage: 3,
-				currentPage: 1,
-				totalPages: 1,
-			},
-			users: [],
-		}
-	},
-	async mounted() {
-		await this.searchUsers()
-	},
-	methods: {
-		searchUsersByMeta(e: SearchResultMetaType) {
-			Object.assign(this.search.meta, e, {})
-			this.searchUsers()
-		},
-		async searchUsers() {
-			this.isLoading = true
-			const params: { [key: string]: string | number } = Object.entries(
-				this.search.form,
-			).reduce((object: { [key: string]: string }, item: any) => {
-				object[item[0]] = item[1].value
-				return object
-			}, {})
+onMounted(async () => {
+	await searchUsers();
+});
 
-			Object.keys(this.search.meta).forEach((key: string) => {
-				params[key] = this.search.meta[key]
-			})
-
-			await this.$axios
-				.get('/api/users/', { params: this.$toSnakeCaseObject(params) })
-				.then(
-					(res: {
-						data: { records: UserListItemType[]; meta: SearchResultHeaderType }
-					}) => {
-						this.users.splice(
-							0,
-							this.users.length,
-							...this.$toCamelCaseObjectArray(res.data.records),
-						)
-						Object.assign(this.meta, this.$toCamelCaseObject(res.data.meta), {})
-
-						this.isLoading = false
-					},
-				)
-				.catch((err: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status || 500,
-					})
-				})
-		},
-	},
-})
+function searchUsersByMeta(e: SearchResultEmitsParamsType) {
+	Object.assign(searchParams.value.meta, e, {});
+	searchUsers();
+}
 </script>
 
 <style lang="scss">
