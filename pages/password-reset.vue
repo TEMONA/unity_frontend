@@ -60,15 +60,15 @@ const snackbar = useSnackbarStore();
 const route = useRoute();
 
 definePageMeta({ auth: false, layout: 'noauth' });
-useHead({title: 'パスワード変更'});
+useHead({ title: 'パスワード変更' });
 const step = ref(2);
 
-const uid = ref('');
-const token = ref('');
+const uid = ref<string | string[]>('');
+const token = ref<string | string[]>('');
 
 onMounted(() => {
 	uid.value = route.params.uid;
-	uid.value = route.params.token;
+	token.value = route.params.token;
 
 	if (!uid || !token) {
 		const errorMessage = {
@@ -86,12 +86,12 @@ const password_confirm = ref('');
 
 function handleChange(): void {
 	$fetch('/authen/users/reset_password_confirm', {
-    method: 'POST',
-    body: {
+		method: 'POST',
+		body: {
 			uid,
 			token,
 			new_password: password,
-    }
+		},
 	})
 		.then(() => {
 			const successMessage = {
@@ -99,13 +99,13 @@ function handleChange(): void {
 				message: 'パスワードを更新しました',
 			};
 			snackbar.displaySnackbar(successMessage);
-			step.value++
+			step.value++;
 		})
 		.catch((err: any) => {
 			const errorMessage = {
 				status: err.response?.status || 500,
-			}
-			snackbar.displaySnackbar(errorMessage)
-		})
+			};
+			snackbar.displaySnackbar(errorMessage);
+		});
 }
 </script>
