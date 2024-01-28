@@ -8,7 +8,6 @@ export default defineNuxtConfig({
 		googleApiKey: '',
 		public: {
 			baseURL: '',
-			apiUrl: '',
 		},
 	},
 	plugins: ['utils'],
