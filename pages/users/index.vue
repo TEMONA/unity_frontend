@@ -27,7 +27,7 @@
 			<FormCard v-if="isOpenSearchCard" title="詳細検索">
 				<template v-slot:default>
 					<v-text-field
-						v-for="(item, index) in viewParams.form"
+						v-for="(item, index) in viewParams"
 						:key="index"
 						v-model="searchQuery[index]"
 						:label="item"
@@ -67,33 +67,17 @@ useHead({ title: '社員一覧' });
 
 const isOpenSearchCard = ref(false);
 
-interface viewParamsFormType {
-	name: string;
-	headquarters: string;
-	department: string;
-	group: string;
-	jobDescription: string;
-}
 interface searchResultType {
 	records: UserListItemPropsType[];
 	meta: SearchResultHeaderPropsType;
 }
-const viewParams = ref<{
-	form: viewParamsFormType;
-	meta: SearchResultHeaderPropsType;
-}>({
-	form: {
-		name: '氏名',
-		headquarters: '事業本部',
-		department: '事業部',
-		group: 'グループ',
-		jobDescription: '業務内容',
-	},
-	meta: {
-		totalCount: 30,
-		perPage: 3,
-		currentPage: 1,
-	},
+
+const viewParams = ref({
+	name: '氏名',
+	headquarters: '事業本部',
+	department: '事業部',
+	group: 'グループ',
+	jobDescription: '業務内容',
 });
 const searchQuery = ref({
 	name: '',

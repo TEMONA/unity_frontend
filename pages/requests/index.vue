@@ -8,7 +8,7 @@
 							<v-text-field
 								label="相手の氏名"
 								hide-details="auto"
-								v-model="search.name"
+								v-model="searchQuery.name"
 							/>
 							<v-row no-gutters class="pt-3 mt-1">
 								<v-col cols="12" class="text-subtitle-1"
@@ -16,7 +16,7 @@
 								>
 								<v-col>
 									<v-checkbox
-										v-model="search.direction.from"
+										v-model="searchQuery.direction.from"
 										label="相手から"
 										hide-details="auto"
 										class="mt-0"
@@ -24,54 +24,38 @@
 								</v-col>
 								<v-col>
 									<v-checkbox
-										v-model="search.direction.to"
+										v-model="searchQuery.direction.to"
 										label="自分から"
 										hide-details="auto"
 										class="mt-0"
 									/>
 								</v-col>
 							</v-row>
-							<v-menu
-								ref="menu"
-								v-model="datePickerIsActive"
-								:close-on-content-click="false"
-								:return-value.sync="search.dates"
-								transition="scale-transition"
-								offset-y
-								min-width="auto"
-							>
-								<template v-slot:activator="{ on, attrs }">
-									<v-text-field
-										:value="dateRangeText"
-										label="リクエスト日時（範囲）"
-										hide-details="auto"
-										readonly
-										v-bind="attrs"
-										v-on="on"
-										clear-icon="mdi-close-circle"
-										clearable
-										@click:clear="search.dates = []"
-										class="mt-3"
-									></v-text-field>
-								</template>
-								<v-date-picker v-model="search.dates" no-title scrollable range>
-									<v-spacer></v-spacer>
-									<v-btn
-										text
-										color="primary"
-										@click="datePickerIsActive = false"
-									>
-										Cancel
-									</v-btn>
-									<v-btn
-										text
-										color="primary"
-										@click="$refs.menu.save(search.dates)"
-									>
-										OK
-									</v-btn>
-								</v-date-picker>
-							</v-menu>
+							<v-row>
+								<v-text-field
+									:value="dateRangeText"
+									label="リクエスト日（範囲）"
+									hide-details="auto"
+									readonly
+									clear-icon="mdi-close-circle"
+									clearable
+									@click:clear="searchQuery.dates = []"
+									class="mt-3"
+								></v-text-field>
+								<v-btn color="primary" @click="isActiveDatePicker = true">
+									日付を選ぶ
+									<v-dialog v-model="isActiveDatePicker">
+										<v-date-picker
+											show-adjacent-months
+											multiple="range"
+											v-model="searchQuery.dates"
+											@click:save="isActiveDatePicker = false"
+											@click:cancel="isActiveDatePicker = false"
+										>
+										</v-date-picker>
+									</v-dialog>
+								</v-btn>
+							</v-row>
 						</template>
 						<template v-slot:action>
 							<v-btn color="primary" @click="searchRequests">検索</v-btn>
@@ -87,132 +71,83 @@
 		</v-col>
 
 		<v-col cols="12" md="8">
-			<RequestSearchResult :meta="meta" :requests="requests" />
+			<RequestSearchResult
+				:meta="getRequestsData?.meta"
+				:requests="getRequestsData?.records"
+				:is-loading="pending"
+			/>
 		</v-col>
 	</v-row>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { SearchResultHeaderType } from '~/components/molecules/SearchResultHeader.vue'
-import { RequestListItemType } from '~/components/molecules/RequestListItem.vue'
-import { SearchResultMetaType } from '~/components/organisms/UserSearchResult.vue'
+<script lang="ts" setup>
+import { ref, computed } from 'vue';
+import {
+	SearchResultHeaderPropsType,
+	SearchResultEmitsParamsType,
+} from '~/components/molecules/SearchResultHeader.vue';
+import { RequestListItemPropsType } from '~/components/molecules/RequestListItem.vue';
 
-interface searchItemType {
-	title: string
-	value: string
-}
+import { useBreadcrumbsStore } from '@/store/breadcrumbs';
+const breadcrumbs = useBreadcrumbsStore();
+const route = useRoute();
+breadcrumbs.updateBreadcrumbs([
+	{
+		text: 'ランチリクエスト一覧',
+		href: route.fullPath,
+		disabled: true,
+	},
+]);
 
-interface searchType {
-	name: string
+useHead({ title: 'ランチリクエスト一覧' });
+
+const isActiveDatePicker = ref(false);
+
+interface searchQueryType {
+	name: string;
 	direction: {
-		from: boolean
-		to: boolean
-	}
-	dates: string[]
-	meta: SearchResultMetaType & { [key: string]: number }
+		from: boolean;
+		to: boolean;
+	};
+	dates: string[];
+}
+interface searchResultType {
+	records: RequestListItemPropsType[];
+	meta: SearchResultHeaderPropsType;
+}
+const searchQuery = ref<searchQueryType>({
+	name: '',
+	direction: {
+		from: true,
+		to: true,
+	},
+	dates: [],
+});
+
+const dateRangeText = computed(() => {
+	return searchQuery.value.dates.join(' ~ ');
+});
+
+const {
+	data: getRequestsData,
+	pending,
+	error,
+	refresh,
+} = await useFetch<searchResultType>('/api/users', {
+	query: { ...searchQuery.value },
+});
+
+if (!getRequestsData.value || error.value) {
+	throw createError({
+		statusCode: 404,
+		message: 'ページが見つかりません。',
+	});
 }
 
-interface dataType {
-	isLoading: boolean
-	datePickerIsActive: boolean
-	search: searchType
-	meta: SearchResultHeaderType
-	requests: RequestListItemType[]
+function searchRequests(e: SearchResultEmitsParamsType) {
+	Object.assign(searchQuery.value, e, {});
+	refresh();
 }
-
-export default Vue.extend({
-	head() {
-		return {
-			title: 'リクエスト一覧',
-		}
-	},
-	fetch({ store, route }) {
-		const breadcrumbs = [
-			{
-				text: 'リクエスト一覧',
-				href: route.fullPath,
-				disabled: true,
-			},
-		]
-		store.commit('updateBreadcrumbs', breadcrumbs)
-	},
-	data(): dataType {
-		return {
-			isLoading: true,
-			datePickerIsActive: false,
-			search: {
-				name: '',
-				direction: {
-					from: true,
-					to: false,
-				},
-				dates: [],
-				meta: {
-					perPage: 30,
-					page: 1,
-				},
-			},
-			meta: {
-				totalCount: 30,
-				perPage: 3,
-				currentPage: 1,
-				totalPages: 1,
-			},
-			requests: [],
-		}
-	},
-	async mounted() {
-		await this.searchRequests()
-	},
-	computed: {
-		dateRangeText(): string {
-			return this.search.dates.join(' ~ ')
-		},
-	},
-	methods: {
-		async searchRequests() {
-			this.isLoading = true
-			const params: { [key: string]: string | number } = Object.entries(
-				this.search,
-			).reduce((object: { [key: string]: string }, item: any) => {
-				object[item[0]] = item[1].value
-				return object
-			}, {})
-
-			Object.keys(this.search.meta).forEach((key: string) => {
-				params[key] = this.search.meta[key]
-			})
-
-			await this.$axios
-				.get('/api/lunch-requests/', {
-					params: this.$toSnakeCaseObject(params),
-				})
-				.then(
-					(res: {
-						data: {
-							records: RequestListItemType[]
-							meta: SearchResultHeaderType
-						}
-					}) => {
-						this.requests.splice(
-							0,
-							this.requests.length,
-							...this.$toCamelCaseObjectArray(res.data.records),
-						)
-						Object.assign(this.meta, this.$toCamelCaseObject(res.data.meta), {})
-
-						this.isLoading = false
-					},
-				)
-				.catch((err: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status || 500,
-					})
-				})
-		},
-	},
-})
 </script>
 
 <style lang="scss">
