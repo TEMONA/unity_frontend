@@ -72,13 +72,13 @@ interface searchResultType {
 	meta: SearchResultHeaderPropsType;
 }
 
-const viewParams = ref({
+const viewParams = {
 	name: '氏名',
 	headquarters: '事業本部',
 	department: '事業部',
 	group: 'グループ',
 	jobDescription: '業務内容',
-});
+};
 const searchQuery = ref({
 	name: '',
 	headquarters: '',

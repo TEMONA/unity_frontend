@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
 declare const gapi: any;
 declare const google: any;
