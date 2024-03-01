@@ -1,10 +1,10 @@
 <template>
 	<v-row class="profile">
 		<v-col cols="12" md="4" class="profile__sidebar">
-			<UserOverview v-bind="overview" />
+			<UserOverview v-bind="userData?.overview" />
 
 			<v-chip-group>
-				<v-chip v-for="tag in tags" :key="tag">
+				<v-chip v-for="tag in userData?.tags" :key="tag">
 					{{ tag }}
 				</v-chip>
 			</v-chip-group>
@@ -14,7 +14,7 @@
 			<FormCard title="プロフィール編集">
 				<template v-slot:default>
 					<v-textarea
-						v-for="(detail, index) in details"
+						v-for="(detail, index) in userData?.details"
 						:key="index"
 						v-model="detail.value"
 						:label="detail.title"
@@ -32,117 +32,109 @@
 	</v-row>
 </template>
 
-<script lang="ts">
-import Vue from 'vue'
-import { UserOverviewType } from '~/components/organisms/UserOverview.vue'
+<script lang="ts" setup>
+import { useBreadcrumbsStore } from '@/store/breadcrumbs';
+const breadcrumbs = useBreadcrumbsStore();
+const route = useRoute();
+breadcrumbs.updateBreadcrumbs([
+	{
+		text: 'プロフィール編集',
+		href: route.fullPath,
+		disabled: true,
+	},
+]);
+
+useHead({ title: 'プロフィール編集' });
+
+import { useSnackbarStore } from '@/store/snackbar';
+const snackbar = useSnackbarStore();
+import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
 
 interface detailType {
-	title: string
-	value: string
+	title: string;
+	value: string;
 }
-
-interface dataType {
-	overview: UserOverviewType
-	tags: string[]
+interface getUserDataType {
+	overview: UserOverviewPropsType;
+	tags: string[];
 	details: {
-		birthPlace: detailType
-		jobDescription: detailType
-		career: detailType
-		hobby: detailType
-		specialty: detailType
-		strengths: detailType
-		message: detailType
-	}
+		birthPlace: detailType;
+		jobDescription: detailType;
+		career: detailType;
+		hobby: detailType;
+		specialty: detailType;
+		strengths: detailType;
+		message: detailType;
+	};
 }
 
-export default Vue.extend({
-	head() {
-		return {
-			title: 'プロフィール編集',
-		}
+const userData = ref<getUserDataType>({
+	overview: {
+		image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
+		name: 'User Name',
+		email: '',
+		nameKana: 'ホゲ',
+		headquarters: '〇〇事業本部',
+		department: '〇〇事業部',
+		group: '〇〇グループ',
+		role: 'グループ長',
+		chatworkId: 'chatwork_id',
 	},
-	async asyncData({ app, $auth, $toCamelCaseObject }) {
-		const response = await app.$axios
-			.get(`/api/users/${$auth.user?.id}/`)
-			.then((res: any) => {
-				return {
-					...res.data,
-					overview: $toCamelCaseObject(res.data.overview),
-					details: $toCamelCaseObject(res.data.details),
-				}
-			})
-			.catch((err: any) => {
-				this.$store.commit('snackbar/displaySnackbar', {
-					status: err.response?.status || 500,
-				})
-				return {
-					overview: {},
-					tags: [],
-					details: [],
-				}
-			})
+	tags: [],
+	details: {
+		birthPlace: { title: '出身地', value: '' },
+		jobDescription: { title: '業務内容、役割', value: '' },
+		career: { title: '経歴、職歴', value: '' },
+		hobby: { title: '趣味', value: '' },
+		specialty: { title: '特技', value: '' },
+		strengths: { title: 'アピールポイント', value: '' },
+		message: { title: '最後にひとこと', value: '' },
+	},
+});
 
-		return { ...response }
-	},
-	fetch({ store, route }) {
-		const breadcrumbs = [
-			{
-				text: 'プロフィール変更',
-				href: route.fullPath,
-				disabled: true,
-			},
-		]
-		store.commit('updateBreadcrumbs', breadcrumbs)
-	},
-	data(): dataType {
-		return {
-			overview: {
-				image: 'https://cdn.vuetifyjs.com/images/parallax/material.jpg',
-				name: 'User Name',
-				email: '',
-				nameKana: 'ホゲ',
-				headquarters: '〇〇事業本部',
-				department: '〇〇事業部',
-				group: '〇〇グループ',
-				role: 'グループ長',
-				chatworkId: 'chatwork_id',
-			},
-			tags: [],
-			details: {
-				birthPlace: { title: '出身地', value: '' },
-				jobDescription: { title: '業務内容、役割', value: '' },
-				career: { title: '経歴、職歴', value: '' },
-				hobby: { title: '趣味', value: '' },
-				specialty: { title: '特技', value: '' },
-				strengths: { title: 'アピールポイント', value: '' },
-				message: { title: '最後にひとこと', value: '' },
-			},
-		}
-	},
-	methods: {
-		async handleSubmit() {
-			const params = Object.fromEntries(
-				Object.entries(this.details).map(([key, val]) => [key, val.value]),
-			)
-			await this.$axios
-				.patch(`/api/users/${this.$auth.user?.id}/`, {
-					contents: { ...this.$toSnakeCaseObject(params) },
-				})
-				.then(() => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: 200,
-						message: '社員情報を更新しました',
-					})
-				})
-				.catch((err: any) => {
-					this.$store.commit('snackbar/displaySnackbar', {
-						status: err.response?.status || 500,
-						message: err.response.data.errors.join(' '),
-					})
-				})
+const { $camelcaseKeys, $snakecaseKeys } = useNuxtApp();
+const { data: getUserData, error } = await useFetch<getUserDataType>(
+	`/api/users/hoge`, // ${$auth.user?.id}
+);
+
+if (getUserData && !error.value) {
+	Object.assign(userData.value, getUserData, {});
+} else {
+	throw createError({
+		statusCode: 404,
+		message: 'ページが見つかりません。',
+	});
+}
+
+async function handleSubmit() {
+	const params = Object.fromEntries(
+		Object.entries(userData.value.details).map(([key, val]) => [
+			key,
+			val.value,
+		]),
+	);
+	await $fetch(`/api/users/hoge/`, {
+		//${this.$auth.user?.id}
+		method: 'PATCH',
+		params: {
+			contents: { ...$snakecaseKeys(params) },
 		},
-	},
-})
+	})
+		.then(() => {
+			const successMessage = {
+				status: 200,
+				message: '社員情報を更新しました',
+			};
+			snackbar.displaySnackbar(successMessage);
+		})
+		.catch((err: any) => {
+			const errorMessage = {
+				status: err.response?.status || 500,
+				message: err.response.data.errors.join(' '),
+			};
+			snackbar.displaySnackbar(errorMessage);
+		});
+}
 </script>
 
 <style lang="scss">
