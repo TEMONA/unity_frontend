@@ -50,11 +50,11 @@ import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
 import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
 
-interface detailType {
+type detailType = {
 	title: string;
 	value: string;
-}
-interface getUserDataType {
+};
+type getUserDataType = {
 	overview: UserOverviewPropsType;
 	tags: string[];
 	details: {
@@ -66,7 +66,7 @@ interface getUserDataType {
 		strengths: detailType;
 		message: detailType;
 	};
-}
+};
 
 const userData = ref<getUserDataType>({
 	overview: {

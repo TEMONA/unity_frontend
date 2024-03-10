@@ -34,12 +34,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
 
 definePageMeta({ auth: false, layout: 'noauth' });
-useHead({title: 'パスワードを忘れた方'});
+useHead({ title: 'パスワードを忘れた方' });
+
+import { ref } from 'vue';
 
 const step = ref(1);
 const email = ref('');
@@ -50,33 +51,34 @@ function requiredValidator(value: string): boolean | string {
 }
 
 function checkEmailValidator(value: string): boolean | string {
-	const regex = /^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
+	const regex =
+		/^[A-Za-z0-9]{1}[A-Za-z0-9_.-]*@{1}[A-Za-z0-9_.-]+.[A-Za-z0-9]+$/;
 	return regex.test(value) || 'メールアドレスの形式で入力してください';
 }
 
 function handleSubmit(): void {
 	if (!checkEmailValidator(email.value)) {
-		return
+		return;
 	}
 
 	$fetch('/authen/users/resend_activation/', {
-    method: 'POST',
-    body: {
-      email
-    }
-  })
+		method: 'POST',
+		body: {
+			email,
+		},
+	})
 		.then(() => {
 			const successMessage = {
 				status: 200,
 				message: 'パスワード更新用メールを送信しました',
-			}
-			snackbar.displaySnackbar(successMessage)
+			};
+			snackbar.displaySnackbar(successMessage);
 		})
 		.catch((err: any) => {
 			const errorMessage = {
 				status: err.response?.status || 500,
-			}
-			snackbar.displaySnackbar(errorMessage)
-		})
+			};
+			snackbar.displaySnackbar(errorMessage);
+		});
 }
 </script>

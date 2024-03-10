@@ -21,16 +21,16 @@
 
 <script setup lang="ts">
 // 検索APIに渡す際に以下2つのパラメータが必要なため定義
-export interface SearchResultEmitsParamsType {
-	perPage: number
-	page: number
-}
+export type SearchResultEmitsParamsType = {
+	perPage: number;
+	page: number;
+};
 
-export interface SearchResultHeaderPropsType {
-	totalCount: number
-	perPage: number
-	currentPage: number
-}
+export type SearchResultHeaderPropsType = {
+	totalCount: number;
+	perPage: number;
+	currentPage: number;
+};
 
-const props = defineProps<SearchResultHeaderPropsType>()
+const props = defineProps<SearchResultHeaderPropsType>();
 </script>

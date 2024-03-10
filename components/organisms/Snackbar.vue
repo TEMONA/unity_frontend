@@ -13,12 +13,12 @@
 </template>
 
 <script setup lang="ts">
-import { useSnackbarStore } from '@/store/snackbar'
-const snackbar = useSnackbarStore()
+import { useSnackbarStore } from '@/store/snackbar';
+const snackbar = useSnackbarStore();
 
 const closeSnackbar = (): void => {
-	snackbar.closeSnackbar()
-}
+	snackbar.closeSnackbar();
+};
 </script>
 
 <style lang="scss">

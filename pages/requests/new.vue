@@ -80,17 +80,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-
-declare const gapi: any;
-declare const google: any;
-
-const DISCOVERY_DOC =
-	'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
-const SCOPES = 'https://www.googleapis.com/auth/calendar';
-
-const runtimeConfig = useRuntimeConfig();
-
 import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
 
@@ -117,17 +106,27 @@ useHead({
 	],
 });
 
-interface getUsersDataType {
+import { ref } from 'vue';
+
+declare const gapi: any;
+declare const google: any;
+
+const DISCOVERY_DOC =
+	'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest';
+const SCOPES = 'https://www.googleapis.com/auth/calendar';
+
+const runtimeConfig = useRuntimeConfig();
+
+type getUsersDataType = {
 	text: string;
 	value: string;
 	email: string;
-}
-
-interface requestFormType {
+};
+type requestFormType = {
 	target: { text: string; value: string; email: string }[];
 	dates: Date[] | string[];
 	detail: string;
-}
+};
 
 const users = ref<getUsersDataType[]>([
 	{ text: '選択してください', value: '', email: 'fuga' },

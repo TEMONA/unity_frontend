@@ -58,21 +58,10 @@ import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
 import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
 
-interface getUserDataType {
+type getUserDataType = {
 	overview: UserOverviewPropsType;
 	tags: string[];
-}
-
-interface itemType {
-	title: string;
-	autocomplete: string;
-	value: string;
-}
-
-interface passwordFormType {
-	currentPassword: itemType;
-	newPassword: itemType;
-}
+};
 
 const { data: getUserData, error } = await useFetch<getUserDataType>(
 	`/api/users/hoge/`, //$auth.user?.id
@@ -90,18 +79,6 @@ const validationRules = [
 	(value: any) => !!value || '必ず入力してください',
 	(value: any) => value.length >= 7 || '８文字以上で入力してください',
 ];
-const formItems = ref<passwordFormType>({
-	currentPassword: {
-		title: '現在のパスワード',
-		autocomplete: 'current-password',
-		value: '',
-	},
-	newPassword: {
-		title: '新しいパスワード',
-		autocomplete: 'new-password',
-		value: '',
-	},
-});
 const viewParams = {
 	currentPassword: {
 		title: '現在のパスワード',

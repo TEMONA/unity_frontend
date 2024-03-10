@@ -63,8 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
-
 import { useBreadcrumbsStore } from '@/store/breadcrumbs';
 const breadcrumbs = useBreadcrumbsStore();
 const route = useRoute();
@@ -82,7 +80,9 @@ breadcrumbs.updateBreadcrumbs([
 
 useHead({ title: 'ランチリクエスト詳細' });
 
-interface getRequestDataType {
+import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
+
+type getRequestDataType = {
 	user: UserOverviewPropsType;
 	tags: string[];
 	request: {
@@ -90,7 +90,7 @@ interface getRequestDataType {
 		dates: Date[];
 		detail: string;
 	};
-}
+};
 
 const { data: getRequestData, error } = await useFetch<getRequestDataType>(
 	`/api/lunch-requests/${route.params.requestId}`,

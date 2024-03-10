@@ -21,23 +21,23 @@
 </template>
 
 <script setup lang="ts">
-export interface UserListItemPropsType {
-	userId: string
-	image?: string
-	name: string
-	headquarters: string
-	department?: string
-	group?: string
-	role?: string
-	jobDescription: string
-}
+export type UserListItemPropsType = {
+	userId: string;
+	image?: string;
+	name: string;
+	headquarters: string;
+	department?: string;
+	group?: string;
+	role?: string;
+	jobDescription: string;
+};
 
 const props = withDefaults(defineProps<UserListItemPropsType>(), {
 	image: '',
 	department: '',
 	group: '',
 	role: '',
-})
+});
 </script>
 
 <style lang="scss">

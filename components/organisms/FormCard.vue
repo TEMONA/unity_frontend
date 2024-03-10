@@ -19,9 +19,9 @@
 </template>
 
 <script setup lang="ts">
-export interface FormCardPropsType {
+export type FormCardPropsType = {
 	title: string;
-}
+};
 
 const props = defineProps<FormCardPropsType>();
 </script>

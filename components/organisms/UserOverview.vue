@@ -23,17 +23,17 @@
 </template>
 
 <script setup lang="ts">
-export interface UserOverviewPropsType {
-	image?: string
-	name: string
-	email?: string
-	nameKana: string
-	headquarters: string
-	department?: string | null
-	group?: string | null
-	role?: string | null
-	chatworkId?: string | null
-}
+export type UserOverviewPropsType = {
+	image?: string;
+	name: string;
+	email?: string;
+	nameKana: string;
+	headquarters: string;
+	department?: string | null;
+	group?: string | null;
+	role?: string | null;
+	chatworkId?: string | null;
+};
 
 const props = withDefaults(defineProps<UserOverviewPropsType>(), {
 	image: '',
@@ -42,5 +42,5 @@ const props = withDefaults(defineProps<UserOverviewPropsType>(), {
 	group: '',
 	role: '',
 	chatworkId: '',
-})
+});
 </script>

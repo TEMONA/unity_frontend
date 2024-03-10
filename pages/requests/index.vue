@@ -81,13 +81,6 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
-import {
-	SearchResultHeaderPropsType,
-	SearchResultEmitsParamsType,
-} from '~/components/molecules/SearchResultHeader.vue';
-import { RequestListItemPropsType } from '~/components/molecules/RequestListItem.vue';
-
 import { useBreadcrumbsStore } from '@/store/breadcrumbs';
 const breadcrumbs = useBreadcrumbsStore();
 const route = useRoute();
@@ -101,20 +94,28 @@ breadcrumbs.updateBreadcrumbs([
 
 useHead({ title: 'ランチリクエスト一覧' });
 
+import { ref, computed } from 'vue';
+
 const isActiveDatePicker = ref(false);
 
-interface searchQueryType {
+import {
+	SearchResultHeaderPropsType,
+	SearchResultEmitsParamsType,
+} from '~/components/molecules/SearchResultHeader.vue';
+import { RequestListItemPropsType } from '~/components/molecules/RequestListItem.vue';
+
+type searchQueryType = {
 	name: string;
 	direction: {
 		from: boolean;
 		to: boolean;
 	};
 	dates: string[];
-}
-interface searchResultType {
+};
+type searchResultType = {
 	records: RequestListItemPropsType[];
 	meta: SearchResultHeaderPropsType;
-}
+};
 const searchQuery = ref<searchQueryType>({
 	name: '',
 	direction: {

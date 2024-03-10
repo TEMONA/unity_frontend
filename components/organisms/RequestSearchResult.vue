@@ -26,17 +26,17 @@ import {
 } from '../molecules/SearchResultHeader.vue';
 import { RequestListItemPropsType } from '../molecules/RequestListItem.vue';
 
-interface RequestSearchResultPropsType {
+type RequestSearchResultPropsType = {
 	meta: SearchResultHeaderPropsType;
 	requests: RequestListItemPropsType[];
 	isLoading: Boolean;
-}
+};
 const props = defineProps<RequestSearchResultPropsType>();
 
-interface RequestSearchResultEmitsType {
+type RequestSearchResultEmitsType = {
 	// 関数名, 引数の型, 返り値の型
 	(e: 'changeMeta', v: SearchResultEmitsParamsType): void;
-}
+};
 const emits = defineEmits<RequestSearchResultEmitsType>();
 const changeCurrentPage = (e: any): void => {
 	emits('changeMeta', { perPage: props.meta.perPage, page: e });

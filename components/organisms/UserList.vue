@@ -9,11 +9,11 @@
 </template>
 
 <script setup lang="ts">
-import { UserListItemPropsType } from '../molecules/UserListItem.vue'
+import { UserListItemPropsType } from '../molecules/UserListItem.vue';
 
-interface UserListPropsType {
-	users: UserListItemPropsType[]
-}
+type UserListPropsType = {
+	users: UserListItemPropsType[];
+};
 
-const props = defineProps<UserListPropsType>()
+const props = defineProps<UserListPropsType>();
 </script>

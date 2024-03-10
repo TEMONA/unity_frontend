@@ -54,13 +54,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
 const route = useRoute();
 
 definePageMeta({ auth: false, layout: 'noauth' });
 useHead({ title: 'パスワード変更' });
+
+import { ref } from 'vue';
+
 const step = ref(2);
 
 const uid = ref<string | string[]>('');

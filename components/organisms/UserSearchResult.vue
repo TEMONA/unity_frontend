@@ -26,17 +26,17 @@ import {
 } from '../molecules/SearchResultHeader.vue';
 import { UserListItemPropsType } from '../molecules/UserListItem.vue';
 
-interface UserSearchResultPropsType {
+type UserSearchResultPropsType = {
 	meta: SearchResultHeaderPropsType;
 	users: UserListItemPropsType[];
 	isLoading: Boolean;
-}
+};
 const props = defineProps<UserSearchResultPropsType>();
 
-interface UserSearchResultEmitsType {
+type UserSearchResultEmitsType = {
 	// 関数名, 引数の型, 返り値の型
 	(e: 'changeMeta', v: SearchResultEmitsParamsType): void;
-}
+};
 const emits = defineEmits<UserSearchResultEmitsType>();
 const changeCurrentPage = (e: any): void => {
 	emits('changeMeta', { perPage: props.meta.perPage, page: e });

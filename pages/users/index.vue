@@ -52,6 +52,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useBreadcrumbsStore } from '@/store/breadcrumbs';
+const breadcrumbs = useBreadcrumbsStore();
+breadcrumbs.updateBreadcrumbs([]);
+
+useHead({ title: '社員一覧' });
+
 import { ref } from 'vue';
 import {
 	SearchResultHeaderPropsType,
@@ -59,18 +65,12 @@ import {
 } from '~/components/molecules/SearchResultHeader.vue';
 import { UserListItemPropsType } from '~/components/molecules/UserListItem.vue';
 
-import { useBreadcrumbsStore } from '@/store/breadcrumbs';
-const breadcrumbs = useBreadcrumbsStore();
-breadcrumbs.updateBreadcrumbs([]);
-
-useHead({ title: '社員一覧' });
-
 const isOpenSearchCard = ref(false);
 
-interface searchResultType {
+type searchResultType = {
 	records: UserListItemPropsType[];
 	meta: SearchResultHeaderPropsType;
-}
+};
 
 const viewParams = {
 	name: '氏名',

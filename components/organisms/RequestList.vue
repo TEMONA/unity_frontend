@@ -11,9 +11,9 @@
 <script setup lang="ts">
 import { RequestListItemPropsType } from '../molecules/RequestListItem.vue';
 
-interface RequestListPropsType {
+type RequestListPropsType = {
 	requests: RequestListItemPropsType[];
-}
+};
 
 const props = defineProps<RequestListPropsType>();
 </script>

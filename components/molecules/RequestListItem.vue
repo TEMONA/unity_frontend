@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-export interface RequestListItemPropsType {
+export type RequestListItemPropsType = {
 	id: string;
 	direction: string;
 	image?: string;
@@ -36,7 +36,7 @@ export interface RequestListItemPropsType {
 	group?: string;
 	role?: string;
 	applyContent: string;
-}
+};
 
 const props = withDefaults(defineProps<RequestListItemPropsType>(), {
 	image: '',

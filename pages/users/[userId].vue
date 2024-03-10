@@ -79,11 +79,11 @@ breadcrumbs.updateBreadcrumbs([
 
 useHead({ title: '社員詳細' });
 
-interface detailsType {
+type detailsType = {
 	title: string;
 	value: string;
-}
-interface userInformationType {
+};
+type userInformationType = {
 	overview: UserOverviewPropsType;
 	tags: string[];
 	details: {
@@ -95,7 +95,7 @@ interface userInformationType {
 		strengths: detailsType;
 		message: detailsType;
 	};
-}
+};
 
 const { $camelcaseKeys } = useNuxtApp();
 const { data: userInformation, error } = await useFetch<userInformationType>(
