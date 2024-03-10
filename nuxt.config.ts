@@ -13,9 +13,8 @@ export default defineNuxtConfig({
 	plugins: ['utils'],
 	modules: ['@pinia/nuxt', '@sidebase/nuxt-auth'],
 	auth: {
-		globalAppMiddleware: true,
 		provider: {
-			type: 'refresh',
+			type: 'refresh', // localに加えトークンリフレッシュが可能
 			baseURL: '/api/authen',
 			refreshOnlyToken: true,
 			endpoints: {
@@ -32,14 +31,37 @@ export default defineNuxtConfig({
 					method: 'get',
 				},
 			},
+			pages: {
+				login: '/login',
+			},
 			token: {
 				signInResponseTokenPointer: '/token/access',
-				type: 'jwt',
+				type: 'JWT',
 				headerName: 'Authorization',
 				maxAgeInSeconds: 60 * 60 * 24,
 				sameSiteAttribute: 'none',
 				// 5 minutes
 			},
+			refreshToken: { signInResponseRefreshTokenPointer: '/refresh' },
+			sessionDataType: {
+				code: 'number',
+				success: 'boolean',
+				detail: {
+					user: {
+						_id: 'string',
+						email: 'string',
+						name: 'string',
+						user_roles: 'string[]',
+					},
+				},
+				globalAppMiddleware: {
+					isEnabled: true,
+				},
+			},
+		},
+		baseURL: 'http://127.0.0.1:3001/',
+		globalAppMiddleware: {
+			isEnabled: false,
 		},
 	},
 	build: {

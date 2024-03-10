@@ -20,7 +20,9 @@
 					/>
 				</template>
 				<template v-slot:action>
-					<v-btn color="primary" @click="signIn(auth)" :disabled="!isProcessing">ログイン</v-btn>
+					<v-btn color="primary" @click="signIn(auth)" :disabled="!isProcessing"
+						>ログイン</v-btn
+					>
 				</template>
 			</FormCard>
 		</v-col>
@@ -35,23 +37,23 @@ const snackbar = useSnackbarStore();
 const isProcessing = ref(false);
 
 const { signIn } = useAuth();
-const auth = ref({email: '',passowrd: ''});
+const auth = ref({ email: '', passowrd: '' });
 
 const signIn = async (credentials) => {
-	isProcessing.value = true
+	isProcessing.value = true;
 
-  const nuxt = useNuxtApp();
-  const config = useTypedBackendConfig(useRuntimeConfig(), "refresh");
+	const nuxt = useNuxtApp();
+	const config = useTypedBackendConfig(useRuntimeConfig(), 'refresh');
 
-  const { path, method } = config.endpoints.signIn;
-  const response = await _fetch(nuxt, path, {
-    method,
-    body: {
-      ...credentials,
-    },
-  })
+	const { path, method } = config.endpoints.signIn;
+	const response = await _fetch(nuxt, path, {
+		method,
+		body: {
+			...credentials,
+		},
+	})
 		.then(() => {
-			isProcessing.value = false
+			isProcessing.value = false;
 		})
 		.catch((err: any) => {
 			const errorMessage = Object.keys(err?.response).length
@@ -63,11 +65,10 @@ const signIn = async (credentials) => {
 						status: 500,
 						message:
 							'サーバーの応答がありません。次回をおいて再度お試しください',
-					}
-			snackbar.displaySnackbar(errorMessage)
+					};
+			snackbar.displaySnackbar(errorMessage);
 
-			isProcessing.value = false
-		})
-	;
+			isProcessing.value = false;
+		});
 };
 </script>
