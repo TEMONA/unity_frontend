@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<RequestListItem
+		<MoleculesRequestListItem
 			v-for="(item, index) in props.requests"
 			:key="index"
 			v-bind="item"

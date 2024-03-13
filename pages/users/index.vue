@@ -24,7 +24,7 @@
 				</template>
 			</v-text-field>
 
-			<FormCard v-if="isOpenSearchCard" title="詳細検索">
+			<OrganismsFormCard v-if="isOpenSearchCard" title="詳細検索">
 				<template v-slot:default>
 					<v-text-field
 						v-for="(item, index) in viewParams"
@@ -38,7 +38,7 @@
 				<template v-slot:action>
 					<v-btn color="primary" @click="searchUsers">検索</v-btn>
 				</template>
-			</FormCard>
+			</OrganismsFormCard>
 		</v-col>
 		<v-col cols="12" md="8">
 			<UserSearchResult

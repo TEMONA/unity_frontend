@@ -1,7 +1,7 @@
 <template>
 	<v-row align="center">
 		<v-col cols="10" md="6" offset="1" offset-md="3" class="login">
-			<FormCard title="パスワード変更">
+			<OrganismsFormCard title="パスワード変更">
 				<template v-slot:header>
 					<v-stepper alt-labels :flat="true" v-model="step">
 						<v-stepper-header>
@@ -29,10 +29,10 @@
 							v-model="password_confirm"
 						/>
 					</div>
-					<Paragraph v-else-if="step === 3">
+					<AtomsParagraph v-else-if="step === 3">
 						パスワードの変更が完了しました。<br />
 						新しいパスワードでログインしてください。
-					</Paragraph>
+					</AtomsParagraph>
 				</template>
 
 				<template v-slot:action>
@@ -48,7 +48,7 @@
 						ログインページへ
 					</v-btn>
 				</template>
-			</FormCard>
+			</OrganismsFormCard>
 		</v-col>
 	</v-row>
 </template>

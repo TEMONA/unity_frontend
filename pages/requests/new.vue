@@ -1,11 +1,11 @@
 <template>
 	<v-row class="request">
 		<v-col cols="12" md="4" class="request__sidebar">
-			<Paragraph text="リクエストを送る相手を選んでください" />
+			<AtomsParagraph text="リクエストを送る相手を選んでください" />
 		</v-col>
 
 		<v-col cols="12" md="8">
-			<FormCard title="新規リクエスト作成">
+			<OrganismsFormCard title="新規リクエスト作成">
 				<template v-slot:default>
 					<v-select
 						:items="users"
@@ -74,7 +74,7 @@
 				<template v-slot:action>
 					<v-btn color="primary" @click="handleInsertCalendar">申請</v-btn>
 				</template>
-			</FormCard>
+			</OrganismsFormCard>
 		</v-col>
 	</v-row>
 </template>

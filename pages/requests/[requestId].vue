@@ -1,7 +1,7 @@
 <template>
 	<v-row class="request">
 		<v-col cols="12" md="4" class="request__sidebar">
-			<UserOverview v-bind="getRequestData?.user" />
+			<OrganismsUserOverview v-bind="getRequestData?.user" />
 
 			<v-row>
 				<v-col cols="6">
@@ -28,11 +28,11 @@
 				</v-chip>
 			</v-chip-group>
 
-			<Paragraph class="text-h6">
+			<AtomsParagraph class="text-h6">
 				この人{{
 					getRequestData?.request.direction === 'from' ? 'から' : 'へ'
 				}}送られたリクエスト
-			</Paragraph>
+			</AtomsParagraph>
 
 			<v-row>
 				<v-col cols="12">
@@ -40,13 +40,13 @@
 						<v-card-title> 依頼日時 </v-card-title>
 
 						<v-card-text>
-							<Paragraph
+							<AtomsParagraph
 								:key="index"
 								v-for="(date, index) in getRequestData?.request.dates"
 								class="mb-2"
 							>
 								第{{ index + 1 }}希望：{{ date }}
-							</Paragraph>
+							</AtomsParagraph>
 						</v-card-text>
 					</v-card>
 				</v-col>

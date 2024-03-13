@@ -12,7 +12,7 @@
 						: props.currentPage * props.perPage
 				}}件 / {{ props.totalCount }}件
 			</div>
-			<!-- <v-icon>mdi-dots-vertical</v-icon> -->
+			<v-icon>mdi-dots-vertical</v-icon>
 		</v-subheader>
 
 		<v-divider />

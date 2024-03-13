@@ -2,7 +2,7 @@
 	<v-row align="center">
 		<v-col cols="10" md="6" offset="1" offset-md="3" class="login">
 			<v-form :value="isValid" ref="email">
-				<FormCard title="パスワード変更">
+				<OrganismsFormCard title="パスワード変更">
 					<template v-slot:header>
 						<v-stepper alt-labels :flat="true" v-model="step">
 							<v-stepper-header>
@@ -27,7 +27,7 @@
 					<template v-slot:action>
 						<v-btn color="primary" @click="handleSubmit">送信</v-btn>
 					</template>
-				</FormCard>
+				</OrganismsFormCard>
 			</v-form>
 		</v-col>
 	</v-row>

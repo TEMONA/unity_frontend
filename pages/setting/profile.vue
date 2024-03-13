@@ -1,7 +1,7 @@
 <template>
 	<v-row class="profile">
 		<v-col cols="12" md="4" class="profile__sidebar">
-			<UserOverview v-bind="userData?.overview" />
+			<OrganismsUserOverview v-bind="userData?.overview" />
 
 			<v-chip-group>
 				<v-chip v-for="tag in userData?.tags" :key="tag">
@@ -11,7 +11,7 @@
 		</v-col>
 
 		<v-col cols="12" md="8">
-			<FormCard title="プロフィール編集">
+			<OrganismsFormCard title="プロフィール編集">
 				<template v-slot:default>
 					<v-textarea
 						v-for="(detail, index) in userData?.details"
@@ -27,7 +27,7 @@
 				<template v-slot:action>
 					<v-btn color="primary" @click="handleSubmit">保存</v-btn>
 				</template>
-			</FormCard>
+			</OrganismsFormCard>
 		</v-col>
 	</v-row>
 </template>

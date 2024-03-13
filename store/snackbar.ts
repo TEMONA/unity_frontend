@@ -17,6 +17,7 @@ interface StatusCodeMap {
 
 const statusCodeMap: StatusCodeMap = {
 	200: '',
+	201: '',
 	400: 'パラメータが不正です',
 	401: 'ログイン情報が正しくありません',
 	403: '閲覧権限がありません',

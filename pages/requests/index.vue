@@ -3,7 +3,7 @@
 		<v-col cols="12" md="4" class="requests__sidebar">
 			<v-row>
 				<v-col cols="12">
-					<FormCard title="リクエストを検索">
+					<OrganismsFormCard title="リクエストを検索">
 						<template v-slot:default>
 							<v-text-field
 								label="相手の氏名"
@@ -60,7 +60,7 @@
 						<template v-slot:action>
 							<v-btn color="primary" @click="searchRequests">検索</v-btn>
 						</template>
-					</FormCard>
+					</OrganismsFormCard>
 				</v-col>
 				<v-col cols="12">
 					<v-btn to="/requests/new" nuxt block color="primary">
@@ -71,7 +71,7 @@
 		</v-col>
 
 		<v-col cols="12" md="8">
-			<RequestSearchResult
+			<OrganismsRequestSearchResult
 				:meta="getRequestsData?.meta"
 				:requests="getRequestsData?.records"
 				:is-loading="pending"

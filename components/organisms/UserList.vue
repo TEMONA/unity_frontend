@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UserListItem
+		<MoleculesUserListItem
 			v-for="(item, index) in props.users"
 			:key="index"
 			v-bind="item"

@@ -7,13 +7,17 @@
 		</v-col>
 
 		<v-col cols="12" class="text-center">
-			<Paragraph :text="props.nameKana" class="text-caption mb-0" />
-			<Heading :level="2" :text="props.name" class="font-weight-medium mb-1" />
-			<Paragraph
+			<AtomsParagraph :text="props.nameKana" class="text-caption mb-0" />
+			<AtomsHeading
+				:level="2"
+				:text="props.name"
+				class="font-weight-medium mb-1"
+			/>
+			<AtomsParagraph
 				:text="`${props.headquarters} ${props.department} ${props.group} ${props.role}`"
 				class="mb-2"
 			/>
-			<Paragraph
+			<AtomsParagraph
 				v-if="props.chatworkId"
 				:text="`@${props.chatworkId}`"
 				class="grey--text"

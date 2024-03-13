@@ -26,35 +26,35 @@
 		</v-navigation-drawer>
 		<v-main>
 			<v-container class="mb-16">
-				<Breadcrumbs />
+				<OrganismsBreadcrumbs />
 				<slot />
 			</v-container>
-			<Footer />
+			<OrganismsFooter />
+			<OrganismsSnackbar />
 		</v-main>
-		<Snackbar />
 	</v-app>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue';
 
-const drawer = ref(false)
+const drawer = ref(false);
 const links = ref([
-  { icon: 'mdi-account-group', title: '社員一覧', link: '/users' },
-  {
-    icon: 'mdi-send',
-    title: 'ランチリクエスト一覧',
-    link: '/requests',
-  },
-  {
-    icon: 'mdi-cog',
-    title: 'プロフィール設定',
-    link: '/setting/profile',
-  },
-  {
-    icon: 'mdi-lock-reset',
-    title: 'パスワード変更',
-    link: '/setting/password',
-  },
-])
+	{ icon: 'mdi-account-group', title: '社員一覧', link: '/users' },
+	{
+		icon: 'mdi-send',
+		title: 'ランチリクエスト一覧',
+		link: '/requests',
+	},
+	{
+		icon: 'mdi-cog',
+		title: 'プロフィール設定',
+		link: '/setting/profile',
+	},
+	{
+		icon: 'mdi-lock-reset',
+		title: 'パスワード変更',
+		link: '/setting/password',
+	},
+]);
 </script>

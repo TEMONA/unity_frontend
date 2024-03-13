@@ -1,7 +1,7 @@
 <template>
 	<v-row class="user">
 		<v-col cols="12" md="4" class="user__sidebar">
-			<UserOverview v-bind="userInformation?.overview" />
+			<OrganismsUserOverview v-bind="userInformation?.overview" />
 			<v-row class="mt-3">
 				<v-col v-if="userInformation?.overview.chatworkId" cols="6">
 					<v-btn

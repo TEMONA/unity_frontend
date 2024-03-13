@@ -1,7 +1,7 @@
 <template>
 	<v-row class="password">
 		<v-col cols="12" md="4" class="password__sidebar">
-			<UserOverview v-bind="getUserData?.overview" />
+			<OrganismsUserOverview v-bind="getUserData?.overview" />
 
 			<v-chip-group v-if="getUserData?.tags.length">
 				<v-chip v-for="tag in getUserData.tags" :key="tag">
@@ -12,7 +12,7 @@
 
 		<v-col cols="12" md="8">
 			<v-form :value="isValid" ref="items">
-				<FormCard title="パスワード変更">
+				<OrganismsFormCard title="パスワード変更">
 					<template v-slot:default>
 						<v-text-field
 							v-for="(item, index) in viewParams"
@@ -32,7 +32,7 @@
 					<template v-slot:action>
 						<v-btn color="primary" @click="handleSubmit">保存</v-btn>
 					</template>
-				</FormCard>
+				</OrganismsFormCard>
 			</v-form>
 		</v-col>
 	</v-row>

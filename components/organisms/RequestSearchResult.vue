@@ -1,13 +1,13 @@
 <template>
 	<div>
-		<SearchResultHeader v-bind="props.meta" />
+		<MoleculesSearchResultHeader v-bind="props.meta" />
 		<div v-if="!props.isLoading">
 			<v-list v-if="props.requests.length" two-line class="pt-0">
 				<RequestList :requests="props.requests" />
 			</v-list>
-			<Paragraph v-else text="検索結果はありません" />
+			<AtomsParagraph v-else text="検索結果はありません" />
 		</div>
-		<Paragraph v-else text="読み込み中です" class="m-3" />
+		<AtomsParagraph v-else text="読み込み中です" class="m-3" />
 		<div v-if="props.meta.totalCount > 1" class="text-center">
 			<v-pagination
 				:value="props.meta.currentPage"

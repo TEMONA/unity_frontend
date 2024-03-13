@@ -12,7 +12,7 @@
 				<slot />
 			</v-container>
 		</v-main>
-		<Snackbar />
+		<OrganismsSnackbar />
 	</v-app>
 </template>
 
