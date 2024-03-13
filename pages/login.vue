@@ -1,74 +1,62 @@
 <template>
 	<v-row align="center">
 		<v-col cols="10" md="6" offset="1" offset-md="3" class="login">
-			<FormCard title="ログイン">
+			<OrganismsFormCard title="ログイン">
 				<template v-slot:default>
 					<v-text-field
 						label="メールアドレス"
 						type="email"
 						hide-details="auto"
-						v-model="auth.email"
+						v-model="email"
 						autocomplete="email"
 					/>
 					<v-text-field
 						label="パスワード"
 						type="password"
 						hide-details="auto"
-						v-model="auth.password"
+						v-model="password"
 						autocomplete="current-password"
 						class="mt-3"
 					/>
 				</template>
 				<template v-slot:action>
-					<v-btn color="primary" @click="signIn(auth)" :disabled="!isProcessing"
-						>ログイン</v-btn
-					>
+					<v-btn color="primary" @click="login()" :disabled="isProcessing">
+						ログイン
+					</v-btn>
 				</template>
-			</FormCard>
+			</OrganismsFormCard>
 		</v-col>
 	</v-row>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
 import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
 
 const isProcessing = ref(false);
 
 const { signIn } = useAuth();
-const auth = ref({ email: '', passowrd: '' });
+const auth = ref({ email: '', password: '' });
+const email = ref('');
+const password = ref('');
 
-const signIn = async (credentials) => {
+async function login() {
 	isProcessing.value = true;
-
-	const nuxt = useNuxtApp();
-	const config = useTypedBackendConfig(useRuntimeConfig(), 'refresh');
-
-	const { path, method } = config.endpoints.signIn;
-	const response = await _fetch(nuxt, path, {
-		method,
-		body: {
-			...credentials,
-		},
-	})
+	await signIn({ email: email.value, password: password.value })
 		.then(() => {
+			const successMessage = {
+				status: 200,
+				message: 'ログインしました',
+			};
+			snackbar.displaySnackbar(successMessage);
 			isProcessing.value = false;
 		})
 		.catch((err: any) => {
-			const errorMessage = Object.keys(err?.response).length
-				? {
-						status: err.response?.status || 500,
-						message: 'メールアドレスかパスワードが正しくありません',
-					}
-				: {
-						status: 500,
-						message:
-							'サーバーの応答がありません。次回をおいて再度お試しください',
-					};
+			const errorMessage = {
+				status: err.response?.status || 500,
+			};
 			snackbar.displaySnackbar(errorMessage);
-
 			isProcessing.value = false;
 		});
-};
+}
 </script>

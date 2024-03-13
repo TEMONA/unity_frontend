@@ -7,27 +7,24 @@ export default defineNuxtConfig({
 		googleClientId: '',
 		googleApiKey: '',
 		public: {
-			baseURL: '',
+			baseUrl: '',
 		},
 	},
-	plugins: ['utils'],
+	plugins: [],
 	modules: ['@pinia/nuxt', '@sidebase/nuxt-auth'],
 	auth: {
+		baseURL: 'https://unity-backend.temona.co.jp/authen',
 		provider: {
 			type: 'refresh', // localに加えトークンリフレッシュが可能
-			baseURL: '/api/authen',
 			refreshOnlyToken: true,
 			endpoints: {
 				signIn: {
-					url: '/jwt/create',
+					path: '/jwt/create', // なんでかこれが効かない、デフォルト値のまま
 					method: 'post',
 				},
-				refresh: {
-					url: '/jwt/refresh/',
-					method: 'post',
-				},
+				refresh: { path: '/jwt/refresh', method: 'post' },
 				getSession: {
-					url: '/users/me/',
+					path: '/users/me/',
 					method: 'get',
 				},
 			},
@@ -35,7 +32,7 @@ export default defineNuxtConfig({
 				login: '/login',
 			},
 			token: {
-				signInResponseTokenPointer: '/token/access',
+				signInResponseTokenPointer: '/access',
 				type: 'JWT',
 				headerName: 'Authorization',
 				maxAgeInSeconds: 60 * 60 * 24,
@@ -54,14 +51,10 @@ export default defineNuxtConfig({
 						user_roles: 'string[]',
 					},
 				},
-				globalAppMiddleware: {
-					isEnabled: true,
-				},
 			},
-		},
-		baseURL: 'http://127.0.0.1:3001/',
-		globalAppMiddleware: {
-			isEnabled: false,
+			globalAppMiddleware: {
+				isEnabled: true,
+			},
 		},
 	},
 	build: {
