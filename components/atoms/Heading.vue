@@ -11,7 +11,7 @@ const level = defineProps<HeadingPropsType>();
 const text = defineProps<string | number>();
 const textSize = computed(() => {
 	let size = '';
-	switch (level.value) {
+	switch (level) {
 		case 1:
 			size = 'h3';
 			break;
