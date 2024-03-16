@@ -5,13 +5,15 @@
 </template>
 
 <script lang="ts" setup>
-type HeadingPropsType = 1 | 2 | 3 | 4 | 5 | 6;
+type HeadingPropsType = {
+	level: 1 | 2 | 3 | 4 | 5 | 6;
+	text: string | number;
+};
 
-const level = defineProps<HeadingPropsType>();
-const text = defineProps<string | number>();
+const props = defineProps<HeadingPropsType>();
 const textSize = computed(() => {
 	let size = '';
-	switch (level) {
+	switch (props.level) {
 		case 1:
 			size = 'h3';
 			break;
