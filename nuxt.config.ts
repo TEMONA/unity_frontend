@@ -19,9 +19,11 @@ export default defineNuxtConfig({
 			refreshOnlyToken: true,
 			endpoints: {
 				signIn: {
-					path: '/jwt/create', // なんでかこれが効かない、デフォルト値のまま
+					path: '/jwt/create',
 					method: 'post',
 				},
+				signOut: false,
+				signUp: false,
 				refresh: { path: '/jwt/refresh', method: 'post' },
 				getSession: {
 					path: '/users/me/',
@@ -57,6 +59,9 @@ export default defineNuxtConfig({
 			},
 		},
 	},
+	alias: {
+		'*': 'types/*',
+	},
 	build: {
 		transpile: ['vuetify'],
 	},
@@ -73,5 +78,5 @@ export default defineNuxtConfig({
 			'process.env.DEBUG': false,
 		},
 	},
-	css: ['@/assets/main.scss'],
+	css: ['@/assets/main.scss', 'vuetify/lib/styles/main.sass'],
 });
