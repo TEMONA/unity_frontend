@@ -14,13 +14,12 @@
 					:to="item.link"
 					nuxt
 				>
-					<v-list-item-icon>
-						<v-icon>{{ item.icon }}</v-icon>
-					</v-list-item-icon>
-
-					<v-list-item-content>
-						<v-list-item-title>{{ item.title }}</v-list-item-title>
-					</v-list-item-content>
+					<template v-slot:prepend>
+						<v-icon>
+							{{ item.icon }}
+						</v-icon>
+					</template>
+					<v-list-item-title v-text="item.title" />
 				</v-list-item>
 			</v-list>
 		</v-navigation-drawer>
@@ -36,25 +35,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { mdiAccountGroup, mdiSend, mdiCog, mdiLockReset } from '@mdi/js'; // todo.VSCodeが型定義ないってエラー吐くけどめんどいから放置
 
 const drawer = ref(false);
-const links = ref([
-	{ icon: 'mdi-account-group', title: '社員一覧', link: '/users' },
+const links = [
+	{ icon: mdiAccountGroup, title: '社員一覧', link: '/users' },
 	{
-		icon: 'mdi-send',
+		icon: mdiSend,
 		title: 'ランチリクエスト一覧',
 		link: '/requests',
 	},
 	{
-		icon: 'mdi-cog',
+		icon: mdiCog,
 		title: 'プロフィール設定',
 		link: '/setting/profile',
 	},
 	{
-		icon: 'mdi-lock-reset',
+		icon: mdiLockReset,
 		title: 'パスワード変更',
 		link: '/setting/password',
 	},
-]);
+];
 </script>

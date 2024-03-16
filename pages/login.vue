@@ -33,6 +33,8 @@
 import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
 
+definePageMeta({ auth: false, layout: 'noauth' });
+
 const isProcessing = ref(false);
 
 const { signIn } = useAuth();

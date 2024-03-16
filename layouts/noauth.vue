@@ -1,11 +1,7 @@
 <template>
 	<v-app class="noauth">
 		<v-app-bar app color="primary" class="white--text">
-			<v-toolbar-title
-				><nuxt-link to="/login" class="white--text noauth__logo">
-					Unity - Temona SNS
-				</nuxt-link>
-			</v-toolbar-title>
+			<v-toolbar-title>Unity - Temona SNS</v-toolbar-title>
 		</v-app-bar>
 		<v-main>
 			<v-container class="mb-16 fill-height">
@@ -16,9 +12,7 @@
 	</v-app>
 </template>
 
-<script setup>
-definePageMeta({ auth: false });
-</script>
+<script setup></script>
 
 <style lang="scss">
 .noauth {
