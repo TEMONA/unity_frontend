@@ -60,7 +60,7 @@ export default defineNuxtConfig({
 		},
 	},
 	alias: {
-		'*': 'types/*',
+		'*': './types/*',
 	},
 	build: {
 		transpile: ['vuetify'],
