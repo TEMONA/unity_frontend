@@ -8,7 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-const props = withDefaults(defineProps<string | number>(), '');
+type ParagraphPropsType = {
+	text: string | number;
+};
+const props = withDefaults(defineProps<ParagraphPropsType>(), { text: '' });
 </script>
 
 <style lang="scss">
