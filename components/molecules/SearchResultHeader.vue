@@ -1,8 +1,10 @@
 <template>
 	<div>
-		<v-subheader>
-			検索結果
-			<v-spacer />
+		<v-toolbar color="cyan-lighten-1">
+			<v-toolbar-title>検索結果</v-toolbar-title>
+
+			<v-spacer></v-spacer>
+
 			<div class="mr-2">
 				{{ (props.currentPage - 1) * props.perPage + 1 }}
 				-
@@ -12,9 +14,9 @@
 						: props.currentPage * props.perPage
 				}}件 / {{ props.totalCount }}件
 			</div>
-			<v-icon>mdi-dots-vertical</v-icon>
-		</v-subheader>
 
+			<v-icon>mdi-dots-vertical</v-icon>
+		</v-toolbar>
 		<v-divider />
 	</div>
 </template>
