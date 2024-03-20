@@ -7,7 +7,7 @@ export default defineNuxtConfig({
 		googleClientId: '',
 		googleApiKey: '',
 		public: {
-			baseUrl: '',
+			baseURL: process.env.BASE_URL || '',
 		},
 	},
 	plugins: [],

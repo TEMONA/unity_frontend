@@ -30,35 +30,19 @@
 </template>
 
 <script lang="ts" setup>
-import { useSnackbarStore } from '@/store/snackbar';
-const snackbar = useSnackbarStore();
-
 definePageMeta({ auth: false, layout: 'noauth' });
 
 const isProcessing = ref(false);
 
-const { signIn } = useAuth();
-const auth = ref({ email: '', password: '' });
 const email = ref('');
 const password = ref('');
 
+const { signIn } = useAuth();
 async function login() {
 	isProcessing.value = true;
-	await signIn({ email: email.value, password: password.value })
-		.then(() => {
-			const successMessage = {
-				status: 200,
-				message: 'ログインしました',
-			};
-			snackbar.displaySnackbar(successMessage);
-			isProcessing.value = false;
-		})
-		.catch((err: any) => {
-			const errorMessage = {
-				status: err.response?.status || 500,
-			};
-			snackbar.displaySnackbar(errorMessage);
-			isProcessing.value = false;
-		});
+	await signIn(
+		{ email: email.value, password: password.value },
+		{ callbackUrl: '/users' },
+	);
 }
 </script>

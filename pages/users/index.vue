@@ -93,14 +93,14 @@ const {
 	pending,
 	error,
 	refresh,
-} = await useFetch<searchResultType>('/api/users', {
+} = await useFetchWithBaseURL<searchResultType>('/api/users', {
 	query: { ...searchQuery.value },
 });
 
 if (!getUsersData.value || error.value) {
 	throw createError({
-		statusCode: 404,
-		message: 'ページが見つかりません。',
+		statusCode: 500,
+		message: 'サーバーエラーが発生しました。時間をおいて再度お試しください',
 	});
 }
 
