@@ -4,7 +4,7 @@
 			{{ error.message }}
 		</h1>
 		<NuxtLink to="/"> Home page </NuxtLink>
-		<Snackbar />
+		<OrganismsSnackbar />
 	</v-app>
 </template>
 

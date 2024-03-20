@@ -41,7 +41,7 @@
 			</OrganismsFormCard>
 		</v-col>
 		<v-col cols="12" md="8">
-			<UserSearchResult
+			<OrganismsUserSearchResult
 				:meta="getUsersData?.meta"
 				:users="getUsersData?.records"
 				:is-loading="pending"
