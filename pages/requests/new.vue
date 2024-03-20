@@ -1,82 +1,84 @@
 <template>
-	<v-row class="request">
-		<v-col cols="12" md="4" class="request__sidebar">
-			<AtomsParagraph text="リクエストを送る相手を選んでください" />
-		</v-col>
+	<NuxtLayout>
+		<v-row class="request">
+			<v-col cols="12" md="4" class="request__sidebar">
+				<AtomsParagraph text="リクエストを送る相手を選んでください" />
+			</v-col>
 
-		<v-col cols="12" md="8">
-			<OrganismsFormCard title="新規リクエスト作成">
-				<template v-slot:default>
-					<v-select
-						:items="users"
-						hide-details="auto"
-						label="氏名"
-						v-model="requestForm.target"
-						return-object
-						multiple
-						:rules="[rules.required]"
-						class="mt-3"
-					/>
+			<v-col cols="12" md="8">
+				<OrganismsFormCard title="新規リクエスト作成">
+					<template v-slot:default>
+						<v-select
+							:items="users"
+							hide-details="auto"
+							label="氏名"
+							v-model="requestForm.target"
+							return-object
+							multiple
+							:rules="[rules.required]"
+							class="mt-3"
+						/>
 
-					<v-row no-gutters class="pt-3 mt-1">
-						<v-col cols="12" class="text-subtitle-1">希望日時</v-col>
-						<v-col cols="12" class="pa-2">
-							<v-text-field
-								v-model="requestForm.dates[0]"
-								label="第１希望"
-								type="datetime-local"
-								clear-icon="mdi-close-circle"
-								clearable
-								@click:clear="requestForm.dates[0] = ''"
-								suffix="から１時間"
-								:rules="[rules.required]"
-								class="mt-3"
-							/>
-						</v-col>
-						<v-col cols="12" class="pa-2">
-							<v-text-field
-								v-model="requestForm.dates[1]"
-								label="第２希望"
-								type="datetime-local"
-								clear-icon="mdi-close-circle"
-								clearable
-								@click:clear="requestForm.dates[1] = ''"
-								suffix="から１時間"
-								:rules="[rules.required]"
-								class="mt-3"
-							/>
-						</v-col>
-						<v-col cols="12" class="pa-2">
-							<v-text-field
-								v-model="requestForm.dates[2]"
-								label="第３希望"
-								type="datetime-local"
-								clear-icon="mdi-close-circle"
-								clearable
-								@click:clear="requestForm.dates[2] = ''"
-								suffix="から１時間"
-								:rules="[rules.required]"
-								class="mt-3"
-							/>
-						</v-col>
-					</v-row>
+						<v-row no-gutters class="pt-3 mt-1">
+							<v-col cols="12" class="text-subtitle-1">希望日時</v-col>
+							<v-col cols="12" class="pa-2">
+								<v-text-field
+									v-model="requestForm.dates[0]"
+									label="第１希望"
+									type="datetime-local"
+									clear-icon="mdi-close-circle"
+									clearable
+									@click:clear="requestForm.dates[0] = ''"
+									suffix="から１時間"
+									:rules="[rules.required]"
+									class="mt-3"
+								/>
+							</v-col>
+							<v-col cols="12" class="pa-2">
+								<v-text-field
+									v-model="requestForm.dates[1]"
+									label="第２希望"
+									type="datetime-local"
+									clear-icon="mdi-close-circle"
+									clearable
+									@click:clear="requestForm.dates[1] = ''"
+									suffix="から１時間"
+									:rules="[rules.required]"
+									class="mt-3"
+								/>
+							</v-col>
+							<v-col cols="12" class="pa-2">
+								<v-text-field
+									v-model="requestForm.dates[2]"
+									label="第３希望"
+									type="datetime-local"
+									clear-icon="mdi-close-circle"
+									clearable
+									@click:clear="requestForm.dates[2] = ''"
+									suffix="から１時間"
+									:rules="[rules.required]"
+									class="mt-3"
+								/>
+							</v-col>
+						</v-row>
 
-					<v-textarea
-						v-model="requestForm.detail"
-						name="detail"
-						label="依頼文"
-						auto-grow
-						rows="1"
-						:rules="[rules.required]"
-						class="mt-2"
-					/>
-				</template>
-				<template v-slot:action>
-					<v-btn color="primary" @click="handleInsertCalendar">申請</v-btn>
-				</template>
-			</OrganismsFormCard>
-		</v-col>
-	</v-row>
+						<v-textarea
+							v-model="requestForm.detail"
+							name="detail"
+							label="依頼文"
+							auto-grow
+							rows="1"
+							:rules="[rules.required]"
+							class="mt-2"
+						/>
+					</template>
+					<template v-slot:action>
+						<v-btn color="primary" @click="handleInsertCalendar">申請</v-btn>
+					</template>
+				</OrganismsFormCard>
+			</v-col>
+		</v-row>
+	</NuxtLayout>
 </template>
 
 <script lang="ts" setup>

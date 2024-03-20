@@ -1,48 +1,49 @@
 <template>
-	<v-row align="center">
-		<v-col cols="10" md="6" offset="1" offset-md="3" class="login">
-			<v-form :value="isValid" ref="email">
-				<OrganismsFormCard title="パスワード変更">
-					<template v-slot:header>
-						<v-stepper alt-labels :flat="true" v-model="step">
-							<v-stepper-header>
-								<v-stepper-step step="1">変更メール送信</v-stepper-step>
-								<v-divider />
-								<v-stepper-step step="2">パスワード変更</v-stepper-step>
-								<v-divider />
-								<v-stepper-step step="3">ログイン</v-stepper-step>
-							</v-stepper-header>
-						</v-stepper>
-					</template>
+	<NuxtLayout name="noauth">
+		<v-row align="center">
+			<v-col cols="10" md="6" offset="1" offset-md="3" class="login">
+				<v-form :value="isValid" ref="email">
+					<OrganismsFormCard title="パスワード変更">
+						<template v-slot:header>
+							<v-stepper alt-labels :flat="true" v-model="step">
+								<v-stepper-header>
+									<v-stepper-step step="1">変更メール送信</v-stepper-step>
+									<v-divider />
+									<v-stepper-step step="2">パスワード変更</v-stepper-step>
+									<v-divider />
+									<v-stepper-step step="3">ログイン</v-stepper-step>
+								</v-stepper-header>
+							</v-stepper>
+						</template>
 
-					<template v-slot:default>
-						<v-text-field
-							label="メールアドレス"
-							:hide-details="false"
-							v-model="email"
-							:rules="[requiredValidator, checkEmailValidator]"
-						/>
-					</template>
+						<template v-slot:default>
+							<v-text-field
+								label="メールアドレス"
+								:hide-details="false"
+								v-model="email"
+								:rules="[requiredValidator, checkEmailValidator]"
+							/>
+						</template>
 
-					<template v-slot:action>
-						<v-btn color="primary" @click="handleSubmit">送信</v-btn>
-					</template>
-				</OrganismsFormCard>
-			</v-form>
-		</v-col>
-	</v-row>
+						<template v-slot:action>
+							<v-btn color="primary" @click="handleSubmit">送信</v-btn>
+						</template>
+					</OrganismsFormCard>
+				</v-form>
+			</v-col>
+		</v-row>
+	</NuxtLayout>
 </template>
 
 <script lang="ts" setup>
+definePageMeta({ auth: false });
+useHead({ title: 'パスワードを忘れた方' });
+
 import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
 
-definePageMeta({ auth: false, layout: 'noauth' });
-useHead({ title: 'パスワードを忘れた方' });
-
-import { ref } from 'vue';
-
 const step = ref(1);
+
 const email = ref('');
 const isValid = ref(false);
 

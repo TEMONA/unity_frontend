@@ -1,41 +1,43 @@
 <template>
-	<v-row class="password">
-		<v-col cols="12" md="4" class="password__sidebar">
-			<OrganismsUserOverview v-bind="getUserData?.overview" />
+	<NuxtLayout>
+		<v-row class="password">
+			<v-col cols="12" md="4" class="password__sidebar">
+				<OrganismsUserOverview v-bind="getUserData?.overview" />
 
-			<v-chip-group v-if="getUserData?.tags.length">
-				<v-chip v-for="tag in getUserData.tags" :key="tag">
-					{{ tag }}
-				</v-chip>
-			</v-chip-group>
-		</v-col>
+				<v-chip-group v-if="getUserData?.tags.length">
+					<v-chip v-for="tag in getUserData.tags" :key="tag">
+						{{ tag }}
+					</v-chip>
+				</v-chip-group>
+			</v-col>
 
-		<v-col cols="12" md="8">
-			<v-form :value="isValid" ref="items">
-				<OrganismsFormCard title="パスワード変更">
-					<template v-slot:default>
-						<v-text-field
-							v-for="(item, index) in viewParams"
-							:key="index"
-							v-model="setPasswordParams[index]"
-							:label="item.title"
-							type="password"
-							:autocomplete="item.autocomplete"
-							hide-details="auto"
-							required
-							auto-grow
-							rows="1"
-							:rules="[...validationRules]"
-							class="mt-3"
-						/>
-					</template>
-					<template v-slot:action>
-						<v-btn color="primary" @click="handleSubmit">保存</v-btn>
-					</template>
-				</OrganismsFormCard>
-			</v-form>
-		</v-col>
-	</v-row>
+			<v-col cols="12" md="8">
+				<v-form :value="isValid" ref="items">
+					<OrganismsFormCard title="パスワード変更">
+						<template v-slot:default>
+							<v-text-field
+								v-for="(item, index) in viewParams"
+								:key="index"
+								v-model="setPasswordParams[index]"
+								:label="item.title"
+								type="password"
+								:autocomplete="item.autocomplete"
+								hide-details="auto"
+								required
+								auto-grow
+								rows="1"
+								:rules="[...validationRules]"
+								class="mt-3"
+							/>
+						</template>
+						<template v-slot:action>
+							<v-btn color="primary" @click="handleSubmit">保存</v-btn>
+						</template>
+					</OrganismsFormCard>
+				</v-form>
+			</v-col>
+		</v-row>
+	</NuxtLayout>
 </template>
 
 <script lang="ts" setup>

@@ -1,66 +1,68 @@
 <template>
-	<v-row class="user">
-		<v-col cols="12" md="4" class="user__sidebar">
-			<OrganismsUserOverview v-bind="userInformation?.overview" />
-			<v-row class="mt-3">
-				<v-col v-if="userInformation?.overview.chatworkId" cols="6">
-					<v-btn
-						:href="`https://www.chatwork.com/${userInformation?.overview.chatworkId}`"
-						outlined
-						block
-						color="primary"
-						target="_blank"
-						>チャットを開く</v-btn
-					>
-				</v-col>
-				<v-col cols="6">
-					<v-btn
-						href="https://calendar.google.com/calendar/u/0/r/day"
-						outlined
-						block
-						color="primary"
-						target="_blank"
-					>
-						meetsを依頼する
-					</v-btn>
-				</v-col>
-				<v-col cols="12">
-					<v-btn
-						:href="`/requests/new?users=${route.params.userId}`"
-						block
-						color="primary"
-					>
-						ランチを申請する
-					</v-btn>
-				</v-col>
-			</v-row>
-		</v-col>
-		<v-col v-if="userInformation?.tags" cols="12" md="8">
-			<v-chip-group class="mb-3">
-				<v-chip
-					v-for="tag in userInformation?.tags"
-					:key="tag"
-					:ripple="false"
-					:disabled="true"
-					color="secondary"
-				>
-					{{ tag }}
-				</v-chip>
-			</v-chip-group>
-
-			<v-row v-if="userInformation?.details">
-				<template v-for="(item, index) in userInformation?.details">
-					<v-col v-if="item.value" cols="12" :key="index">
-						<v-card>
-							<v-card-title v-text="item.title" />
-
-							<v-card-text v-html="item.value" />
-						</v-card>
+	<NuxtLayout>
+		<v-row class="user">
+			<v-col cols="12" md="4" class="user__sidebar">
+				<OrganismsUserOverview v-bind="userInformation?.overview" />
+				<v-row class="mt-3">
+					<v-col v-if="userInformation?.overview.chatworkId" cols="6">
+						<v-btn
+							:href="`https://www.chatwork.com/${userInformation?.overview.chatworkId}`"
+							outlined
+							block
+							color="primary"
+							target="_blank"
+							>チャットを開く</v-btn
+						>
 					</v-col>
-				</template>
-			</v-row>
-		</v-col>
-	</v-row>
+					<v-col cols="6">
+						<v-btn
+							href="https://calendar.google.com/calendar/u/0/r/day"
+							outlined
+							block
+							color="primary"
+							target="_blank"
+						>
+							meetsを依頼する
+						</v-btn>
+					</v-col>
+					<v-col cols="12">
+						<v-btn
+							:href="`/requests/new?users=${route.params.userId}`"
+							block
+							color="primary"
+						>
+							ランチを申請する
+						</v-btn>
+					</v-col>
+				</v-row>
+			</v-col>
+			<v-col v-if="userInformation?.tags" cols="12" md="8">
+				<v-chip-group class="mb-3">
+					<v-chip
+						v-for="tag in userInformation?.tags"
+						:key="tag"
+						:ripple="false"
+						:disabled="true"
+						color="secondary"
+					>
+						{{ tag }}
+					</v-chip>
+				</v-chip-group>
+
+				<v-row v-if="userInformation?.details">
+					<template v-for="(item, index) in userInformation?.details">
+						<v-col v-if="item.value" cols="12" :key="index">
+							<v-card>
+								<v-card-title v-text="item.title" />
+
+								<v-card-text v-html="item.value" />
+							</v-card>
+						</v-col>
+					</template>
+				</v-row>
+			</v-col>
+		</v-row>
+	</NuxtLayout>
 </template>
 
 <script lang="ts" setup>

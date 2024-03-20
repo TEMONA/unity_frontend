@@ -1,54 +1,56 @@
 <template>
-	<v-row class="users">
-		<v-col cols="12" md="4" class="users__sidebar">
-			<v-text-field
-				single-line
-				solo
-				outlined
-				dense
-				label="氏名から社員を検索"
-				v-model="searchQuery.name"
-				hide-details="auto"
-			>
-				<template v-slot:prepend-inner>
-					<v-btn icon @click="searchUsers">
-						<v-icon>mdi-magnify</v-icon>
-					</v-btn>
-				</template>
-				<template v-slot:append>
-					<v-btn icon @click="isOpenSearchCard = !isOpenSearchCard">
-						<v-icon>
-							{{ isOpenSearchCard ? 'mdi-close' : 'mdi-menu-open' }}
-						</v-icon>
-					</v-btn>
-				</template>
-			</v-text-field>
+	<NuxtLayout>
+		<v-row class="users">
+			<v-col cols="12" md="4" class="users__sidebar">
+				<v-text-field
+					single-line
+					solo
+					outlined
+					dense
+					label="氏名から社員を検索"
+					v-model="searchQuery.name"
+					hide-details="auto"
+				>
+					<template v-slot:prepend-inner>
+						<v-btn icon @click="searchUsers">
+							<v-icon>mdi-magnify</v-icon>
+						</v-btn>
+					</template>
+					<template v-slot:append>
+						<v-btn icon @click="isOpenSearchCard = !isOpenSearchCard">
+							<v-icon>
+								{{ isOpenSearchCard ? 'mdi-close' : 'mdi-menu-open' }}
+							</v-icon>
+						</v-btn>
+					</template>
+				</v-text-field>
 
-			<OrganismsFormCard v-if="isOpenSearchCard" title="詳細検索">
-				<template v-slot:default>
-					<v-text-field
-						v-for="(item, index) in viewParams"
-						:key="index"
-						v-model="searchQuery[index]"
-						:label="item"
-						hide-details="auto"
-						class="mt-2"
-					/>
-				</template>
-				<template v-slot:action>
-					<v-btn color="primary" @click="searchUsers">検索</v-btn>
-				</template>
-			</OrganismsFormCard>
-		</v-col>
-		<v-col cols="12" md="8">
-			<OrganismsUserSearchResult
-				:meta="getUsersData?.meta"
-				:users="getUsersData?.records"
-				:is-loading="pending"
-				@changeMeta="searchUsers"
-			/>
-		</v-col>
-	</v-row>
+				<OrganismsFormCard v-if="isOpenSearchCard" title="詳細検索">
+					<template v-slot:default>
+						<v-text-field
+							v-for="(item, index) in viewParams"
+							:key="index"
+							v-model="searchQuery[index]"
+							:label="item"
+							hide-details="auto"
+							class="mt-2"
+						/>
+					</template>
+					<template v-slot:action>
+						<v-btn color="primary" @click="searchUsers">検索</v-btn>
+					</template>
+				</OrganismsFormCard>
+			</v-col>
+			<v-col cols="12" md="8">
+				<OrganismsUserSearchResult
+					:meta="getUsersData?.meta"
+					:users="getUsersData?.records"
+					:is-loading="pending"
+					@changeMeta="searchUsers"
+				/>
+			</v-col>
+		</v-row>
+	</NuxtLayout>
 </template>
 
 <script lang="ts" setup>

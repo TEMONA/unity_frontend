@@ -1,83 +1,85 @@
 <template>
-	<v-row class="requests">
-		<v-col cols="12" md="4" class="requests__sidebar">
-			<v-row>
-				<v-col cols="12">
-					<OrganismsFormCard title="リクエストを検索">
-						<template v-slot:default>
-							<v-text-field
-								label="相手の氏名"
-								hide-details="auto"
-								v-model="searchQuery.name"
-							/>
-							<v-row no-gutters class="pt-3 mt-1">
-								<v-col cols="12" class="text-subtitle-1"
-									>リクエストの方向</v-col
-								>
-								<v-col>
-									<v-checkbox
-										v-model="searchQuery.direction.from"
-										label="相手から"
-										hide-details="auto"
-										class="mt-0"
-									/>
-								</v-col>
-								<v-col>
-									<v-checkbox
-										v-model="searchQuery.direction.to"
-										label="自分から"
-										hide-details="auto"
-										class="mt-0"
-									/>
-								</v-col>
-							</v-row>
-							<v-row>
+	<NuxtLayout>
+		<v-row class="requests">
+			<v-col cols="12" md="4" class="requests__sidebar">
+				<v-row>
+					<v-col cols="12">
+						<OrganismsFormCard title="リクエストを検索">
+							<template v-slot:default>
 								<v-text-field
-									:value="dateRangeText"
-									label="リクエスト日（範囲）"
+									label="相手の氏名"
 									hide-details="auto"
-									readonly
-									clear-icon="mdi-close-circle"
-									clearable
-									@click:clear="searchQuery.dates = []"
-									class="mt-3"
-								></v-text-field>
-								<v-btn color="primary" @click="isActiveDatePicker = true">
-									日付を選ぶ
-									<v-dialog v-model="isActiveDatePicker">
-										<v-date-picker
-											show-adjacent-months
-											multiple="range"
-											v-model="searchQuery.dates"
-											@click:save="isActiveDatePicker = false"
-											@click:cancel="isActiveDatePicker = false"
-										>
-										</v-date-picker>
-									</v-dialog>
-								</v-btn>
-							</v-row>
-						</template>
-						<template v-slot:action>
-							<v-btn color="primary" @click="searchRequests">検索</v-btn>
-						</template>
-					</OrganismsFormCard>
-				</v-col>
-				<v-col cols="12">
-					<v-btn to="/requests/new" nuxt block color="primary">
-						新しくランチを申請する
-					</v-btn>
-				</v-col>
-			</v-row>
-		</v-col>
+									v-model="searchQuery.name"
+								/>
+								<v-row no-gutters class="pt-3 mt-1">
+									<v-col cols="12" class="text-subtitle-1"
+										>リクエストの方向</v-col
+									>
+									<v-col>
+										<v-checkbox
+											v-model="searchQuery.direction.from"
+											label="相手から"
+											hide-details="auto"
+											class="mt-0"
+										/>
+									</v-col>
+									<v-col>
+										<v-checkbox
+											v-model="searchQuery.direction.to"
+											label="自分から"
+											hide-details="auto"
+											class="mt-0"
+										/>
+									</v-col>
+								</v-row>
+								<v-row>
+									<v-text-field
+										:value="dateRangeText"
+										label="リクエスト日（範囲）"
+										hide-details="auto"
+										readonly
+										clear-icon="mdi-close-circle"
+										clearable
+										@click:clear="searchQuery.dates = []"
+										class="mt-3"
+									></v-text-field>
+									<v-btn color="primary" @click="isActiveDatePicker = true">
+										日付を選ぶ
+										<v-dialog v-model="isActiveDatePicker">
+											<v-date-picker
+												show-adjacent-months
+												multiple="range"
+												v-model="searchQuery.dates"
+												@click:save="isActiveDatePicker = false"
+												@click:cancel="isActiveDatePicker = false"
+											>
+											</v-date-picker>
+										</v-dialog>
+									</v-btn>
+								</v-row>
+							</template>
+							<template v-slot:action>
+								<v-btn color="primary" @click="searchRequests">検索</v-btn>
+							</template>
+						</OrganismsFormCard>
+					</v-col>
+					<v-col cols="12">
+						<v-btn to="/requests/new" nuxt block color="primary">
+							新しくランチを申請する
+						</v-btn>
+					</v-col>
+				</v-row>
+			</v-col>
 
-		<v-col cols="12" md="8">
-			<OrganismsRequestSearchResult
-				:meta="getRequestsData?.meta"
-				:requests="getRequestsData?.records"
-				:is-loading="pending"
-			/>
-		</v-col>
-	</v-row>
+			<v-col cols="12" md="8">
+				<OrganismsRequestSearchResult
+					:meta="getRequestsData?.meta"
+					:requests="getRequestsData?.records"
+					:is-loading="pending"
+				/>
+			</v-col>
+		</v-row>
+	</NuxtLayout>
 </template>
 
 <script lang="ts" setup>

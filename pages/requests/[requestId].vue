@@ -1,65 +1,67 @@
 <template>
-	<v-row class="request">
-		<v-col cols="12" md="4" class="request__sidebar">
-			<OrganismsUserOverview v-bind="getRequestData?.user" />
+	<NuxtLayout>
+		<v-row class="request">
+			<v-col cols="12" md="4" class="request__sidebar">
+				<OrganismsUserOverview v-bind="getRequestData?.user" />
 
-			<v-row>
-				<v-col cols="6">
-					<v-btn outlined block color="primary">チャットを開く</v-btn>
-				</v-col>
-				<v-col cols="6">
-					<v-btn outlined block color="primary">プロフィールを見る</v-btn>
-				</v-col>
-				<v-col v-if="getRequestData?.request.direction === 'from'" cols="12">
-					<v-btn block color="primary">日時を選択して申請を承認する</v-btn>
-				</v-col>
-				<v-col v-if="getRequestData?.request.direction === 'to'" cols="6">
-					<v-btn block color="primary">申請を編集する</v-btn>
-				</v-col>
-				<v-col v-if="getRequestData?.request.direction === 'to'" cols="6">
-					<v-btn block color="error">申請を削除する</v-btn>
-				</v-col>
-			</v-row>
-		</v-col>
-		<v-col cols="12" md="8">
-			<v-chip-group class="mb-3">
-				<v-chip v-for="tag in getRequestData?.tags" :key="tag">
-					{{ tag }}
-				</v-chip>
-			</v-chip-group>
+				<v-row>
+					<v-col cols="6">
+						<v-btn outlined block color="primary">チャットを開く</v-btn>
+					</v-col>
+					<v-col cols="6">
+						<v-btn outlined block color="primary">プロフィールを見る</v-btn>
+					</v-col>
+					<v-col v-if="getRequestData?.request.direction === 'from'" cols="12">
+						<v-btn block color="primary">日時を選択して申請を承認する</v-btn>
+					</v-col>
+					<v-col v-if="getRequestData?.request.direction === 'to'" cols="6">
+						<v-btn block color="primary">申請を編集する</v-btn>
+					</v-col>
+					<v-col v-if="getRequestData?.request.direction === 'to'" cols="6">
+						<v-btn block color="error">申請を削除する</v-btn>
+					</v-col>
+				</v-row>
+			</v-col>
+			<v-col cols="12" md="8">
+				<v-chip-group class="mb-3">
+					<v-chip v-for="tag in getRequestData?.tags" :key="tag">
+						{{ tag }}
+					</v-chip>
+				</v-chip-group>
 
-			<AtomsParagraph class="text-h6">
-				この人{{
-					getRequestData?.request.direction === 'from' ? 'から' : 'へ'
-				}}送られたリクエスト
-			</AtomsParagraph>
+				<AtomsParagraph class="text-h6">
+					この人{{
+						getRequestData?.request.direction === 'from' ? 'から' : 'へ'
+					}}送られたリクエスト
+				</AtomsParagraph>
 
-			<v-row>
-				<v-col cols="12">
-					<v-card>
-						<v-card-title> 依頼日時 </v-card-title>
+				<v-row>
+					<v-col cols="12">
+						<v-card>
+							<v-card-title> 依頼日時 </v-card-title>
 
-						<v-card-text>
-							<AtomsParagraph
-								:key="index"
-								v-for="(date, index) in getRequestData?.request.dates"
-								class="mb-2"
-							>
-								第{{ index + 1 }}希望：{{ date }}
-							</AtomsParagraph>
-						</v-card-text>
-					</v-card>
-				</v-col>
-				<v-col cols="12">
-					<v-card>
-						<v-card-title> 依頼詳細 </v-card-title>
+							<v-card-text>
+								<AtomsParagraph
+									:key="index"
+									v-for="(date, index) in getRequestData?.request.dates"
+									class="mb-2"
+								>
+									第{{ index + 1 }}希望：{{ date }}
+								</AtomsParagraph>
+							</v-card-text>
+						</v-card>
+					</v-col>
+					<v-col cols="12">
+						<v-card>
+							<v-card-title> 依頼詳細 </v-card-title>
 
-						<v-card-text v-text="getRequestData?.request.detail" />
-					</v-card>
-				</v-col>
-			</v-row>
-		</v-col>
-	</v-row>
+							<v-card-text v-text="getRequestData?.request.detail" />
+						</v-card>
+					</v-col>
+				</v-row>
+			</v-col>
+		</v-row>
+	</NuxtLayout>
 </template>
 
 <script lang="ts" setup>

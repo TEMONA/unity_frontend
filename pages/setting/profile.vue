@@ -1,35 +1,37 @@
 <template>
-	<v-row class="profile">
-		<v-col cols="12" md="4" class="profile__sidebar">
-			<OrganismsUserOverview v-bind="userData?.overview" />
+	<NuxtLayout>
+		<v-row class="profile">
+			<v-col cols="12" md="4" class="profile__sidebar">
+				<OrganismsUserOverview v-bind="userData?.overview" />
 
-			<v-chip-group>
-				<v-chip v-for="tag in userData?.tags" :key="tag">
-					{{ tag }}
-				</v-chip>
-			</v-chip-group>
-		</v-col>
+				<v-chip-group>
+					<v-chip v-for="tag in userData?.tags" :key="tag">
+						{{ tag }}
+					</v-chip>
+				</v-chip-group>
+			</v-col>
 
-		<v-col cols="12" md="8">
-			<OrganismsFormCard title="プロフィール編集">
-				<template v-slot:default>
-					<v-textarea
-						v-for="(detail, index) in userData?.details"
-						:key="index"
-						v-model="detail.value"
-						:label="detail.title"
-						hide-details="auto"
-						auto-grow
-						rows="1"
-						class="mt-3"
-					/>
-				</template>
-				<template v-slot:action>
-					<v-btn color="primary" @click="handleSubmit">保存</v-btn>
-				</template>
-			</OrganismsFormCard>
-		</v-col>
-	</v-row>
+			<v-col cols="12" md="8">
+				<OrganismsFormCard title="プロフィール編集">
+					<template v-slot:default>
+						<v-textarea
+							v-for="(detail, index) in userData?.details"
+							:key="index"
+							v-model="detail.value"
+							:label="detail.title"
+							hide-details="auto"
+							auto-grow
+							rows="1"
+							class="mt-3"
+						/>
+					</template>
+					<template v-slot:action>
+						<v-btn color="primary" @click="handleSubmit">保存</v-btn>
+					</template>
+				</OrganismsFormCard>
+			</v-col>
+		</v-row>
+	</NuxtLayout>
 </template>
 
 <script lang="ts" setup>
