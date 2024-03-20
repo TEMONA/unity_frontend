@@ -10,13 +10,11 @@
 
 <script setup lang="ts">
 interface Props {
-  error: Error;
+	error: Error;
 }
 const props = defineProps<Props>();
 
-useHead({title: props.error.message});
-
-definePageMeta({ auth: false });
+useHead({ title: props.error.message });
 </script>
 
 <style scoped>
