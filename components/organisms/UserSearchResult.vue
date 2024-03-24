@@ -3,7 +3,7 @@
 		<MoleculesSearchResultHeader v-bind="props.meta" />
 		<div v-if="!props.isLoading">
 			<v-list v-if="props.users.length" two-line class="pt-0">
-				<UserList :users="props.users" />
+				<OrganismsUserList :users="props.users" />
 			</v-list>
 			<AtomsParagraph v-else text="検索結果はありません" />
 		</div>
