@@ -251,6 +251,7 @@ async function handleInsertCalendar() {
 	await submitLunchRequest();
 }
 
+const { data } = useAuth();
 /**
  * google calendar apiにイベント登録申請をする関数
  *
@@ -258,7 +259,7 @@ async function handleInsertCalendar() {
 async function insertEvents() {
 	const attendees = [
 		{
-			email: 'hoge@example.com' /*$auth.user.email*/,
+			email: data.email, // エラー消えないけど動くからとりあえず放置
 			responseStatus: 'needsAction',
 		},
 	];
@@ -337,7 +338,7 @@ async function submitLunchRequest() {
 	await $fetch(`/api/lunch-requests/`, {
 		method: 'POST',
 		params: {
-			applicant: 'hoge@example.com', //this.$auth.user?.id,
+			applicant: data.id,
 			recipient_calender_uid: listTargetByKey('value'),
 			apply_content: requestForm.value.detail,
 			preferred_days,

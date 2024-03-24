@@ -71,8 +71,10 @@ type getUserDataType = {
 	tags: string[];
 };
 
+const { data } = useAuth();
+
 const { data: getUserData, error } = await useFetch<getUserDataType>(
-	`/api/users/hoge/`, //$auth.user?.id
+	`/api/users/${data.id}/`, //エラー消えないけどとりあえず放置
 );
 
 if (!getUserData.value || error.value) {

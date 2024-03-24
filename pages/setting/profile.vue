@@ -94,9 +94,10 @@ const userData = ref<getUserDataType>({
 	},
 });
 
+const { data } = useAuth();
 const { $camelcaseKeys, $snakecaseKeys } = useNuxtApp();
 const { data: getUserData, error } = await useFetch<getUserDataType>(
-	`/api/users/hoge`, // ${$auth.user?.id}
+	`/api/users/${data.id}`,
 );
 
 if (getUserData && !error.value) {
@@ -115,8 +116,7 @@ async function handleSubmit() {
 			val.value,
 		]),
 	);
-	await $fetch(`/api/users/hoge/`, {
-		//${this.$auth.user?.id}
+	await $fetch(`/api/users/${data.id}/`, {
 		method: 'PATCH',
 		params: {
 			contents: { ...$snakecaseKeys(params) },

@@ -42,18 +42,7 @@ export default defineNuxtConfig({
 				// 5 minutes
 			},
 			refreshToken: { signInResponseRefreshTokenPointer: '/refresh' },
-			sessionDataType: {
-				code: 'number',
-				success: 'boolean',
-				detail: {
-					user: {
-						_id: 'string',
-						email: 'string',
-						name: 'string',
-						user_roles: 'string[]',
-					},
-				},
-			},
+			sessionDataType: { id: 'string', name: 'string', email: 'string' },
 			globalAppMiddleware: {
 				isEnabled: true,
 			},

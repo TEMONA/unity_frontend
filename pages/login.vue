@@ -21,7 +21,11 @@
 						/>
 					</template>
 					<template v-slot:action>
-						<v-btn color="primary" @click="login()" :disabled="isProcessing">
+						<v-btn
+							color="primary"
+							@click="login()"
+							:disabled="isProcessing || !email || !password"
+						>
 							ログイン
 						</v-btn>
 					</template>
