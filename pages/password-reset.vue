@@ -4,13 +4,13 @@
 			<v-col cols="10" md="6" offset="1" offset-md="3" class="login">
 				<OrganismsFormCard title="パスワード変更">
 					<template v-slot:header>
-						<v-stepper alt-labels :flat="true" v-model="step">
+						<v-stepper alt-labels :flat="true" :model-value="step">
 							<v-stepper-header>
-								<v-stepper-step step="1">変更メール送信</v-stepper-step>
+								<v-stepper-item title="変更メール送信" :value="1" />
 								<v-divider />
-								<v-stepper-step step="2">パスワード変更</v-stepper-step>
+								<v-stepper-item title="パスワード変更" :value="2" />
 								<v-divider />
-								<v-stepper-step step="3">ログイン</v-stepper-step>
+								<v-stepper-item title="ログイン" :value="3" />
 							</v-stepper-header>
 						</v-stepper>
 					</template>
@@ -22,12 +22,15 @@
 								type="password"
 								hide-details="auto"
 								v-model="password"
+								:rules="[requiredValidator, passwordValidator]"
+								class="mb-3"
 							/>
 							<v-text-field
 								label="新しいパスワード（確認）"
 								type="password"
 								hide-details="auto"
 								v-model="password_confirm"
+								:rules="[requiredValidator, confirmValidator]"
 							/>
 						</div>
 						<AtomsParagraph v-else-if="step === 3">
@@ -41,7 +44,7 @@
 							v-if="step === 2"
 							color="primary"
 							:disabled="
-								password && password === password_confirm ? true : false
+								password && password === password_confirm ? false : true
 							"
 							@click="handleChange"
 						>
@@ -86,9 +89,31 @@ onMounted(() => {
 });
 
 const password = ref('');
+
+function requiredValidator(value: string): boolean | string {
+	return !!value || '必ず入力してください';
+}
+
+function passwordValidator(value: string): boolean | string {
+	return String(value).length >= 8 || '８文字以上で入力してください';
+}
+
 const password_confirm = ref('');
 
+function confirmValidator(value: string): boolean | string {
+	return value === password.value || 'パスワードと一致しません';
+}
+
 function handleChange(): void {
+	if (password.value !== password_confirm.value) {
+		const errorMessage = {
+			status: 401,
+			message: 'パスワードが一致しません',
+		};
+		snackbar.displaySnackbar(errorMessage);
+		return;
+	}
+
 	$fetch('/authen/users/reset_password_confirm', {
 		method: 'POST',
 		body: {

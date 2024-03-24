@@ -5,13 +5,13 @@
 				<v-form :value="isValid" ref="email">
 					<OrganismsFormCard title="パスワード変更">
 						<template v-slot:header>
-							<v-stepper alt-labels :flat="true" v-model="step">
+							<v-stepper alt-labels :flat="true" :model-value="step">
 								<v-stepper-header>
-									<v-stepper-step step="1">変更メール送信</v-stepper-step>
+									<v-stepper-item title="変更メール送信" :value="1" />
 									<v-divider />
-									<v-stepper-step step="2">パスワード変更</v-stepper-step>
+									<v-stepper-item title="パスワード変更" :value="2" />
 									<v-divider />
-									<v-stepper-step step="3">ログイン</v-stepper-step>
+									<v-stepper-item title="ログイン" :value="3" />
 								</v-stepper-header>
 							</v-stepper>
 						</template>
@@ -20,13 +20,20 @@
 							<v-text-field
 								label="メールアドレス"
 								:hide-details="false"
-								v-model="email"
+								type="email"
+								v-model="emailValue"
 								:rules="[requiredValidator, checkEmailValidator]"
 							/>
 						</template>
 
 						<template v-slot:action>
-							<v-btn color="primary" @click="handleSubmit">送信</v-btn>
+							<v-btn
+								color="primary"
+								@click="handleSubmit"
+								:disabled="!emailValue"
+							>
+								送信
+							</v-btn>
 						</template>
 					</OrganismsFormCard>
 				</v-form>
@@ -44,7 +51,7 @@ const snackbar = useSnackbarStore();
 
 const step = ref(1);
 
-const email = ref('');
+const emailValue = ref('');
 const isValid = ref(false);
 
 function requiredValidator(value: string): boolean | string {
@@ -58,14 +65,14 @@ function checkEmailValidator(value: string): boolean | string {
 }
 
 function handleSubmit(): void {
-	if (!checkEmailValidator(email.value)) {
+	if (!checkEmailValidator(emailValue.value)) {
 		return;
 	}
 
 	$fetch('/authen/users/resend_activation/', {
 		method: 'POST',
 		body: {
-			email,
+			email: emailValue.value,
 		},
 	})
 		.then(() => {

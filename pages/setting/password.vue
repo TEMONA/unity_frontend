@@ -31,7 +31,13 @@
 							/>
 						</template>
 						<template v-slot:action>
-							<v-btn color="primary" @click="handleSubmit">保存</v-btn>
+							<v-btn
+								color="primary"
+								@click="handleSubmit"
+								:disabled="!setPasswordParams.newPassword"
+							>
+								保存
+							</v-btn>
 						</template>
 					</OrganismsFormCard>
 				</v-form>
@@ -54,10 +60,10 @@ breadcrumbs.updateBreadcrumbs([
 
 useHead({ title: 'パスワード変更' });
 
-import { ref } from 'vue';
 const { $snakecaseKeys } = useNuxtApp();
 import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
+
 import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
 
 type getUserDataType = {
@@ -78,8 +84,9 @@ if (!getUserData.value || error.value) {
 
 const isValid = ref(false);
 const validationRules = [
-	(value: any) => !!value || '必ず入力してください',
-	(value: any) => value.length >= 7 || '８文字以上で入力してください',
+	(value: string | number) => !!value || '必ず入力してください',
+	(value: string | number) =>
+		String(value).length >= 8 || '８文字以上で入力してください',
 ];
 const viewParams = {
 	currentPassword: {
