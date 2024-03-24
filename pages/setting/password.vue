@@ -73,7 +73,7 @@ type getUserDataType = {
 
 const { data } = useAuth();
 
-const { data: getUserData, error } = await useFetch<getUserDataType>(
+const { data: getUserData, error } = await useFetchWithBaseURL<getUserDataType>(
 	`/api/users/${data.id}/`, //エラー消えないけどとりあえず放置
 );
 

@@ -136,7 +136,7 @@ const {
 	pending,
 	error,
 	refresh,
-} = await useFetch<searchResultType>('/api/users', {
+} = await useFetchWithBaseURL<searchResultType>('/api/users', {
 	query: { ...searchQuery.value },
 });
 

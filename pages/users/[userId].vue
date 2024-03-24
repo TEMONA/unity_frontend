@@ -2,11 +2,11 @@
 	<NuxtLayout>
 		<v-row class="user">
 			<v-col cols="12" md="4" class="user__sidebar">
-				<OrganismsUserOverview v-bind="userInformation?.overview" />
+				<OrganismsUserOverview v-bind="getUserData?.overview" />
 				<v-row class="mt-3">
-					<v-col v-if="userInformation?.overview.chatworkId" cols="6">
+					<v-col v-if="getUserData?.overview.chatworkId" cols="6">
 						<v-btn
-							:href="`https://www.chatwork.com/${userInformation?.overview.chatworkId}`"
+							:href="`https://www.chatwork.com/${getUserData?.overview.chatworkId}`"
 							outlined
 							block
 							color="primary"
@@ -36,10 +36,10 @@
 					</v-col>
 				</v-row>
 			</v-col>
-			<v-col v-if="userInformation?.tags" cols="12" md="8">
+			<v-col v-if="getUserData?.tags" cols="12" md="8">
 				<v-chip-group class="mb-3">
 					<v-chip
-						v-for="tag in userInformation?.tags"
+						v-for="tag in getUserData?.tags"
 						:key="tag"
 						:ripple="false"
 						:disabled="true"
@@ -49,8 +49,8 @@
 					</v-chip>
 				</v-chip-group>
 
-				<v-row v-if="userInformation?.details">
-					<template v-for="(item, index) in userInformation?.details">
+				<v-row v-if="getUserData?.details">
+					<template v-for="(item, index) in getUserData?.details">
 						<v-col v-if="item.value" cols="12" :key="index">
 							<v-card>
 								<v-card-title v-text="item.title" />
@@ -85,7 +85,7 @@ type detailsType = {
 	title: string;
 	value: string;
 };
-type userInformationType = {
+type getUserDataType = {
 	overview: UserOverviewPropsType;
 	tags: string[];
 	details: {
@@ -99,12 +99,11 @@ type userInformationType = {
 	};
 };
 
-const { $camelcaseKeys } = useNuxtApp();
-const { data: userInformation, error } = await useFetch<userInformationType>(
+const { data: getUserData, error } = await useFetchWithBaseURL<getUserDataType>(
 	`/api/users/${route.params.userId}`,
 );
 
-if (!userInformation.value || error.value) {
+if (!getUserData.value || error.value) {
 	throw createError({
 		statusCode: 404,
 		message: 'ページが見つかりません。',

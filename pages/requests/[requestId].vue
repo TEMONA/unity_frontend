@@ -94,9 +94,10 @@ type getRequestDataType = {
 	};
 };
 
-const { data: getRequestData, error } = await useFetch<getRequestDataType>(
-	`/api/lunch-requests/${route.params.requestId}`,
-);
+const { data: getRequestData, error } =
+	await useFetchWithBaseURL<getRequestDataType>(
+		`/api/lunch-requests/${route.params.requestId}`,
+	);
 
 if (!getRequestData.value || error.value) {
 	throw createError({

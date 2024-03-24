@@ -95,8 +95,8 @@ const userData = ref<getUserDataType>({
 });
 
 const { data } = useAuth();
-const { $camelcaseKeys, $snakecaseKeys } = useNuxtApp();
-const { data: getUserData, error } = await useFetch<getUserDataType>(
+const { $snakecaseKeys } = useNuxtApp();
+const { data: getUserData, error } = await useFetchWithBaseURL<getUserDataType>(
 	`/api/users/${data.id}`,
 );
 
