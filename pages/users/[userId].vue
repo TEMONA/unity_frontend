@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
+import type { UserOverviewPropsType } from '@/components/organisms/UserOverview.vue';
 
 import { useBreadcrumbsStore } from '@/store/breadcrumbs';
 const breadcrumbs = useBreadcrumbsStore();

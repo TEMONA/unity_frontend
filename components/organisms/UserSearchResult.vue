@@ -20,11 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import {
+import type {
 	SearchResultHeaderPropsType,
 	SearchResultEmitsParamsType,
 } from '../molecules/SearchResultHeader.vue';
-import { UserListItemPropsType } from '../molecules/UserListItem.vue';
+import type { UserListItemPropsType } from '../molecules/UserListItem.vue';
 
 type UserSearchResultPropsType = {
 	meta: SearchResultHeaderPropsType;

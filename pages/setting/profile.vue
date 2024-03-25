@@ -50,7 +50,7 @@ useHead({ title: 'プロフィール編集' });
 
 import { useSnackbarStore } from '@/store/snackbar';
 const snackbar = useSnackbarStore();
-import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
+import type { UserOverviewPropsType } from '@/components/organisms/UserOverview.vue';
 
 type detailType = {
 	title: string;

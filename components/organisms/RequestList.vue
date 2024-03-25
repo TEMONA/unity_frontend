@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { RequestListItemPropsType } from '../molecules/RequestListItem.vue';
+import type { RequestListItemPropsType } from '../molecules/RequestListItem.vue';
 
 type RequestListPropsType = {
 	requests: RequestListItemPropsType[];

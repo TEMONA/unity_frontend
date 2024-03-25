@@ -61,11 +61,11 @@ breadcrumbs.updateBreadcrumbs([]);
 useHead({ title: '社員一覧' });
 
 import { ref } from 'vue';
-import {
+import type {
 	SearchResultHeaderPropsType,
 	SearchResultEmitsParamsType,
-} from '~/components/molecules/SearchResultHeader.vue';
-import { UserListItemPropsType } from '~/components/molecules/UserListItem.vue';
+} from '@/components/molecules/SearchResultHeader.vue';
+import type { UserListItemPropsType } from '@/components/molecules/UserListItem.vue';
 
 const isOpenSearchCard = ref(false);
 

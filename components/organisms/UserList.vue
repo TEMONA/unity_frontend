@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { UserListItemPropsType } from '../molecules/UserListItem.vue';
+import type { UserListItemPropsType } from '../molecules/UserListItem.vue';
 
 type UserListPropsType = {
 	users: UserListItemPropsType[];

@@ -82,7 +82,7 @@ breadcrumbs.updateBreadcrumbs([
 
 useHead({ title: 'ランチリクエスト詳細' });
 
-import { UserOverviewPropsType } from '~/components/organisms/UserOverview.vue';
+import type { UserOverviewPropsType } from '@/components/organisms/UserOverview.vue';
 
 type getRequestDataType = {
 	user: UserOverviewPropsType;

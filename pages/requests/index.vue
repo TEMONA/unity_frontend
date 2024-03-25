@@ -100,11 +100,11 @@ import { ref, computed } from 'vue';
 
 const isActiveDatePicker = ref(false);
 
-import {
+import type {
 	SearchResultHeaderPropsType,
 	SearchResultEmitsParamsType,
-} from '~/components/molecules/SearchResultHeader.vue';
-import { RequestListItemPropsType } from '~/components/molecules/RequestListItem.vue';
+} from '@/components/molecules/SearchResultHeader.vue';
+import type { RequestListItemPropsType } from '@/components/molecules/RequestListItem.vue';
 
 type searchQueryType = {
 	name: string;
