@@ -36,6 +36,7 @@
 </template>
 
 <script lang="ts" setup>
+definePageMeta({ auth: false });
 const isProcessing = ref(false);
 
 const email = ref('');

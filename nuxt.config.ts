@@ -13,10 +13,10 @@ export default defineNuxtConfig({
 	plugins: [],
 	modules: ['@pinia/nuxt', '@sidebase/nuxt-auth'],
 	auth: {
+		globalAppMiddleware: true,
 		baseURL: 'https://unity-backend.temona.co.jp/authen',
 		provider: {
 			type: 'refresh', // localに加えトークンリフレッシュが可能
-			refreshOnlyToken: true,
 			endpoints: {
 				signIn: {
 					path: '/jwt/create',
@@ -39,13 +39,9 @@ export default defineNuxtConfig({
 				headerName: 'Authorization',
 				maxAgeInSeconds: 60 * 60 * 24,
 				sameSiteAttribute: 'none',
-				// 5 minutes
 			},
 			refreshToken: { signInResponseRefreshTokenPointer: '/refresh' },
-			sessionDataType: { id: 'string', name: 'string', email: 'string' },
-			globalAppMiddleware: {
-				isEnabled: true,
-			},
+			sessionDataType: { id: 'string', email: 'string' },
 		},
 	},
 	alias: {
